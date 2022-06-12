@@ -94,4 +94,9 @@
     // titleFieldInput.parentNode.insertAfter(successFieldContainer, titleFieldInput);
     parentDiv.insertBefore(successFieldContainer, titleFieldInput.nextSibling);
   });
+  // Enable Long Artwork Button
+  const agreeTermsInput = document.querySelector("#agree_terms");
+  longArtWorkButton.addEventListener("click", () => {
+    agreeTermsInput.checked = true;
+  });
 })();

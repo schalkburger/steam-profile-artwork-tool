@@ -8,6 +8,13 @@
 // @description  Steam Profile Artwork Tool
 // ==/UserScript==
 
+// TO-DO
+// Workshop
+// $J('[name=consumer_app_id]').val(480);$J('[name=file_type]').val(0);$J('[name=visibility]').val(0);
+// Long guide:
+// $J('[name=consumer_app_id]').val(767);$J('[name=file_type]').val(9);$J('[name=visibility]').val(0);
+
+
 (function () {
   "use strict";
   // Inject Steam Profile Artwork Tool styles
@@ -30,14 +37,11 @@
 
   input[type="text"].fieldInputSuccess {
     position: relative;
-    box-shadow: none;
-    background: rgb(20 45 11 / 18%);
-    border: 1px solid #28432d;
   }
-  .successFieldContainer {
-    position: absolute;
+  .alertBlankTitleSet, .alertCustomArtworkEnabled {
+    position: relative;
     left: 0;
-    top: 50%;
+    top: 0;
     line-height: 1;
     background: transparent;
     width: auto;
@@ -47,7 +51,8 @@
     align-items: center;
     color: #22830f;
     font-size: 16px;
-    margin: -10px 0 0 10px;
+    margin: 15px 0 0 0px;
+    opacity: 1;
   }
   `,
     head = document.head || document.getElementsByTagName("head")[0],
@@ -69,34 +74,92 @@
   <div class="pageTitle">Steam Profile Artwork Tool</div>
   <div class="buttonsContainer">
     <a id="blankTitleButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px">
-    <span style="padding-left: 32px; padding-right: 32px;">Fill Blank Title</span>
+    <span style="padding-left: 16px; padding-right: 16px;">Enter Blank Title</span>
     </a>
-    <a id="longArtWorkButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
-    <span style="padding-left: 32px; padding-right: 32px;">Enable Long Artwork</span>
+    <a id="longArtworkButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
+    <span style="padding-left: 16px; padding-right: 16px;">Enable Custom Artwork Upload</span>
+    </a>
+    <a id="workshopArtworkButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
+    <span style="padding-left: 16px; padding-right: 16px;">Enable Workshop Upload</span>
+    </a>
+    <a id="longguideArtworkButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
+    <span style="padding-left: 16px; padding-right: 16px;">Enable Long Guide Upload</span>
+    </a>
+    <a id="resetButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;background:#171a21">
+    <span style="padding-left: 16px; padding-right: 14px;background:#171a21">Reset</span>
     </a>
   </div>`;
   // Grab mainContentsDiv element reference
   const mainContentsDiv = document.querySelector("#mainContents");
   // Insert the Buttons
   mainContentsDiv.parentNode.insertBefore(steamProfileArtworkContainer, mainContentsDiv);
+  // ----------------------------
   // Fill Blank Title Button
+  // ----------------------------
   const blankTitleCharacter = "⠀";
-  const successFieldContainer = document.createElement("div");
-  successFieldContainer.className = "successFieldContainer";
-  successFieldContainer.innerHTML = `<span>✔ Blank Title Set</span>`;
+  const alertBlankTitleSet = document.createElement("div");
+  alertBlankTitleSet.className = "alertBlankTitleSet";
+  alertBlankTitleSet.innerHTML = `<span><i>✔</i> Blank Title Set</span>`;
   const titleFieldInput = document.querySelector(".titleField");
   const blankTitleButton = document.querySelector("#blankTitleButton");
-  const parentDiv = titleFieldInput.parentNode;
+  const titleFieldParent = titleFieldInput.parentNode;
   blankTitleButton.addEventListener("click", () => {
     titleFieldInput.value = blankTitleCharacter;
     titleFieldInput.classList.add("fieldInputSuccess");
-    titleFieldInput.disabled = true;
-    // titleFieldInput.parentNode.insertAfter(successFieldContainer, titleFieldInput);
-    parentDiv.insertBefore(successFieldContainer, titleFieldInput.nextSibling);
+    alertBlankTitleSet.classList.add("fadeIn");
+    titleFieldParent.insertBefore(alertBlankTitleSet, titleFieldInput.nextSibling);
   });
-  // Enable Long Artwork Button
+  // ----------------------------
+  // Enable Custom Artwork Button
+  // ----------------------------
+  const alertCustomArtworkEnabled = document.createElement("div");
+  alertCustomArtworkEnabled.className = "alertCustomArtworkEnabled";
+  alertCustomArtworkEnabled.innerHTML = `<span><i>✔</i> Upload Custom Artwork Enabled</span>`;
+  const fileUploadButton = document.querySelector("#file");
+  const longArtworkButton = document.querySelector("#longArtworkButton");
+  const workshopArtworkButton = document.querySelector("#workshopArtworkButton");
+  const longGuideArtworkButton = document.querySelector("#longguideArtworkButton");
+  const resetButton = document.querySelector("#resetButton");
+  const fileUploadParent = fileUploadButton.parentNode;
+  function scrollToChooseFileButton() {
+    document.querySelectorAll(".detailBox")[1].scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  function customArtworkUploadEnable() {
+    console.log("Custom Artwork Upload Enabled");
+    $J("#image_width").val(1000).attr("id", ""), $J("#image_height").val(1).attr("id", "");
+    setTimeout(scrollToChooseFileButton, 0);
+  }
+  function customWorkshopUploadEnable() {
+    console.log("Workshop Upload Enabled");
+    $J('[name=consumer_app_id]').val(480); $J('[name=file_type]').val(0); $J('[name=visibility]').val(0);
+    setTimeout(scrollToChooseFileButton, 0);
+  }
+  function longGuideUploadEnable() {
+    console.log("Long guide Upload Enabled");
+    $J('[name=consumer_app_id]').val(767); $J('[name=file_type]').val(9); $J('[name=visibility]').val(0);
+    setTimeout(scrollToChooseFileButton, 0);
+  }
+  function resetUploads() {
+    console.log("Resetting uploads");
+    location.reload();
+  }
   const agreeTermsInput = document.querySelector("#agree_terms");
-  longArtWorkButton.addEventListener("click", () => {
+  longArtworkButton.addEventListener("click", () => {
+    customArtworkUploadEnable();
     agreeTermsInput.checked = true;
+    fileUploadParent.insertBefore(alertCustomArtworkEnabled, fileUploadButton.nextSibling);
+  });
+  workshopArtworkButton.addEventListener("click", () => {
+    customWorkshopUploadEnable();
+    agreeTermsInput.checked = true;
+    fileUploadParent.insertBefore(alertCustomArtworkEnabled, fileUploadButton.nextSibling);
+  });
+  longGuideArtworkButton.addEventListener("click", () => {
+    longGuideUploadEnable();
+    agreeTermsInput.checked = true;
+    fileUploadParent.insertBefore(alertCustomArtworkEnabled, fileUploadButton.nextSibling);
+  });
+  resetButton.addEventListener("click", () => {
+    resetUploads();
   });
 })();

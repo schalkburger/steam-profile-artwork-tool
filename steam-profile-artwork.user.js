@@ -9,10 +9,7 @@
 // ==/UserScript==
 
 // TO-DO
-// Workshop
-// $J('[name=consumer_app_id]').val(480);$J('[name=file_type]').val(0);$J('[name=visibility]').val(0);
-// Long guide:
-// $J('[name=consumer_app_id]').val(767);$J('[name=file_type]').val(9);$J('[name=visibility]').val(0);
+// Make workshop upload also use hex convert
 
 
 (function () {
@@ -54,6 +51,26 @@
     margin: 15px 0 0 0px;
     opacity: 1;
   }
+  .alertBlankTitleSet, .alertCustomArtworkEnabled.longWorkshopGuideEnabled {
+    margin-top: 0;
+  }
+  .modifyArtworkInstructions {
+    margin: 0 0 15px 0;
+  }
+  .modifyArtworkInstructions blockquote {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .modifyArtworkInstructions blockquote ol {
+    font-size: 16px;
+  }
+  .modifyArtworkInstructions blockquote ol li {
+    margin-bottom: 10px;
+  }
+  .modifyArtworkInstructions blockquote code {
+    padding: 2px 4px;
+    background: #1a1a1a;
+  }
   `,
     head = document.head || document.getElementsByTagName("head")[0],
     style = document.createElement("style");
@@ -76,14 +93,14 @@
     <a id="blankTitleButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px">
     <span style="padding-left: 16px; padding-right: 16px;">Enter Blank Title</span>
     </a>
-    <a id="longArtworkButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
+    <a id="customArtworkButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
     <span style="padding-left: 16px; padding-right: 16px;">Enable Custom Artwork Upload</span>
     </a>
-    <a id="workshopArtworkButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
-    <span style="padding-left: 16px; padding-right: 16px;">Enable Workshop Upload</span>
+    <a id="longWorkshopButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
+    <span style="padding-left: 16px; padding-right: 16px;">Upload Long Workshop</span>
     </a>
-    <a id="longguideArtworkButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
-    <span style="padding-left: 16px; padding-right: 16px;">Enable Long Guide Upload</span>
+    <a id="longGuideButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
+    <span style="padding-left: 16px; padding-right: 16px;">Upload Long Guide</span>
     </a>
     <a id="resetButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;background:#171a21">
     <span style="padding-left: 16px; padding-right: 14px;background:#171a21">Reset</span>
@@ -115,12 +132,27 @@
   const alertCustomArtworkEnabled = document.createElement("div");
   alertCustomArtworkEnabled.className = "alertCustomArtworkEnabled";
   alertCustomArtworkEnabled.innerHTML = `<span><i>✔</i> Upload Custom Artwork Enabled</span>`;
+  // Long workshop enabled notification
+  const alertLongWorkshopEnabled = document.createElement("div");
+  alertLongWorkshopEnabled.className = "alertCustomArtworkEnabled longWorkshopGuideEnabled";
+  alertLongWorkshopEnabled.innerHTML = `<span><i>✔</i> Upload Long Workshop Enabled</span>`;
+  // Long guide enabled notification
+  const alertLongGuideEnabled = document.createElement("div");
+  alertLongGuideEnabled.className = "alertCustomArtworkEnabled";
+  alertLongGuideEnabled.innerHTML = `<span><i>✔</i> Upload Long Guide Enabled</span>`;
+  // Long guide enabled notification
+  const hexEditWebsite = document.createElement("div");
+  hexEditWebsite.className = "modifyArtworkInstructions";
+  hexEditWebsite.innerHTML = `<blockquote class="bb_blockquote">This method allows you to upload long workshop images without faking the heights. <br/>This method works with all supported file types independently of size and frame count. <br/>You are expected to apply the instructions below for all workshop images seperately. <div class="description"><ol><li>Visit this site: <a href="https://hexed.it" target="_blank">https://hexed.it</a></li><li>Click "Open File" and select your image</li><li>Scroll to the very bottom of the page</li><li>Replace the last byte of your file with <code>21</code></li><li>Click "Export" and save your modified image</li></ol></div></blockquote>`;
+  // Buttons selectors
   const fileUploadButton = document.querySelector("#file");
-  const longArtworkButton = document.querySelector("#longArtworkButton");
-  const workshopArtworkButton = document.querySelector("#workshopArtworkButton");
-  const longGuideArtworkButton = document.querySelector("#longguideArtworkButton");
+  const customArtworkButton = document.querySelector("#customArtworkButton");
+  const longWorkshopButton = document.querySelector("#longWorkshopButton");
+  const longGuideButton = document.querySelector("#longGuideButton");
   const resetButton = document.querySelector("#resetButton");
+  const selectArtworkTitle = document.querySelector(".detailBox:nth-of-type(2) .title");
   const fileUploadParent = fileUploadButton.parentNode;
+  // Scroll functions
   function scrollToChooseFileButton() {
     document.querySelectorAll(".detailBox")[1].scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -144,20 +176,23 @@
     location.reload();
   }
   const agreeTermsInput = document.querySelector("#agree_terms");
-  longArtworkButton.addEventListener("click", () => {
+  customArtworkButton.addEventListener("click", () => {
     customArtworkUploadEnable();
     agreeTermsInput.checked = true;
     fileUploadParent.insertBefore(alertCustomArtworkEnabled, fileUploadButton.nextSibling);
   });
-  workshopArtworkButton.addEventListener("click", () => {
+  longWorkshopButton.addEventListener("click", () => {
     customWorkshopUploadEnable();
     agreeTermsInput.checked = true;
-    fileUploadParent.insertBefore(alertCustomArtworkEnabled, fileUploadButton.nextSibling);
+    // selectArtworkTitle.classList.add("test");
+    selectArtworkTitle.textContent = "Modify your artwork";
+    fileUploadParent.insertBefore(alertLongWorkshopEnabled, fileUploadButton);
+    fileUploadParent.insertBefore(hexEditWebsite, fileUploadButton);
   });
-  longGuideArtworkButton.addEventListener("click", () => {
+  longGuideButton.addEventListener("click", () => {
     longGuideUploadEnable();
     agreeTermsInput.checked = true;
-    fileUploadParent.insertBefore(alertCustomArtworkEnabled, fileUploadButton.nextSibling);
+    fileUploadParent.insertBefore(alertLongGuideEnabled, fileUploadButton.nextSibling);
   });
   resetButton.addEventListener("click", () => {
     resetUploads();

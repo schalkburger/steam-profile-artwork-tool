@@ -71,6 +71,35 @@
     padding: 2px 4px;
     background: #1a1a1a;
   }
+  .hexEditInstructionsVideo {
+    background-image: url(https://store.akamai.steamstatic.com/public/images/v6/maincol_gradient_rule.png);
+    background-repeat: no-repeat;
+    background-position: top left;
+    padding-top: 10px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  .hexEditInstructionsVideo h2 {
+    font-size: 20px;
+  }
+  .embed-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+  }
+  .embed-container iframe,
+  .embed-container object,
+  .embed-container embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
   `,
     head = document.head || document.getElementsByTagName("head")[0],
     style = document.createElement("style");
@@ -102,7 +131,7 @@
     <a id="longGuideButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
     <span style="padding-left: 16px; padding-right: 16px;">Upload Long Guide</span>
     </a>
-    <a id="resetButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;background:#171a21">
+    <a id="resetButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 0 0 0 5px;background:#171a21">
     <span style="padding-left: 16px; padding-right: 14px;background:#171a21">Reset</span>
     </a>
   </div>`;
@@ -143,7 +172,9 @@
   // Long guide enabled notification
   const hexEditWebsite = document.createElement("div");
   hexEditWebsite.className = "modifyArtworkInstructions";
-  hexEditWebsite.innerHTML = `<blockquote class="bb_blockquote">This method allows you to upload long workshop images without faking the heights. <br/>This method works with all supported file types independently of size and frame count. <br/>You are expected to apply the instructions below for all workshop images seperately. <div class="description"><ol><li>Visit this site: <a href="https://hexed.it" target="_blank">https://hexed.it</a></li><li>Click "Open File" and select your image</li><li>Scroll to the very bottom of the page</li><li>Replace the last byte of your file with <code>21</code></li><li>Click "Export" and save your modified image</li></ol></div></blockquote>`;
+  hexEditWebsite.innerHTML = `<blockquote class="bb_blockquote">This method allows you to upload long workshop images without faking the heights. <br/>This method works with all supported file types independently of size and frame count. <br/>You are expected to apply the instructions below for all workshop images seperately. <div class="description"><ol><li>Visit this site: <a href="https://hexed.it" target="_blank">https://hexed.it</a></li><li>Click "Open File" and select your image</li><li>Scroll to the very bottom of the page</li><li>Replace the last byte of your file with <code>21</code></li><li>Click "Export" and save your modified image</li></ol></div><div class="hexEditInstructionsVideo"><div id="game_area_description" class="game_area_description">
+  <h2>Video instructions</h2>
+  </div><div class="embed-container"><iframe src="https://www.dropbox.com/s/6ilvut3br5dnks3/HexEdit-Instructions.mp4?raw=1" allowfullscreen style="border:0"></iframe></div></blockquote></div>`;
   // Buttons selectors
   const fileUploadButton = document.querySelector("#file");
   const customArtworkButton = document.querySelector("#customArtworkButton");

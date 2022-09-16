@@ -80,8 +80,12 @@
     display: flex;
     flex-direction: column;
   }
-  .hexEditInstructionsVideo h2 {
-    font-size: 20px;
+  .hexEditInstructionsVideo details {
+    margin-left: 5px;
+    cursor: pointer;
+  }
+  .hexEditInstructionsVideo {
+    font-size: 16px;
   }
   .embed-container {
     position: relative;
@@ -172,9 +176,27 @@
   // Long guide enabled notification
   const hexEditWebsite = document.createElement("div");
   hexEditWebsite.className = "modifyArtworkInstructions";
-  hexEditWebsite.innerHTML = `<blockquote class="bb_blockquote">This method allows you to upload long workshop images without faking the heights. <br/>This method works with all supported file types independently of size and frame count. <br/>You are expected to apply the instructions below for all workshop images seperately. <div class="description"><ol><li>Visit this site: <a href="https://hexed.it" target="_blank">https://hexed.it</a></li><li>Click "Open File" and select your image</li><li>Scroll to the very bottom of the page</li><li>Replace the last byte of your file with <code>21</code></li><li>Click "Export" and save your modified image</li></ol></div><div class="hexEditInstructionsVideo"><div id="game_area_description" class="game_area_description">
-  <h2>Video instructions</h2>
-  </div><div class="embed-container"><iframe src="https://www.dropbox.com/s/6ilvut3br5dnks3/HexEdit-Instructions.mp4?raw=1" allowfullscreen style="border:0"></iframe></div></blockquote></div>`;
+  hexEditWebsite.innerHTML = `<blockquote class="bb_blockquote">This method allows you to upload long workshop images without faking the heights.
+  <br />This method works with all supported file types independently of size and frame count. <br />You are expected
+  to apply the instructions below for all workshop images seperately. <div class="description">
+      <ol>
+          <li>Visit this site: <a href="https://hexed.it" target="_blank">https://hexed.it</a></li>
+          <li>Click "Open File" and select your image</li>
+          <li>Scroll to the very bottom of the page</li>
+          <li>Replace the last byte of your file with <code>21</code></li>
+          <li>Click "Export" and save your modified image</li>
+          <li>Upload your artwork via the "Choose File" button below</li>
+      </ol>
+  </div>
+  <div class="hexEditInstructionsVideo">
+      <details>
+          <summary>Video instructions</summary>
+          <div class="embed-container"><iframe
+                  src="https://www.dropbox.com/s/6ilvut3br5dnks3/HexEdit-Instructions.mp4?raw=1" allowfullscreen
+                  style="border:0"></iframe></div>
+      </details>
+</blockquote>
+</div>`;
   // Buttons selectors
   const fileUploadButton = document.querySelector("#file");
   const customArtworkButton = document.querySelector("#customArtworkButton");
@@ -207,6 +229,7 @@
     location.reload();
   }
   const agreeTermsInput = document.querySelector("#agree_terms");
+  // Buttons event listeners
   customArtworkButton.addEventListener("click", () => {
     customArtworkUploadEnable();
     agreeTermsInput.checked = true;
@@ -215,7 +238,6 @@
   longWorkshopButton.addEventListener("click", () => {
     customWorkshopUploadEnable();
     agreeTermsInput.checked = true;
-    // selectArtworkTitle.classList.add("test");
     selectArtworkTitle.textContent = "Modify your artwork";
     fileUploadParent.insertBefore(alertLongWorkshopEnabled, fileUploadButton);
     fileUploadParent.insertBefore(hexEditWebsite, fileUploadButton);
@@ -223,7 +245,9 @@
   longGuideButton.addEventListener("click", () => {
     longGuideUploadEnable();
     agreeTermsInput.checked = true;
-    fileUploadParent.insertBefore(alertLongGuideEnabled, fileUploadButton.nextSibling);
+    selectArtworkTitle.textContent = "Modify your artwork";
+    fileUploadParent.insertBefore(alertLongGuideEnabled, fileUploadButton);
+    fileUploadParent.insertBefore(hexEditWebsite, fileUploadButton);
   });
   resetButton.addEventListener("click", () => {
     resetUploads();

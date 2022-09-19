@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Steam Profile Artwork
-// @namespace    https://greasyfork.org/users/776541
+// @namespace    https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/sharedfiles/edititem/767/3/
 // @grant       none
-// @version     1.0
-// @author      -
+// @version     1.0.0
+// @author      Schalk Burger <schalkb@gmail.com>
 // @description  Steam Profile Artwork Tool
 // ==/UserScript==
 

@@ -54,10 +54,10 @@
   .alertBlankTitleSet, .alertCustomArtworkEnabled.longWorkshopGuideEnabled {
     margin-top: 0;
   }
-  .modifyArtworkInstructions {
-    margin: 0 0 15px 0;
-  }
-  .modifyArtworkInstructions blockquote {
+  // .alertCustomArtworkEnabled.longWorkshopEnabled, .alertCustomArtworkEnabled.longGuideEnabled {
+  //   display: none;
+  // }
+  // .modifyArtworkInstructions blockquote {
     font-size: 14px;
     line-height: 1.6;
   }
@@ -162,16 +162,21 @@
   // ----------------------------
   // Enable Custom Artwork Button
   // ----------------------------
+  // Fix the bug where I'm getting tuned the whole time about
+  // Fucking cunts
+  // Jirre
   const alertCustomArtworkEnabled = document.createElement("div");
   alertCustomArtworkEnabled.className = "alertCustomArtworkEnabled";
   alertCustomArtworkEnabled.innerHTML = `<span><i>✔</i> Upload Custom Artwork Enabled</span>`;
   // Long workshop enabled notification
   const alertLongWorkshopEnabled = document.createElement("div");
-  alertLongWorkshopEnabled.className = "alertCustomArtworkEnabled longWorkshopGuideEnabled";
+  alertLongWorkshopEnabled.className = "alertCustomArtworkEnabled longWorkshopEnabled";
+  alertCustomArtworkEnabled.classList.add("longWorkshopEnabled");
   alertLongWorkshopEnabled.innerHTML = `<span><i>✔</i> Upload Long Workshop Enabled</span>`;
   // Long guide enabled notification
   const alertLongGuideEnabled = document.createElement("div");
-  alertLongGuideEnabled.className = "alertCustomArtworkEnabled";
+  alertLongGuideEnabled.className = "alertCustomArtworkEnabled longGuideEnabled";
+  alertCustomArtworkEnabled.classList.add("longGuideEnabled");
   alertLongGuideEnabled.innerHTML = `<span><i>✔</i> Upload Long Guide Enabled</span>`;
   // Long guide enabled notification
   const hexEditWebsite = document.createElement("div");
@@ -181,11 +186,11 @@
   to apply the instructions below for all workshop images seperately. <div class="description">
       <ol>
           <li>Visit this site: <a href="https://hexed.it" target="_blank">https://hexed.it</a></li>
-          <li>Click "Open File" and select your image</li>
+          <li>Click <b>"Open File"</b> and select your image</li>
           <li>Scroll to the very bottom of the page</li>
           <li>Replace the last byte of your file with <code>21</code></li>
-          <li>Click "Export" and save your modified image</li>
-          <li>Upload your artwork via the "Choose File" button below</li>
+          <li>Click <b>"Export"</b> and save your modified image</li>
+          <li>Upload your artwork via the <b>"Choose File"</b> button below</li>
       </ol>
   </div>
   <div class="hexEditInstructionsVideo">

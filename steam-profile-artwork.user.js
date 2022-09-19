@@ -103,7 +103,20 @@
     width: 100%;
     height: 100%;
   }
-
+  .customArtworkButtons {
+    display: flex;
+    height: auto;
+    min-height: 32px;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+  }
+  .customArtworkButtons details {
+    font-size: 16px;
+  }
+  .customArtworkButtonsWrapper {
+    display: flex;
+  }
   `,
     head = document.head || document.getElementsByTagName("head")[0],
     style = document.createElement("style");
@@ -126,15 +139,28 @@
     <a id="blankTitleButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px">
     <span style="padding-left: 16px; padding-right: 16px;">Enter Blank Title</span>
     </a>
-    <a id="customArtworkButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
-    <span style="padding-left: 16px; padding-right: 16px;">Enable Custom Artwork Upload</span>
-    </a>
-    <a id="longWorkshopButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
-    <span style="padding-left: 16px; padding-right: 16px;">Upload Long Workshop</span>
-    </a>
-    <a id="longGuideButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
-    <span style="padding-left: 16px; padding-right: 16px;">Upload Long Guide</span>
-    </a>
+    <div class="customArtworkButtons">
+    <details>
+        <summary class="btn_darkblue_white_innerfade btn_medium">Enable Custom Artwork</summary>
+        <div class="customArtworkButtonsWrapper>
+          <a id="customArtworkButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
+          <span style="padding-left: 16px; padding-right: 16px;">Custom Artwork</span>
+          </a>
+          <a id="customArtworkButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
+          <span style="padding-left: 16px; padding-right: 16px;">Screenshot</span>
+          </a>
+          <a id="longWorkshopButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
+          <span style="padding-left: 16px; padding-right: 16px;">Long Workshop</span>
+          </a>
+          <a id="longGuideButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
+          <span style="padding-left: 16px; padding-right: 16px;">Long Guide</span>
+          </a>
+        </div>
+    </details>
+</blockquote>
+</div>
+
+
     <a id="resetButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 0 0 0 5px;background:#171a21">
     <span style="padding-left: 16px; padding-right: 14px;background:#171a21">Reset</span>
     </a>

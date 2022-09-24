@@ -124,9 +124,15 @@
   }
   .customArtworkButtonsWrapper {
     display: flex;
+    flex-direction: column;
     position: absolute;
-    left: -2px;
+    left: 0;
     top: calc(100% + 2px);
+    width: 100%;
+    background: rgba(47,137,188,1);
+    background: -webkit-linear-gradient( top, rgba(47,137,188,1) 5%, rgba(23,67,92,1) 95%);
+    background: linear-gradient( to bottom, rgba(47,137,188,1) 5%, rgba(23,67,92,1) 95%);
+    z-index: 400;
   }
   .customArtworkButtonsWrapper a {
     min-width: 140px;
@@ -166,16 +172,16 @@
     <details>
         <summary class="btn_darkblue_white_innerfade btn_medium enable-custom-artwork-button">Enable Custom Artwork</summary>
         <div class="customArtworkButtonsWrapper">
-          <a id="customArtworkButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
+          <a id="customArtworkButton" class="btn_medium" style="margin: 2px;">
           <span style="padding-left: 16px; padding-right: 16px;">Custom Artwork</span>
           </a>
-          <a id="customArtworkButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
+          <a id="customArtworkButton" class="btn_medium" style="margin: 2px;">
           <span style="padding-left: 16px; padding-right: 16px;">Screenshot</span>
           </a>
-          <a id="longWorkshopButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
+          <a id="longWorkshopButton" class="btn_medium" style="margin: 2px;">
           <span style="padding-left: 16px; padding-right: 16px;">Long Workshop</span>
           </a>
-          <a id="longGuideButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
+          <a id="longGuideButton" class="btn_medium" style="margin: 2px;">
           <span style="padding-left: 16px; padding-right: 16px;">Long Guide</span>
           </a>
         </div>

@@ -110,6 +110,7 @@
     justify-content: center;
     align-items: center;
     padding: 0 5px;
+    font-size: 15px;
   }
   .customArtworkButtons details {
     font-size: 16px;

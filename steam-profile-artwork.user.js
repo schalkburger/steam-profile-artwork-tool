@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Steam Profile Artwork
+// @name         Steam Profile Artwork Tools
 // @namespace    https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/sharedfiles/edititem/767/3/
 // @grant       none
@@ -109,13 +109,36 @@
     min-height: 32px;
     justify-content: center;
     align-items: center;
-    padding: 0 20px;
+    padding: 0 5px;
   }
   .customArtworkButtons details {
     font-size: 16px;
   }
+  .customArtworkButtons details[open] {
+    position: relative;
+    top: 0;
+  }
+  .customArtworkButtons details[open] summary {
+    position: relative;
+    top: 0;
+  }
   .customArtworkButtonsWrapper {
     display: flex;
+    position: absolute;
+    left: -2px;
+    top: calc(100% + 2px);
+  }
+  .customArtworkButtonsWrapper a {
+    min-width: 140px;
+    position: relative;
+    z-index: 400;
+  }
+  .enable-custom-artwork-button {
+    padding: 0 15px;
+    line-height: 30px;
+  }
+  #mainContents .pageTitle {
+    margin-top: 40px;
   }
   `,
     head = document.head || document.getElementsByTagName("head")[0],
@@ -141,8 +164,8 @@
     </a>
     <div class="customArtworkButtons">
     <details>
-        <summary class="btn_darkblue_white_innerfade btn_medium">Enable Custom Artwork</summary>
-        <div class="customArtworkButtonsWrapper>
+        <summary class="btn_darkblue_white_innerfade btn_medium enable-custom-artwork-button">Enable Custom Artwork</summary>
+        <div class="customArtworkButtonsWrapper">
           <a id="customArtworkButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px;">
           <span style="padding-left: 16px; padding-right: 16px;">Custom Artwork</span>
           </a>

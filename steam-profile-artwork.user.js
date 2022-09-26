@@ -2,6 +2,7 @@
 // @name         Steam Profile Artwork Tools
 // @namespace    https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/sharedfiles/edititem/767/3/
+// @match       https://steamcommunity.com/id/*/edit/info
 // @grant       none
 // @version     1.0.0
 // @author      Schalk Burger <schalkb@gmail.com>
@@ -163,6 +164,27 @@
   } else {
     style.appendChild(document.createTextNode(css));
   }
+  // Add some Tools to Edit Profile section
+  // const profileEditToolNavLink = document.querySelector(".profileeditshell_NavLink_3rtIp:last-of-type");
+  // mainContentsDiv.parentNode.insertBefore(steamProfileArtworkContainer, mainContentsDiv);
+  window.addEventListener("load", () => {
+    const pageContentContainer = document.querySelector(".profileeditshell_PageContent_23XE6");
+    const profileEditToolNavLastLink = document.querySelector(".profileeditshell_ProfileEditLine_58Mgh");
+    profileEditToolNavLastLink.classList.add("profileEditToolNavLinkContent");
+    const profileEditToolLink = document.createElement("div");
+    profileEditToolLink.innerHTML = `<a class="profileeditshell_NavLink_3rtIp tools-link" href="#">Tools</a>`;
+    profileEditToolNavLastLink.parentNode.insertBefore(profileEditToolLink, profileEditToolNavLastLink);
+    // Tools content
+    const toolsNavLink = document.querySelector(".tools-link");
+    toolsNavLink.addEventListener("click", () => {
+      console.log("Tools link clicked")
+      const profileEditToolLinkContent = document.createElement("div");
+      pageContentContainer.innerHTML = `Tools`
+      pageContentContainer.parentNode.insertBefore(profileEditToolLinkContent, pageContentContainer.nextSibling);
+    });
+
+  });
+
   // Create Steam Profile Artwork Tool Buttons Container
   const steamProfileArtworkContainer = document.createElement("div");
   steamProfileArtworkContainer.className = "steamProfileArtworkContainer";

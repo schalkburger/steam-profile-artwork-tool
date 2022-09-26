@@ -57,7 +57,7 @@
   // .alertCustomArtworkEnabled.longWorkshopEnabled, .alertCustomArtworkEnabled.longGuideEnabled {
   //   display: none;
   // }
-  // .modifyArtworkInstructions blockquote {
+  .modifyArtworkInstructions blockquote {
     font-size: 14px;
     line-height: 1.6;
   }
@@ -130,22 +130,26 @@
     left: 0;
     top: calc(100% + 2px);
     width: 100%;
-    background: rgba(47,137,188,1);
-    background: -webkit-linear-gradient( top, rgba(47,137,188,1) 5%, rgba(23,67,92,1) 95%);
-    background: linear-gradient( to bottom, rgba(47,137,188,1) 5%, rgba(23,67,92,1) 95%);
+    background: rgb(29 77 104);
     z-index: 400;
+    padding-bottom: 10px;
   }
   .customArtworkButtonsWrapper a {
     min-width: 140px;
     position: relative;
     z-index: 400;
+    padding: 2px 0;
   }
   .enable-custom-artwork-button {
     padding: 0 15px;
     line-height: 30px;
   }
   #mainContents .pageTitle {
-    margin-top: 40px;
+    margin-bottom: 10px;
+  }
+  .blank-title-added {
+    opacity: 0.5;
+    pointer-events: none;
   }
   `,
     head = document.head || document.getElementsByTagName("head")[0],
@@ -171,7 +175,7 @@
     </a>
     <div class="customArtworkButtons">
     <details>
-        <summary class="btn_darkblue_white_innerfade btn_medium enable-custom-artwork-button">Enable Custom Artwork</summary>
+        <summary class="btn_darkblue_white_innerfade btn_medium enable-custom-artwork-button">Enable Custom Uploads</summary>
         <div class="customArtworkButtonsWrapper">
           <a id="customArtworkButton" class="btn_medium" style="margin: 2px;">
           <span style="padding-left: 16px; padding-right: 16px;">Custom Artwork</span>
@@ -187,10 +191,7 @@
           </a>
         </div>
     </details>
-</blockquote>
-</div>
-
-
+  </div>
     <a id="resetButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 0 0 0 5px;background:#171a21">
     <span style="padding-left: 16px; padding-right: 14px;background:#171a21">Reset</span>
     </a>
@@ -210,17 +211,15 @@
   const blankTitleButton = document.querySelector("#blankTitleButton");
   const titleFieldParent = titleFieldInput.parentNode;
   blankTitleButton.addEventListener("click", () => {
+    blankTitleButton.classList.add("blank-title-added")
     titleFieldInput.value = blankTitleCharacter;
     titleFieldInput.classList.add("fieldInputSuccess");
     alertBlankTitleSet.classList.add("fadeIn");
     titleFieldParent.insertBefore(alertBlankTitleSet, titleFieldInput.nextSibling);
   });
   // ----------------------------
-  // Enable Custom Artwork Button
+  // Enable Custom Uploads Button
   // ----------------------------
-  // Fix the bug where I'm getting tuned the whole time about
-  // Fucking cunts
-  // Jirre
   const alertCustomArtworkEnabled = document.createElement("div");
   alertCustomArtworkEnabled.className = "alertCustomArtworkEnabled";
   alertCustomArtworkEnabled.innerHTML = `<span><i>✔</i> Upload Custom Artwork Enabled</span>`;
@@ -266,6 +265,7 @@
   const resetButton = document.querySelector("#resetButton");
   const selectArtworkTitle = document.querySelector(".detailBox:nth-of-type(2) .title");
   const fileUploadParent = fileUploadButton.parentNode;
+  let details = [...document.querySelectorAll('details')];
   // Scroll functions
   function scrollToChooseFileButton() {
     document.querySelectorAll(".detailBox")[1].scrollIntoView({ behavior: "smooth", block: "start" });
@@ -295,6 +295,7 @@
     customArtworkUploadEnable();
     agreeTermsInput.checked = true;
     fileUploadParent.insertBefore(alertCustomArtworkEnabled, fileUploadButton.nextSibling);
+    details[0].removeAttribute('open');
   });
   longWorkshopButton.addEventListener("click", () => {
     customWorkshopUploadEnable();
@@ -302,6 +303,7 @@
     selectArtworkTitle.textContent = "Modify your artwork";
     fileUploadParent.insertBefore(alertLongWorkshopEnabled, fileUploadButton);
     fileUploadParent.insertBefore(hexEditWebsite, fileUploadButton);
+    details[0].removeAttribute('open');
   });
   longGuideButton.addEventListener("click", () => {
     longGuideUploadEnable();
@@ -309,8 +311,17 @@
     selectArtworkTitle.textContent = "Modify your artwork";
     fileUploadParent.insertBefore(alertLongGuideEnabled, fileUploadButton);
     fileUploadParent.insertBefore(hexEditWebsite, fileUploadButton);
+    details[0].removeAttribute('open');
   });
   resetButton.addEventListener("click", () => {
     resetUploads();
   });
+  // Details open close functionality
+  document.addEventListener('click', function (e) {
+    if (!details.some(f => f.contains(e.target))) {
+      details.forEach(f => f.removeAttribute('open'));
+    } else {
+      details.forEach(f => !f.contains(e.target) ? f.removeAttribute('open') : '');
+    }
+  })
 })();

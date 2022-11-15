@@ -1,17 +1,18 @@
 // ==UserScript==
-// @name         Steam Profile Artwork Tools
+// @name         Steam Profile Artwork Tool
 // @namespace    https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/sharedfiles/edititem/767/3/
 // @match       https://steamcommunity.com/id/*/edit/info
+// @match       https://steamcommunity.com/id/*/
 // @grant       none
-// @version     1.0.0
+// @version     1.2.0
 // @author      Schalk Burger <schalkb@gmail.com>
-// @description  Steam Profile Artwork Tool
+// @description  A tool to make it easier to upload custom artwork for your profile.
+// @license MIT
 // ==/UserScript==
 
 // TO-DO
 // Make workshop upload also use hex convert
-
 
 (function () {
   "use strict";
@@ -167,29 +168,46 @@
   // Add some Tools to Edit Profile section
   // const profileEditToolNavLink = document.querySelector(".profileeditshell_NavLink_3rtIp:last-of-type");
   // mainContentsDiv.parentNode.insertBefore(steamProfileArtworkContainer, mainContentsDiv);
-  window.addEventListener("load", () => {
-    const pageContentContainer = document.querySelector(".profileeditshell_PageContent_23XE6");
-    const profileEditToolNavLastLink = document.querySelector(".profileeditshell_ProfileEditLine_58Mgh");
-    profileEditToolNavLastLink.classList.add("profileEditToolNavLinkContent");
-    const profileEditToolLink = document.createElement("div");
-    profileEditToolLink.innerHTML = `<a class="profileeditshell_NavLink_3rtIp tools-link" href="#">Tools</a>`;
-    profileEditToolNavLastLink.parentNode.insertBefore(profileEditToolLink, profileEditToolNavLastLink);
-    // Tools content
-    const toolsNavLink = document.querySelector(".tools-link");
-    toolsNavLink.addEventListener("click", () => {
-      console.log("Tools link clicked")
-      const profileEditToolLinkContent = document.createElement("div");
-      pageContentContainer.innerHTML = `Tools`
-      pageContentContainer.parentNode.insertBefore(profileEditToolLinkContent, pageContentContainer.nextSibling);
-    });
+  // window.addEventListener("load", () => {
+  //   const pageContentContainer = document.querySelector(".profileeditshell_PageContent_23XE6");
+  //   const profileEditToolNavLastLink = document.querySelector(".profileeditshell_ProfileEditLine_58Mgh");
+  //   profileEditToolNavLastLink.classList.add("profileEditToolNavLinkContent");
+  //   const profileEditToolLink = document.createElement("div");
+  //   profileEditToolLink.innerHTML = `<a class="profileeditshell_NavLink_3rtIp tools-link" href="#">Tools</a>`;
+  //   profileEditToolNavLastLink.parentNode.insertBefore(profileEditToolLink, profileEditToolNavLastLink);
+  //   // Tools content
+  //   const toolsNavLink = document.querySelector(".tools-link");
+  //   toolsNavLink.addEventListener("click", () => {
+  //     console.log("Tools link clicked")
+  //     const profileEditToolLinkContent = document.createElement("div");
+  //     pageContentContainer.innerHTML = `Tools`
+  //     pageContentContainer.parentNode.insertBefore(profileEditToolLinkContent, pageContentContainer.nextSibling);
+  //   });
+  // });
 
-  });
-
-  // Create Steam Profile Artwork Tool Buttons Container
-  const steamProfileArtworkContainer = document.createElement("div");
-  steamProfileArtworkContainer.className = "steamProfileArtworkContainer";
-  // Create Buttons
-  steamProfileArtworkContainer.innerHTML = `
+  //== Async Element Check Function ==//
+  (function () {
+    "use strict";
+    function rafAsync() {
+      return new Promise((resolve) => requestAnimationFrame(resolve));
+    }
+    async function checkElement(selector) {
+      let querySelector = null;
+      while (querySelector === null) {
+        await rafAsync();
+        querySelector = document.querySelector(selector);
+      }
+      return querySelector;
+    }
+    // Check if
+    checkElement("#mainContents").then((element) => {
+      console.log("#mainContents exists");
+      function setMainContents() {
+        // Create Steam Profile Artwork Tool Buttons Container
+        const steamProfileArtworkContainer = document.createElement("div");
+        steamProfileArtworkContainer.className = "steamProfileArtworkContainer";
+        // Create Buttons
+        steamProfileArtworkContainer.innerHTML = `
   <div class="pageTitle">Steam Profile Artwork Tool</div>
   <div class="buttonsContainer">
     <a id="blankTitleButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px">
@@ -202,7 +220,7 @@
           <a id="customArtworkButton" class="btn_medium" style="margin: 2px;">
           <span style="padding-left: 16px; padding-right: 16px;">Custom Artwork</span>
           </a>
-          <a id="customArtworkButton" class="btn_medium" style="margin: 2px;">
+          <a id="longScreenshotButton" class="btn_medium" style="margin: 2px;">
           <span style="padding-left: 16px; padding-right: 16px;">Screenshot</span>
           </a>
           <a id="longWorkshopButton" class="btn_medium" style="margin: 2px;">
@@ -218,30 +236,103 @@
     <span style="padding-left: 16px; padding-right: 14px;background:#171a21">Reset</span>
     </a>
   </div>`;
-  // Grab mainContentsDiv element reference
-  const mainContentsDiv = document.querySelector("#mainContents");
-  // Insert the Buttons
-  mainContentsDiv.parentNode.insertBefore(steamProfileArtworkContainer, mainContentsDiv);
+        // Grab mainContentsDiv element reference
+        const mainContentsDiv = document.querySelector("#mainContents");
+        // Insert the Buttons
+        mainContentsDiv.parentNode.insertBefore(steamProfileArtworkContainer, mainContentsDiv);
+      }
+      setTimeout(setMainContents, 0);
+    });
+  })();
+
+  //== Async Element Check Function ==//
+  (function () {
+    "use strict";
+    function rafAsync() {
+      return new Promise((resolve) => requestAnimationFrame(resolve));
+    }
+    async function checkElement(selector) {
+      let querySelector = null;
+      while (querySelector === null) {
+        await rafAsync();
+        querySelector = document.querySelector(selector);
+      }
+      return querySelector;
+    }
+    // Check if
+    checkElement(".titleField").then((element) => {
+      console.log(".titleField exists");
+      function setBlankTitleButton() {
+
+        // ----------------------------
+        // Fill Blank Title Button
+        // ----------------------------
+        const blankTitleCharacter = "⠀";
+        const alertBlankTitleSet = document.createElement("div");
+        alertBlankTitleSet.className = "alertBlankTitleSet";
+        alertBlankTitleSet.innerHTML = `<span><i>✔</i> Blank Title Set</span>`;
+        const titleFieldInput = document.querySelector(".titleField");
+        const blankTitleButton = document.querySelector("#blankTitleButton");
+        const titleFieldParent = titleFieldInput.parentNode;
+        blankTitleButton.addEventListener("click", () => {
+          blankTitleButton.classList.add("blank-title-added")
+          titleFieldInput.value = blankTitleCharacter;
+          titleFieldInput.classList.add("fieldInputSuccess");
+          alertBlankTitleSet.classList.add("fadeIn");
+          titleFieldParent.insertBefore(alertBlankTitleSet, titleFieldInput.nextSibling);
+        });
+      }
+      setTimeout(setBlankTitleButton, 0);
+    });
+  })();
+
+
   // ----------------------------
-  // Fill Blank Title Button
+  // Upload Artwork & Enable Custom Uploads Buttons
   // ----------------------------
-  const blankTitleCharacter = "⠀";
-  const alertBlankTitleSet = document.createElement("div");
-  alertBlankTitleSet.className = "alertBlankTitleSet";
-  alertBlankTitleSet.innerHTML = `<span><i>✔</i> Blank Title Set</span>`;
-  const titleFieldInput = document.querySelector(".titleField");
-  const blankTitleButton = document.querySelector("#blankTitleButton");
-  const titleFieldParent = titleFieldInput.parentNode;
-  blankTitleButton.addEventListener("click", () => {
-    blankTitleButton.classList.add("blank-title-added")
-    titleFieldInput.value = blankTitleCharacter;
-    titleFieldInput.classList.add("fieldInputSuccess");
-    alertBlankTitleSet.classList.add("fadeIn");
-    titleFieldParent.insertBefore(alertBlankTitleSet, titleFieldInput.nextSibling);
-  });
-  // ----------------------------
-  // Enable Custom Uploads Button
-  // ----------------------------
+  // Upload custom artwork button to profile
+
+  //== Async Element Check Function ==//
+  (function () {
+    "use strict";
+    function rafAsync() {
+      return new Promise((resolve) => requestAnimationFrame(resolve));
+    }
+    async function checkElement(selector) {
+      let querySelector = null;
+      while (querySelector === null) {
+        await rafAsync();
+        querySelector = document.querySelector(selector);
+      }
+      return querySelector;
+    }
+    // Check if
+    checkElement(".btn_profile_action").then((element) => {
+      console.log("btn_profile_action");
+      function setUploadArtworkButton() {
+        const uploadArtworkURL = `https://steamcommunity.com/sharedfiles/edititem/767/3/`;
+        const uploadCustomArtworkButtonContainer = document.createElement("a");
+        uploadCustomArtworkButtonContainer.className = "btn_profile_action btn_medium upload-artwork-link";
+        // Create Buttons
+        uploadCustomArtworkButtonContainer.innerHTML = `
+      <span>Upload artwork</span>`;
+        // Grab mainContentsDiv element reference
+        const uploadCustomArtworkButton = document.querySelector(".profile_header_actions .btn_profile_action:first-child");
+        // Insert the Buttons
+        // uploadCustomArtworkButton.insertBefore(uploadCustomArtworkButtonContainer, uploadCustomArtworkButton);
+        uploadCustomArtworkButton.parentNode.appendChild(uploadCustomArtworkButtonContainer, uploadCustomArtworkButton);
+
+        function setUploadArtworkHref() {
+          const uploadArtworkButton = document.querySelector(".upload-artwork-link");
+          uploadArtworkButton.setAttribute("href", uploadArtworkURL);
+        }
+        setTimeout(setUploadArtworkHref, 500);
+      }
+      setTimeout(setUploadArtworkButton, 0);
+    });
+  })();
+
+  // Custom artwork enabled notification
   const alertCustomArtworkEnabled = document.createElement("div");
   alertCustomArtworkEnabled.className = "alertCustomArtworkEnabled";
   alertCustomArtworkEnabled.innerHTML = `<span><i>✔</i> Upload Custom Artwork Enabled</span>`;
@@ -279,71 +370,111 @@
       </details>
 </blockquote>
 </div>`;
-  // Buttons selectors
-  const fileUploadButton = document.querySelector("#file");
-  const customArtworkButton = document.querySelector("#customArtworkButton");
-  const longWorkshopButton = document.querySelector("#longWorkshopButton");
-  const longGuideButton = document.querySelector("#longGuideButton");
-  const resetButton = document.querySelector("#resetButton");
-  const selectArtworkTitle = document.querySelector(".detailBox:nth-of-type(2) .title");
-  const fileUploadParent = fileUploadButton.parentNode;
-  let details = [...document.querySelectorAll('details')];
-  // Scroll functions
-  function scrollToChooseFileButton() {
-    document.querySelectorAll(".detailBox")[1].scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-  function customArtworkUploadEnable() {
-    console.log("Custom Artwork Upload Enabled");
-    $J("#image_width").val(1000).attr("id", ""), $J("#image_height").val(1).attr("id", "");
-    setTimeout(scrollToChooseFileButton, 0);
-  }
-  function customWorkshopUploadEnable() {
-    console.log("Workshop Upload Enabled");
-    $J('[name=consumer_app_id]').val(480); $J('[name=file_type]').val(0); $J('[name=visibility]').val(0);
-    setTimeout(scrollToChooseFileButton, 0);
-  }
-  function longGuideUploadEnable() {
-    console.log("Long guide Upload Enabled");
-    $J('[name=consumer_app_id]').val(767); $J('[name=file_type]').val(9); $J('[name=visibility]').val(0);
-    setTimeout(scrollToChooseFileButton, 0);
-  }
-  function resetUploads() {
-    console.log("Resetting uploads");
-    location.reload();
-  }
-  const agreeTermsInput = document.querySelector("#agree_terms");
-  // Buttons event listeners
-  customArtworkButton.addEventListener("click", () => {
-    customArtworkUploadEnable();
-    agreeTermsInput.checked = true;
-    fileUploadParent.insertBefore(alertCustomArtworkEnabled, fileUploadButton.nextSibling);
-    details[0].removeAttribute('open');
-  });
-  longWorkshopButton.addEventListener("click", () => {
-    customWorkshopUploadEnable();
-    agreeTermsInput.checked = true;
-    selectArtworkTitle.textContent = "Modify your artwork";
-    fileUploadParent.insertBefore(alertLongWorkshopEnabled, fileUploadButton);
-    fileUploadParent.insertBefore(hexEditWebsite, fileUploadButton);
-    details[0].removeAttribute('open');
-  });
-  longGuideButton.addEventListener("click", () => {
-    longGuideUploadEnable();
-    agreeTermsInput.checked = true;
-    selectArtworkTitle.textContent = "Modify your artwork";
-    fileUploadParent.insertBefore(alertLongGuideEnabled, fileUploadButton);
-    fileUploadParent.insertBefore(hexEditWebsite, fileUploadButton);
-    details[0].removeAttribute('open');
-  });
-  resetButton.addEventListener("click", () => {
-    resetUploads();
-  });
-  // Details open close functionality
-  document.addEventListener('click', function (e) {
-    if (!details.some(f => f.contains(e.target))) {
-      details.forEach(f => f.removeAttribute('open'));
-    } else {
-      details.forEach(f => !f.contains(e.target) ? f.removeAttribute('open') : '');
+
+  //== Async Element Check Function ==//
+  (function () {
+    "use strict";
+    function rafAsync() {
+      return new Promise((resolve) => requestAnimationFrame(resolve));
     }
-  })
+    async function checkElement(selector) {
+      let querySelector = null;
+      while (querySelector === null) {
+        await rafAsync();
+        querySelector = document.querySelector(selector);
+      }
+      return querySelector;
+    }
+    // Check if
+    checkElement("#file").then((element) => {
+      console.log("#file exists");
+      function setFileUpload() {
+        // Buttons selectors
+        const fileUploadButton = document.querySelector("#file");
+        const customArtworkButton = document.querySelector("#customArtworkButton");
+        const longScreenshotButton = document.querySelector("#longScreenshotButton");
+        const longWorkshopButton = document.querySelector("#longWorkshopButton");
+        const longGuideButton = document.querySelector("#longGuideButton");
+        const resetButton = document.querySelector("#resetButton");
+        const selectArtworkTitle = document.querySelector(".detailBox:nth-of-type(2) .title");
+        const fileUploadParent = fileUploadButton.parentNode;
+        let details = [...document.querySelectorAll('details')];
+
+
+        // Scroll functions
+        function scrollToChooseFileButton() {
+          document.querySelectorAll(".detailBox")[1].scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+        function customArtworkUploadEnable() {
+          console.log("Custom Artwork Upload Enabled");
+          $J("#image_width").val(1000).attr("id", ""), $J("#image_height").val(1).attr("id", "");
+          setTimeout(scrollToChooseFileButton, 0);
+        }
+        function customWorkshopUploadEnable() {
+          console.log("Workshop Upload Enabled");
+          $J('[name=consumer_app_id]').val(480); $J('[name=file_type]').val(0); $J('[name=visibility]').val(0);
+          setTimeout(scrollToChooseFileButton, 0);
+        }
+        function longGuideUploadEnable() {
+          console.log("Long guide Upload Enabled");
+          $J('[name=consumer_app_id]').val(767); $J('[name=file_type]').val(9); $J('[name=visibility]').val(0);
+          setTimeout(scrollToChooseFileButton, 0);
+        }
+        function longScreenshotUploadEnable() {
+          console.log("Long screenshot Upload Enabled");
+          $J('#image_width').val('1000'); $J('#image_height').val('1'); $J('[name="file_type"]').val("5");
+          setTimeout(scrollToChooseFileButton, 0);
+        }
+        function resetUploads() {
+          console.log("Resetting uploads");
+          location.reload();
+        }
+        const agreeTermsInput = document.querySelector("#agree_terms");
+        // Buttons event listeners
+        customArtworkButton.addEventListener("click", () => {
+          customArtworkUploadEnable();
+          agreeTermsInput.checked = true;
+          fileUploadParent.insertBefore(alertCustomArtworkEnabled, fileUploadButton.nextSibling);
+          details[0].removeAttribute('open');
+        });
+        longScreenshotButton.addEventListener("click", () => {
+          longScreenshotUploadEnable();
+          agreeTermsInput.checked = true;
+          fileUploadParent.insertBefore(alertCustomArtworkEnabled, fileUploadButton.nextSibling);
+          details[0].removeAttribute('open');
+        });
+        longWorkshopButton.addEventListener("click", () => {
+          customWorkshopUploadEnable();
+          agreeTermsInput.checked = true;
+          selectArtworkTitle.textContent = "Modify your artwork";
+          fileUploadParent.insertBefore(alertLongWorkshopEnabled, fileUploadButton);
+          fileUploadParent.insertBefore(hexEditWebsite, fileUploadButton);
+          details[0].removeAttribute('open');
+        });
+        longGuideButton.addEventListener("click", () => {
+          longGuideUploadEnable();
+          agreeTermsInput.checked = true;
+          selectArtworkTitle.textContent = "Modify your artwork";
+          fileUploadParent.insertBefore(alertLongGuideEnabled, fileUploadButton);
+          fileUploadParent.insertBefore(hexEditWebsite, fileUploadButton);
+          details[0].removeAttribute('open');
+        });
+        resetButton.addEventListener("click", () => {
+          resetUploads();
+        });
+        // Details open close functionality
+        document.addEventListener('click', function (e) {
+          if (!details.some(f => f.contains(e.target))) {
+            details.forEach(f => f.removeAttribute('open'));
+          } else {
+            details.forEach(f => !f.contains(e.target) ? f.removeAttribute('open') : '');
+          }
+        })
+      }
+      setTimeout(setFileUpload, 0);
+    });
+  })();
+
+
+
 })();

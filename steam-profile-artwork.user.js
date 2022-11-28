@@ -4,9 +4,10 @@
 // @match       https://steamcommunity.com/sharedfiles/edititem/767/3/
 // @match       https://steamcommunity.com/id/*/edit/info
 // @match       https://steamcommunity.com/id/*
+// @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
 // @exclude     https://steamcommunity.com/id/*/*/
 // @exclude     https://steamcommunity.com/id/*/inventory/*
-// @version     1.3.4
+// @version     1.3.5
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A tool to make it easier to upload custom artwork for your profile.
 // @license MIT
@@ -20,7 +21,7 @@
 
 (function () {
   "use strict";
-  console.log("Steam Artwork Tool Version 1.3.4")
+  console.log("Steam Artwork Tool Version 1.3.5")
   // Inject Steam Profile Artwork Tool styles
   let css = `
   .steamProfileArtworkContainer {
@@ -217,6 +218,9 @@
   }
   .upload-artwork-link {
     margin-right: 4px;
+  }
+  #manage_friends .friends-comments-textarea {
+    width: 100%;
   }
   `,
     head = document.head || document.getElementsByTagName("head")[0],
@@ -655,48 +659,66 @@
         // Featured Showcase Custom Text
 
         const profileEditShowcaseText = document.getElementsByClassName(
-          'customtext_showcase'
+          'customization_edit_area'
         ).length > 0;
 
-        const profileEditGeneralNavLink = document.querySelector(".profileeditshell_NavLink_3rtIp[href$='/showcases']")
-        profileEditGeneralNavLink.addEventListener("click", () => {
-          console.log("Featured Showcase nav link clicked")
-          // window.location.replace("https://steamcommunity.com/id/darkharden/edit/showcases")
-          // window.location.reload();
-          window.history.pushState('', '', '/showcases');
-          function reloadShowCasesPage() {
-            window.location.reload();
-          }
-          // Reload page after 3 seconds
-          setTimeout(reloadShowCasesPage, 0);
-        });
+        const navLinkShowcase = document.getElementsByClassName(
+          'profileeditshell_Shell_2kqKZ'
+        ).length > 0;
+
+        if (navLinkShowcase) {
+          console.log("profileShowCasesMavLink found")
+          const profileEditGeneralNavLink = document.querySelector(".profileeditshell_NavLink_3rtIp[href$='/showcases']")
+          profileEditGeneralNavLink.addEventListener("click", () => {
+            console.log("Featured Showcase nav link clicked")
+            // window.location.replace("https://steamcommunity.com/id/darkharden/edit/showcases")
+            // window.location.reload();
+            window.history.pushState('', '', '/showcases');
+            function reloadShowCasesPage() {
+              window.location.reload();
+            }
+            // Reload page after 3 seconds
+            setTimeout(reloadShowCasesPage, 200);
+          });
+        }
 
         if (profileEditShowcaseText) {
-          console.log("customtext_showcase found")
-          const symbolsPickerProfileEditLocation = document.querySelector(".showcase_preview_ctn .customtext_showcase");
+          console.log("customization_edit_area found")
+          const symbolsPickerProfileEditLocation = document.querySelector(".customization_edit_area .customtext_showcase");
           symbolsPickerProfileEditLocation.parentNode.appendChild(symbolsDialogDetails, symbolsPickerProfileEditLocation);
+
         }
         else {
-          console.log("customtext_showcase not found")
+          console.log("customization_edit_area not found")
         }
+
 
         // Featured Showcase Summary
         const profileEditSummary = document.getElementsByClassName(
           'profileedit_ProfileBoxContent_3s6BB'
         ).length > 0;
 
-        const profileEditFeaturedShowCaseNavLink = document.querySelector(".profileeditshell_NavLink_3rtIp[href$='/info']")
-        profileEditFeaturedShowCaseNavLink.addEventListener("click", () => {
-          console.log("General nav link clicked")
-          // window.location.replace("https://steamcommunity.com/id/darkharden/edit/info")
-          // window.location.reload();
-          window.history.pushState('', '', '/info');
-          function reloadGeneralPage() {
-            window.location.reload();
-          }
-          // Reload page after 3 seconds
-          setTimeout(reloadGeneralPage, 0);
-        });
+        // Check if Showcase Nav link exists
+
+        const navLinkGeneral = document.getElementsByClassName(
+          'profileeditshell_Shell_2kqKZ'
+        ).length > 0;
+
+        if (navLinkGeneral) {
+          const profileEditFeaturedShowCaseNavLink = document.querySelector(".profileeditshell_NavLink_3rtIp[href$='/info']")
+          profileEditFeaturedShowCaseNavLink.addEventListener("click", () => {
+            console.log("General nav link clicked")
+            // window.location.replace("https://steamcommunity.com/id/darkharden/edit/info")
+            // window.location.reload();
+            window.history.pushState('', '', '/info');
+            function reloadGeneralPage() {
+              window.location.reload();
+            }
+            // Reload page after 3 seconds
+            setTimeout(reloadGeneralPage, 200);
+          });
+        }
+
 
         if (profileEditSummary) {
           console.log("profileedit_ProfileBoxContent_3s6BB found")
@@ -856,6 +878,101 @@
     });
   })();
 
+  // Steam Mass Comments Poster Vanilla
 
+  const delay = 7; // Seconds in between posting profile comments
+  const manageFriendsSelector = document.querySelector("#manage_friends > .row");
+  const manageFriendsSelectorParent = document.querySelector("#manage_friends");
+
+
+  const manageFriendsComments = document.createElement("div");
+  manageFriendsComments.className = "friends-comments-textarea";
+  manageFriendsComments.innerHTML = `<div class="row commentthread_entry" style="background-color: initial; padding-right: 24px;">
+  <div class="commentthread_entry_quotebox">
+      <textarea rows="3" class="commentthread_textarea" id="comment_textarea" placeholder="Add a comment" style="overflow: hidden; height: 20px;"></textarea>
+  </div>
+  <div class="commentthread_entry_submitlink" style="">
+      <a class="btn_grey_black btn_small_thin" href="javascript:CCommentThread.FormattingHelpPopup('Profile');">
+      <span>Formatting help</span>
+      </a>
+      <span class="emoticon_container">
+      <span class="emoticon_button small" id="emoticonbtn">
+      </span>
+      </span>
+      <span class="btn_green_white_innerfade btn_small" id="comment_submit">
+      <span>Post Comments to Selected Friends</span>
+      </span>
+  </div>
+</div>
+<div class="row" id="log">
+  <span id="log_head"></span>
+  <span id="log_body"></span>
+</div>`;
+
+  ToggleManageFriends();
+
+  // manageFriendsSelectorParent.parentNode.appendChild(manageFriendsComments, manageFriendsSelectorParent);
+
+  manageFriendsSelectorParent.insertBefore(manageFriendsComments, manageFriendsSelector);
 
 })();
+
+// Steam Mass Comments Poster
+
+// ==Configuration==
+// const delay = 7; // Seconds in between posting profile comments
+// ==/Configuration==
+
+// ==Code==
+// ToggleManageFriends();
+// jQuery(function ($) {
+//   $("#manage_friends > .row:last").before(`
+//     <div class="row commentthread_entry" style="background-color: initial; padding-right: 24px;">
+//         <div class="commentthread_entry_quotebox">
+//             <textarea rows="3" class="commentthread_textarea" id="comment_textarea" placeholder="Add a comment" style="overflow: hidden; height: 20px;"></textarea>
+//         </div>
+//         <div class="commentthread_entry_submitlink" style="">
+//             <a class="btn_grey_black btn_small_thin" href="javascript:CCommentThread.FormattingHelpPopup('Profile');">
+//             <span>Formatting help</span>
+//             </a>
+//             <span class="emoticon_container">
+//             <span class="emoticon_button small" id="emoticonbtn">
+//             </span>
+//             </span>
+//             <span class="btn_green_white_innerfade btn_small" id="comment_submit">
+//             <span>Post Comments to Selected Friends</span>
+//             </span>
+//         </div>
+//     </div>
+//     <div class="row" id="log">
+//         <span id="log_head"></span>
+//         <span id="log_body"></span>
+//     </div>`);
+
+//   new CEmoticonPopup($J('#emoticonbtn'), $J('#commentthread_Profile_0_textarea'));
+//   $("#comment_submit").click(() => {
+//     const total = $(".selected").length;
+//     const msg = $("#comment_textarea").val();
+//     if (total === 0 || msg.length === 0) {
+//       alert("Please make sure you entered a message and selected 1 or more friends.");
+//       return;
+//     }
+
+//     $("#log_head, #log_body").html("");
+//     $(".selected").each((i, elem) => {
+//       let profileID = $(elem).data("steamid");
+//       setTimeout(() => $.post("//steamcommunity.com/comment/Profile/post/" + profileID + "/-1/", {
+//         comment: msg,
+//         count: 6,
+//         sessionid: g_sessionID
+//       }, response => {
+//         $("#log_body").get()[0].innerHTML += "<br>" + (response.success === false ? response.error : "Successfully posted comment on <a href=\"https://steamcommunity.com/profiles/" + profileID + "/#commentthread_Profile_" + profileID + "_0_area\">" + profileID + "</a>");
+//         $(".friend_block_v2[data-steamid=" + profileID + "]").removeClass("selected").find(".select_friend_checkbox").prop("checked", false);
+//         UpdateSelection();
+//       })
+//         .fail(() => $("#log_body").get()[0].innerHTML += "<br>Failed to post comment on <a href=\"http://steamcommunity.com/profiles/" + profileID + "/\">" + profileID + "</a>")
+//         .always(() => $("#log_head").html("<br><b>Processed " + (i + 1) + " out of " + total + " friend" + (total.length === 1 ? "" : "s") + ".<b>")), delay * i * 1000);
+//     });
+
+//   });
+// });

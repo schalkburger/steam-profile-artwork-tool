@@ -5,15 +5,14 @@
 // @match       https://steamcommunity.com/id/*/edit/info
 // @match       https://steamcommunity.com/id/*
 // @exclude     https://steamcommunity.com/id/*/*/
-// @grant       none
-// @version     1.3.3
+// @exclude     https://steamcommunity.com/id/*/inventory/*
+// @version     1.3.4
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A tool to make it easier to upload custom artwork for your profile.
 // @license MIT
 // ==/UserScript==
 
 // TO-DO
-// 1. Add Button to comment field that opens unicode/emoticons/symbols selector (popover)
 // 2. Mass comment on profiles script - https://greasyfork.org/en/scripts/26001-steam-community-friends-poster/
 // 3. Comment remover script - https://greasyfork.org/en/scripts/26473-steam-community-comments-remover
 // 4. Centering text in info box / bios
@@ -21,6 +20,7 @@
 
 (function () {
   "use strict";
+  console.log("Steam Artwork Tool Version 1.3.4")
   // Inject Steam Profile Artwork Tool styles
   let css = `
   .steamProfileArtworkContainer {
@@ -207,6 +207,16 @@
   }
   .profileedit_ProfileBoxContent_3s6BB .symbols-container details[open] {
     background-color: rgba(0,0,0,.25);
+  }
+  .customtext_showcase + .symbols-container {
+    left: 0;
+    top: 10px;
+  }
+  .customtext_showcase + .symbols-container details[open] {
+    background-color: transparent;
+  }
+  .upload-artwork-link {
+    margin-right: 4px;
   }
   `,
     head = document.head || document.getElementsByTagName("head")[0],
@@ -615,14 +625,20 @@
       </details>
       `
 
+        // Check if on main profile page
+
         const mainProfilePage = document.getElementsByClassName(
           'commentthread_entry'
         ).length > 0;
 
         if (mainProfilePage) {
           // Grab mainContentsDiv element reference
+          console.log("commentthread_entry found")
           const symbolsPickerModalLocation = document.querySelector(".commentthread_entry");
           symbolsPickerModalLocation.parentNode.appendChild(symbolsDialogDetails, symbolsPickerModalLocation);
+        }
+        else {
+          console.log("commentthread_entry not found")
         }
 
         // Check if on Edit Profile page
@@ -632,10 +648,65 @@
         ).length > 0;
 
         if (profileEditInfoPage) {
-          console.log('✅ class exists on page');
           const symbolsPickerProfileEditLocation = document.querySelector(".summary_summaryTextArea_2ipSt");
           symbolsPickerProfileEditLocation.parentNode.appendChild(symbolsDialogDetails, symbolsPickerProfileEditLocation);
         }
+
+        // Featured Showcase Custom Text
+
+        const profileEditShowcaseText = document.getElementsByClassName(
+          'customtext_showcase'
+        ).length > 0;
+
+        const profileEditGeneralNavLink = document.querySelector(".profileeditshell_NavLink_3rtIp[href$='/showcases']")
+        profileEditGeneralNavLink.addEventListener("click", () => {
+          console.log("Featured Showcase nav link clicked")
+          // window.location.replace("https://steamcommunity.com/id/darkharden/edit/showcases")
+          // window.location.reload();
+          window.history.pushState('', '', '/showcases');
+          function reloadShowCasesPage() {
+            window.location.reload();
+          }
+          // Reload page after 3 seconds
+          setTimeout(reloadShowCasesPage, 0);
+        });
+
+        if (profileEditShowcaseText) {
+          console.log("customtext_showcase found")
+          const symbolsPickerProfileEditLocation = document.querySelector(".showcase_preview_ctn .customtext_showcase");
+          symbolsPickerProfileEditLocation.parentNode.appendChild(symbolsDialogDetails, symbolsPickerProfileEditLocation);
+        }
+        else {
+          console.log("customtext_showcase not found")
+        }
+
+        // Featured Showcase Summary
+        const profileEditSummary = document.getElementsByClassName(
+          'profileedit_ProfileBoxContent_3s6BB'
+        ).length > 0;
+
+        const profileEditFeaturedShowCaseNavLink = document.querySelector(".profileeditshell_NavLink_3rtIp[href$='/info']")
+        profileEditFeaturedShowCaseNavLink.addEventListener("click", () => {
+          console.log("General nav link clicked")
+          // window.location.replace("https://steamcommunity.com/id/darkharden/edit/info")
+          // window.location.reload();
+          window.history.pushState('', '', '/info');
+          function reloadGeneralPage() {
+            window.location.reload();
+          }
+          // Reload page after 3 seconds
+          setTimeout(reloadGeneralPage, 0);
+        });
+
+        if (profileEditSummary) {
+          console.log("profileedit_ProfileBoxContent_3s6BB found")
+          const symbolsPickerProfileEditLocation = document.querySelector(".profileedit_ProfileBoxContent_3s6BB .summary_summaryTextArea_2ipSt");
+          symbolsPickerProfileEditLocation.parentNode.appendChild(symbolsDialogDetails, symbolsPickerProfileEditLocation);
+        }
+        else {
+          console.log("profileedit_ProfileBox_uwqwo not found")
+        }
+
 
       }
       setTimeout(setCommentSymbolsPicker, 500);

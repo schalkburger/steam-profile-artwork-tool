@@ -921,8 +921,8 @@
   const commentTextarea = document.querySelector("#comment_textarea");
   const commentLogHead = document.querySelector("#log_head");
   const commentLogBody = document.querySelector("#log_body");
-  const friendsSelected = document.querySelector(".selectable.manage");
-  console.log("friendsSelected -->", friendsSelected)
+  // const friendsSelected = document.querySelector(".selectable.manage");
+  // console.log("friendsSelected -->", friendsSelected)
   commentSubmitButton.addEventListener("click", (e) => {
     // e.preventDefault();
     const selectedCheckbox = document.querySelector(".selected");
@@ -936,11 +936,17 @@
     commentLogHead.innerHTML = "";
     commentLogBody.innerHTML = "";
 
+    const selectedFriends = document.getElementsByClassName('selected');
+    // console.log("selectedFriends -->", selectedFriends);
 
-    selectedCheckbox.each((i, elem) => {
-      let profileID = document.querySelector(elem).data("steamid");
+    Array.from(selectedFriends).forEach((elem, i) => {
+      // Testing Steam Multi-Profile Comment Poster
+      console.log(elem);
+      let profileID = elem.getAttribute("data-steamid");
+      console.log(profileID);
+
       setTimeout(() => $.post("//steamcommunity.com/comment/Profile/post/" + profileID + "/-1/", {
-        comment: msg,
+        comment: commentMessage,
         count: 6,
         sessionid: g_sessionID
       }, response => {

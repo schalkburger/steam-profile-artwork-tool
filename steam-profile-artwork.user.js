@@ -945,19 +945,48 @@
       let profileID = elem.getAttribute("data-steamid");
       console.log(profileID);
 
-      setTimeout(() => $.post("//steamcommunity.com/comment/Profile/post/" + profileID + "/-1/", {
-        comment: commentMessage,
-        count: 6,
-        sessionid: g_sessionID
-      }, response => {
-        document.querySelector("#log_body").get()[0].innerHTML += "<br>" + (response.success === false ? response.error : "Successfully posted comment on your friend's profile");
-        // document.querySelector("#log_body").get()[0].innerHTML += "<br>" + (response.success === false ? response.error : "Successfully posted comment on <a href="https://steamcommunity.com/profiles/" + profileID + "/#commentthread_Profile_" + profileID + "_0_area">" + profileID + "</a>");
-        document.querySelector(".friend_block_v2[data-steamid=" + profileID + "]").classList.remove("selected").querySelector(".select_friend_checkbox").prop("checked", false);
-        UpdateSelection();
-      })
-        .fail(() => document.querySelector("#log_body").get()[0].innerHTML += "<br>Failed to post comment on friend's profile")
-        // .fail(() => document.querySelector("#log_body").get()[0].innerHTML += "<br>Failed to post comment on <a href="http://steamcommunity.com/profiles/" + profileID + "/">" + profileID + "</a>")
-        .always(() => document.querySelector("#log_head").html("<br><b>Processed " + (i + 1) + " out of " + total + " friend" + (total.length === 1 ? "" : "s") + ".<b>")), delay * i * 1000);
+      // https://stackoverflow.com/questions/64612746/how-would-i-do-this-ajax-jquery-in-vanilla-js
+
+      var http = new XMLHttpRequest();
+      var url = "//steamcommunity.com/comment/Profile/post/" + profileID + "/-1/";
+      var myForm = new FormData()
+
+      // myForm.append({
+      //   comment: commentMessage,
+      //   count: 6,
+      //   sessionid: g_sessionID
+      // })
+
+      myForm.append(
+        "comment", commentMessage,
+        "count", 6,
+        "sessionid", g_sessionID
+      )
+
+      http.open('POST', url, true);
+
+      http.onreadystatechange = function () {//Call a function when the state changes.
+        if (http.readyState == 4 && http.status == 200) {
+
+          // http.responseText will be anything that the server return
+          console.log("HTTP response text -->", http.responseText);
+        }
+      }
+      // http.send(myForm);
+
+      // setTimeout(() => $.post("//steamcommunity.com/comment/Profile/post/" + profileID + "/-1/", {
+      //   comment: commentMessage,
+      //   count: 6,
+      //   sessionid: g_sessionID
+      // }, response => {
+      //   document.querySelector("#log_body").get()[0].innerHTML += "<br>" + (response.success === false ? response.error : "Successfully posted comment on your friend's profile");
+      //   // document.querySelector("#log_body").get()[0].innerHTML += "<br>" + (response.success === false ? response.error : "Successfully posted comment on <a href="https://steamcommunity.com/profiles/" + profileID + "/#commentthread_Profile_" + profileID + "_0_area">" + profileID + "</a>");
+      //   document.querySelector(".friend_block_v2[data-steamid=" + profileID + "]").classList.remove("selected").querySelector(".select_friend_checkbox").prop("checked", false);
+      //   UpdateSelection();
+      // })
+      //   .fail(() => document.querySelector("#log_body").get()[0].innerHTML += "<br>Failed to post comment on friend's profile")
+      //   // .fail(() => document.querySelector("#log_body").get()[0].innerHTML += "<br>Failed to post comment on <a href="http://steamcommunity.com/profiles/" + profileID + "/">" + profileID + "</a>")
+      //   .always(() => document.querySelector("#log_head").html("<br><b>Processed " + (i + 1) + " out of " + total + " friend" + (total.length === 1 ? "" : "s") + ".<b>")), delay * i * 1000);
     });
 
   });

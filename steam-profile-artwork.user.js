@@ -921,6 +921,8 @@
   const commentTextarea = document.querySelector("#comment_textarea");
   const commentLogHead = document.querySelector("#log_head");
   const commentLogBody = document.querySelector("#log_body");
+  const friendsSelected = document.querySelector(".selectable.manage");
+  console.log("friendsSelected -->", friendsSelected)
   commentSubmitButton.addEventListener("click", (e) => {
     // e.preventDefault();
     const selectedCheckbox = document.querySelector(".selected");
@@ -934,19 +936,22 @@
     commentLogHead.innerHTML = "";
     commentLogBody.innerHTML = "";
 
-    document.querySelector(".selected").each((i, elem) => {
+
+    selectedCheckbox.each((i, elem) => {
       let profileID = document.querySelector(elem).data("steamid");
       setTimeout(() => $.post("//steamcommunity.com/comment/Profile/post/" + profileID + "/-1/", {
         comment: msg,
         count: 6,
         sessionid: g_sessionID
       }, response => {
-        document.querySelector("#log_body").get()[0].innerHTML += "<br>" + (response.success === false ? response.error : "Successfully posted comment on <a href="https://steamcommunity.com/profiles/" + profileID + "/#commentthread_Profile_" + profileID + "_0_area">" + profileID + "</a>");
+        document.querySelector("#log_body").get()[0].innerHTML += "<br>" + (response.success === false ? response.error : "Successfully posted comment on your friend's profile");
+        // document.querySelector("#log_body").get()[0].innerHTML += "<br>" + (response.success === false ? response.error : "Successfully posted comment on <a href="https://steamcommunity.com/profiles/" + profileID + "/#commentthread_Profile_" + profileID + "_0_area">" + profileID + "</a>");
         document.querySelector(".friend_block_v2[data-steamid=" + profileID + "]").classList.remove("selected").querySelector(".select_friend_checkbox").prop("checked", false);
         UpdateSelection();
       })
-        .fail(() => document.querySelector("#log_body").get()[0].innerHTML += "<br>Failed to post comment on <a href="http://steamcommunity.com/profiles/" + profileID + "/">" + profileID + "</a>")
-          .always(() => document.querySelector("#log_head").html("<br><b>Processed " + (i + 1) + " out of " + total + " friend" + (total.length === 1 ? "" : "s") + ".<b>")), delay * i * 1000);
+        .fail(() => document.querySelector("#log_body").get()[0].innerHTML += "<br>Failed to post comment on friend's profile")
+        // .fail(() => document.querySelector("#log_body").get()[0].innerHTML += "<br>Failed to post comment on <a href="http://steamcommunity.com/profiles/" + profileID + "/">" + profileID + "</a>")
+        .always(() => document.querySelector("#log_head").html("<br><b>Processed " + (i + 1) + " out of " + total + " friend" + (total.length === 1 ? "" : "s") + ".<b>")), delay * i * 1000);
     });
 
   });

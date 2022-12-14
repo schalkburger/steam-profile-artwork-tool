@@ -940,39 +940,82 @@
     // console.log("selectedFriends -->", selectedFriends);
 
     Array.from(selectedFriends).forEach((elem, i) => {
-      // Testing Steam Multi-Profile Comment Poster
+      /*
+      Testing Steam Multi-Profile Comment Poster
+      */
       console.log(elem);
       let profileID = elem.getAttribute("data-steamid");
       console.log(profileID);
 
+      const url = "//steamcommunity.com/comment/Profile/post/" + profileID + "/-1/";
+
+      const payload = {
+        comment: commentMessage, //var set elsewhere
+        count: 6, //var set elsewhere
+        sessionid: g_sessionID
+      };
+
+      function handleResponse(data, form) {
+        if (!data.message) return
+
+        if (!form) return
+
+        const responseMessage = form.querySelector('[email-response]')
+        const formData = form.querySelector('[email-data]')
+
+        if ('success' === data.message) {
+          responseMessage.classList.remove('error')
+          responseMessage.classList.add('success')
+          responseMessage.innerText = 'Success! Email has been sent.'
+          formData.classList.add('hidden')
+          return
+        }
+
+        return handleError(responseMessage, data)
+      }
+
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw Error(response.statusText);
+          }
+          return response;
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          handleResponse(data, form);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
       // https://stackoverflow.com/questions/64612746/how-would-i-do-this-ajax-jquery-in-vanilla-js
 
-      var http = new XMLHttpRequest();
-      var url = "//steamcommunity.com/comment/Profile/post/" + profileID + "/-1/";
-      var myForm = new FormData()
+      // var http = new XMLHttpRequest();
+      // var url = "//steamcommunity.com/comment/Profile/post/" + profileID + "/-1/";
+      // var myForm = new FormData()
 
-      // myForm.append({
-      //   comment: commentMessage,
-      //   count: 6,
-      //   sessionid: g_sessionID
-      // })
+      // myForm.append(
+      //   "comment", commentMessage,
+      //   "count", 6,
+      //   "sessionid", g_sessionID
+      // )
+      // http.open('POST', url, true);
+      // // Call a function when the state changes
+      // http.onreadystatechange = function () {
+      //   if (http.readyState == 4 && http.status == 200) {
 
-      myForm.append(
-        "comment", commentMessage,
-        "count", 6,
-        "sessionid", g_sessionID
-      )
-
-      http.open('POST', url, true);
-
-      http.onreadystatechange = function () {//Call a function when the state changes.
-        if (http.readyState == 4 && http.status == 200) {
-
-          // http.responseText will be anything that the server return
-          console.log("HTTP response text -->", http.responseText);
-        }
-      }
-      // http.send(myForm);
+      //     // http.responseText will be anything that the server return
+      //     console.log("HTTP response text -->", http.responseText);
+      //   }
+      // }
+      // // http.send(myForm);
 
       // setTimeout(() => $.post("//steamcommunity.com/comment/Profile/post/" + profileID + "/-1/", {
       //   comment: commentMessage,

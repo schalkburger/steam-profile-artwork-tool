@@ -7,7 +7,7 @@
 // @match       https://steamcommunity.com/id/*/friends/
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
 // @exclude     https://steamcommunity.com/id/*/inventory/*
-// @version     1.3.6
+// @version     1.3.7
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A tool to make it easier to upload custom artwork for your profile.
 // @license MIT
@@ -21,7 +21,7 @@
 
 (function () {
   "use strict";
-  console.log("Steam Artwork Tool Version 1.3.6")
+  console.log("Steam Artwork Tool Version 1.3.7")
   // Inject Steam Profile Artwork Tool styles
   let css = `
   .steamProfileArtworkContainer {
@@ -883,7 +883,7 @@
 
   // Steam Mass Comments Poster Vanilla
 
-  const delay = 7; // Seconds in between posting profile comments
+  const postingDelay = 7; // Seconds in between posting profile comments
   const manageFriendsSelector = document.querySelector("#manage_friends > .row");
   const manageFriendsSelectorParent = document.querySelector("#manage_friends");
 
@@ -921,8 +921,7 @@
   const commentTextarea = document.querySelector("#comment_textarea");
   const commentLogHead = document.querySelector("#log_head");
   const commentLogBody = document.querySelector("#log_body");
-  // const friendsSelected = document.querySelector(".selectable.manage");
-  // console.log("friendsSelected -->", friendsSelected)
+
   commentSubmitButton.addEventListener("click", (e) => {
     // e.preventDefault();
     const selectedCheckbox = document.querySelector(".selected");
@@ -936,101 +935,23 @@
     commentLogHead.innerHTML = "";
     commentLogBody.innerHTML = "";
 
-    const selectedFriends = document.getElementsByClassName('selected');
-    // console.log("selectedFriends -->", selectedFriends);
-
-    Array.from(selectedFriends).forEach((elem, i) => {
-      /*
-      Testing Steam Multi-Profile Comment Poster
-      */
-      console.log(elem);
-      let profileID = elem.getAttribute("data-steamid");
-      console.log(profileID);
-
-      const url = "//steamcommunity.com/comment/Profile/post/" + profileID + "/-1/";
-
-      const payload = {
-        comment: commentMessage, //var set elsewhere
-        count: 6, //var set elsewhere
-        sessionid: g_sessionID
-      };
-
-      function handleResponse(data, form) {
-        if (!data.message) return
-
-        if (!form) return
-
-        const responseMessage = form.querySelector('[email-response]')
-        const formData = form.querySelector('[email-data]')
-
-        if ('success' === data.message) {
-          responseMessage.classList.remove('error')
-          responseMessage.classList.add('success')
-          responseMessage.innerText = 'Success! Email has been sent.'
-          formData.classList.add('hidden')
-          return
-        }
-
-        return handleError(responseMessage, data)
-      }
-
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw Error(response.statusText);
-          }
-          return response;
-        })
-        .then((response) => response.json())
-        .then((data) => {
-          handleResponse(data, form);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-
-      // https://stackoverflow.com/questions/64612746/how-would-i-do-this-ajax-jquery-in-vanilla-js
-
-      // var http = new XMLHttpRequest();
-      // var url = "//steamcommunity.com/comment/Profile/post/" + profileID + "/-1/";
-      // var myForm = new FormData()
-
-      // myForm.append(
-      //   "comment", commentMessage,
-      //   "count", 6,
-      //   "sessionid", g_sessionID
-      // )
-      // http.open('POST', url, true);
-      // // Call a function when the state changes
-      // http.onreadystatechange = function () {
-      //   if (http.readyState == 4 && http.status == 200) {
-
-      //     // http.responseText will be anything that the server return
-      //     console.log("HTTP response text -->", http.responseText);
-      //   }
-      // }
-      // // http.send(myForm);
-
-      // setTimeout(() => $.post("//steamcommunity.com/comment/Profile/post/" + profileID + "/-1/", {
-      //   comment: commentMessage,
-      //   count: 6,
-      //   sessionid: g_sessionID
-      // }, response => {
-      //   document.querySelector("#log_body").get()[0].innerHTML += "<br>" + (response.success === false ? response.error : "Successfully posted comment on your friend's profile");
-      //   // document.querySelector("#log_body").get()[0].innerHTML += "<br>" + (response.success === false ? response.error : "Successfully posted comment on <a href="https://steamcommunity.com/profiles/" + profileID + "/#commentthread_Profile_" + profileID + "_0_area">" + profileID + "</a>");
-      //   document.querySelector(".friend_block_v2[data-steamid=" + profileID + "]").classList.remove("selected").querySelector(".select_friend_checkbox").prop("checked", false);
-      //   UpdateSelection();
-      // })
-      //   .fail(() => document.querySelector("#log_body").get()[0].innerHTML += "<br>Failed to post comment on friend's profile")
-      //   // .fail(() => document.querySelector("#log_body").get()[0].innerHTML += "<br>Failed to post comment on <a href="http://steamcommunity.com/profiles/" + profileID + "/">" + profileID + "</a>")
-      //   .always(() => document.querySelector("#log_head").html("<br><b>Processed " + (i + 1) + " out of " + total + " friend" + (total.length === 1 ? "" : "s") + ".<b>")), delay * i * 1000);
+    document.querySelectorAll('.selected').forEach((elem, i) => {
+      let profileID = elem.dataset.steamid;
+      setTimeout(() => {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', `//steamcommunity.com/comment/Profile/post/${profileID}/-1/`, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        xhr.onloadend = (response) => {
+          // let logBody = document.querySelector('#log_body')[0];
+          commentLogBody.innerHTML += `<br>${response.success === false ? response.error : "Successfully posted comment on <a href=\"https://steamcommunity.com/profiles/${profileID}/#commentthread_Profile_${profileID}_0_area\">" + profileID + "</a>"}`;
+          document.querySelector(`.friend_block_v2[data-steamid="${profileID}"]`).classList.remove('selected');
+          document.querySelector(`.friend_block_v2[data-steamid="${profileID}"] .select_friend_checkbox`).checked = false;
+          UpdateSelection();
+        };
+        xhr.send(`comment=${commentMessage}&count=6&sessionid=${g_sessionID}`);
+      }, postingDelay * i * 1000);
     });
+
 
   });
 

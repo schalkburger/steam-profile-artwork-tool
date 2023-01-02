@@ -7,21 +7,23 @@
 // @match       https://steamcommunity.com/id/*/friends/
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
 // @exclude     https://steamcommunity.com/id/*/inventory/*
-// @version     1.3.7
+// @version     1.4.0
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A tool to make it easier to upload custom artwork for your profile.
 // @license MIT
 // ==/UserScript==
 
 // TO-DO
-// 2. Mass comment on profiles script - https://greasyfork.org/en/scripts/26001-steam-community-friends-poster/
+
+// 1. Profile theme switcher preview on profile page - body class change DefaultTheme / MidnightTheme
 // 3. Comment remover script - https://greasyfork.org/en/scripts/26473-steam-community-comments-remover
 // 4. Centering text in info box / bios
 // 5. Make workshop upload also use hex convert
 
 (function () {
   "use strict";
-  console.log("Steam Artwork Tool Version 1.3.7")
+  let version = GM_info.script.version;
+  console.log(`Steam Artwork Tool Version ${version}`)
   // Inject Steam Profile Artwork Tool styles
   let css = `
   .steamProfileArtworkContainer {
@@ -216,8 +218,33 @@
   .customtext_showcase + .symbols-container details[open] {
     background-color: transparent;
   }
-  .upload-artwork-link {
-    margin-right: 4px;
+  .upload-artwork-link, .change-profile-theme {
+    position: absolute;
+    top: -15px;
+    right: -10px;
+  }
+  .change-profile-theme {
+    top: 25px;
+    right: -15px;
+    min-width: 130px;
+    cursor: pointer;
+    overflow: visible;
+    z-index: 400;
+  }
+  .change-profile-theme .color-themes {
+    display: flex;
+    flex-direction: column;
+    background-color: #171a21;
+    color: #fff;
+    padding: 15px;
+    padding-top: 10px;
+    box-shadow: 0 0 12px #000000;
+  }
+  .change-profile-theme .color-themes a {
+    margin: 6px 0 4px 0;
+  }
+  .change-profile-theme .color-themes a:hover {
+    text-decoration: underline;
   }
   #manage_friends .friends-comments-textarea {
     width: 100%;
@@ -383,19 +410,57 @@
         const uploadCustomArtworkButtonContainer = document.createElement("a");
         uploadCustomArtworkButtonContainer.className = "btn_profile_action btn_medium upload-artwork-link";
         // Create Buttons
-        uploadCustomArtworkButtonContainer.innerHTML = `
-      <span>Upload artwork</span>`;
+        uploadCustomArtworkButtonContainer.innerHTML = `<span>Upload artwork</span>`;
         // Grab mainContentsDiv element reference
         const uploadCustomArtworkButton = document.querySelector(".profile_header_actions .btn_profile_action:first-child");
         // Insert the Buttons
         // uploadCustomArtworkButton.insertBefore(uploadCustomArtworkButtonContainer, uploadCustomArtworkButton);
         uploadCustomArtworkButton.parentNode.appendChild(uploadCustomArtworkButtonContainer, uploadCustomArtworkButton);
-
+        // Set upload artwork button URL
         function setUploadArtworkHref() {
           const uploadArtworkButton = document.querySelector(".upload-artwork-link");
           uploadArtworkButton.setAttribute("href", uploadArtworkURL);
         }
         setTimeout(setUploadArtworkHref, 500);
+        // ========================================================================== //
+        // Change profile theme button
+        // ========================================================================== //
+        const changeProfileThemeButtonContainer = document.createElement("div");
+        changeProfileThemeButtonContainer.className = "change-profile-theme";
+        // Create Buttons
+        changeProfileThemeButtonContainer.innerHTML = `<details>
+        <summary>Preview Theme</summary>
+        <div class="color-themes">
+          <a href="#" class="change-theme" id="DefaultTheme">Default Theme</a>
+          <a href="#" class="change-theme" id="SummerTheme">Summer</a>
+          <a href="#" class="change-theme" id="MidnightTheme">Midnight</a>
+          <a href="#" class="change-theme" id="SteelTheme">Steel</a>
+          <a href="#" class="change-theme" id="CosmicTheme">Cosmic</a>
+          <a href="#" class="change-theme" id="DarkModeTheme">DarkMode</a>
+        </div>
+    </details>`;
+        // Grab mainContentsDiv element reference
+        const changeProfileThemeContainerButton = document.querySelector(".profile_header_actions .btn_profile_action:last-child");
+        // Insert the Buttons
+        // changeProfileThemeContainerButton.insertBefore(changeProfileThemeButtonContainer, changeProfileThemeContainerButton);
+        changeProfileThemeContainerButton.parentNode.appendChild(changeProfileThemeButtonContainer, changeProfileThemeContainerButton);
+        // Change profile theme
+        const bodyClass = document.querySelector("body.profile_page");
+        const changeProfileThemeButtonsDetails = document.querySelector(".change-profile-theme details");
+        const changeProfileThemeButtons = document.querySelectorAll(".change-theme");
+        for (let i = 0; i < changeProfileThemeButtons.length; i++) {
+          const changeProfileThemeButton = changeProfileThemeButtons[i];
+          const changeProfileThemeButtonID = changeProfileThemeButton.id;
+          const themeColorArray = ["DefaultTheme", "SummerTheme", "MidnightTheme", "SteelTheme", "CosmicTheme", "DarkModeTheme"];
+          changeProfileThemeButton.addEventListener("click", () => {
+            console.log("Change theme to:", changeProfileThemeButtonID)
+            bodyClass.classList.remove(...themeColorArray)
+            bodyClass.classList.add(changeProfileThemeButtonID)
+            // bodyClass.classList.replace("DarkModeTheme", changeProfileThemeButtonID)
+            changeProfileThemeButtonsDetails.removeAttribute('open');
+          });
+        }
+
       }
       setTimeout(setUploadArtworkButton, 0);
     });
@@ -883,76 +948,97 @@
 
   // Steam Mass Comments Poster Vanilla
 
-  const postingDelay = 7; // Seconds in between posting profile comments
-  const manageFriendsSelector = document.querySelector("#manage_friends > .row");
-  const manageFriendsSelectorParent = document.querySelector("#manage_friends");
-
-  const manageFriendsComments = document.createElement("div");
-  manageFriendsComments.className = "friends-comments-textarea";
-  manageFriendsComments.innerHTML = `<div class="row commentthread_entry" style="background-color: initial; padding-right: 24px;">
-  <div class="commentthread_entry_quotebox">
-      <textarea rows="3" class="commentthread_textarea" id="comment_textarea" placeholder="Add a comment" style="overflow: hidden; height: 20px;"></textarea>
-  </div>
-  <div class="commentthread_entry_submitlink" style="">
-      <a class="btn_grey_black btn_small_thin" href="javascript:CCommentThread.FormattingHelpPopup('Profile');">
-      <span>Formatting help</span>
-      </a>
-      <span class="emoticon_container">
-      <span class="emoticon_button small" id="emoticonbtn">
-      </span>
-      </span>
-      <span class="btn_green_white_innerfade btn_small" id="comment_submit">
-      <span>Post Comments to Selected Friends</span>
-      </span>
-  </div>
-</div>
-<div class="row" id="log">
-  <span id="log_head"></span>
-  <span id="log_body"></span>
-</div>`;
-
-  ToggleManageFriends();
-
-  // manageFriendsSelectorParent.parentNode.appendChild(manageFriendsComments, manageFriendsSelectorParent);
-
-  manageFriendsSelectorParent.insertBefore(manageFriendsComments, manageFriendsSelector);
-
-  const commentSubmitButton = document.querySelector("#comment_submit");
-  const commentTextarea = document.querySelector("#comment_textarea");
-  const commentLogHead = document.querySelector("#log_head");
-  const commentLogBody = document.querySelector("#log_body");
-
-  commentSubmitButton.addEventListener("click", (e) => {
-    // e.preventDefault();
-    const selectedCheckbox = document.querySelector(".selected");
-    const totalSelected = selectedCheckbox?.length;
-    const commentMessage = commentTextarea.value;
-    if (totalSelected === 0 || commentMessage.length === 0) {
-      alert("Please make sure you entered a message and selected 1 or more friends.");
-      return;
+  (function () {
+    "use strict";
+    function rafAsync() {
+      return new Promise((resolve) => requestAnimationFrame(resolve));
     }
+    async function checkElement(selector) {
+      let querySelector = null;
+      while (querySelector === null) {
+        await rafAsync();
+        querySelector = document.querySelector(selector);
+      }
+      return querySelector;
+    }
+    // Check if
+    checkElement("#manage_friends").then((element) => {
+      console.log("#manage_friends exists");
 
-    commentLogHead.innerHTML = "";
-    commentLogBody.innerHTML = "";
 
-    document.querySelectorAll('.selected').forEach((elem, i) => {
-      let profileID = elem.dataset.steamid;
-      setTimeout(() => {
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', `//steamcommunity.com/comment/Profile/post/${profileID}/-1/`, true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-        xhr.onloadend = (response) => {
-          // let logBody = document.querySelector('#log_body')[0];
-          commentLogBody.innerHTML += `<br>${response.success === false ? response.error : "Successfully posted comment on <a href=\"https://steamcommunity.com/profiles/${profileID}/#commentthread_Profile_${profileID}_0_area\">" + profileID + "</a>"}`;
-          document.querySelector(`.friend_block_v2[data-steamid="${profileID}"]`).classList.remove('selected');
-          document.querySelector(`.friend_block_v2[data-steamid="${profileID}"] .select_friend_checkbox`).checked = false;
-          UpdateSelection();
-        };
-        xhr.send(`comment=${commentMessage}&count=6&sessionid=${g_sessionID}`);
-      }, postingDelay * i * 1000);
+      const postingDelay = 7; // Seconds in between posting profile comments
+      const manageFriendsSelector = document.querySelector("#manage_friends > .row");
+      const manageFriendsSelectorParent = document.querySelector("#manage_friends");
+
+      const manageFriendsComments = document.createElement("div");
+      manageFriendsComments.className = "friends-comments-textarea";
+      manageFriendsComments.innerHTML = `<div class="row commentthread_entry" style="background-color: initial; padding-right: 24px;">
+    <div class="commentthread_entry_quotebox">
+        <textarea rows="3" class="commentthread_textarea" id="comment_textarea" placeholder="Add a comment" style="overflow: hidden; height: 20px;"></textarea>
+    </div>
+    <div class="commentthread_entry_submitlink" style="">
+        <a class="btn_grey_black btn_small_thin" href="javascript:CCommentThread.FormattingHelpPopup('Profile');">
+        <span>Formatting help</span>
+        </a>
+        <span class="emoticon_container">
+        <span class="emoticon_button small" id="emoticonbtn">
+        </span>
+        </span>
+        <span class="btn_green_white_innerfade btn_small" id="comment_submit">
+        <span>Post Comments to Selected Friends</span>
+        </span>
+    </div>
+  </div>
+  <div class="row" id="log">
+    <span id="log_head"></span>
+    <span id="log_body"></span>
+  </div>`;
+
+      ToggleManageFriends();
+
+      manageFriendsSelectorParent.parentNode.appendChild(manageFriendsComments, manageFriendsSelectorParent);
+
+      manageFriendsSelectorParent.insertBefore(manageFriendsComments, manageFriendsSelector);
+
+      const commentSubmitButton = document.querySelector("#comment_submit");
+      const commentTextarea = document.querySelector("#comment_textarea");
+      const commentLogHead = document.querySelector("#log_head");
+      const commentLogBody = document.querySelector("#log_body");
+
+      commentSubmitButton.addEventListener("click", (e) => {
+        // e.preventDefault();
+        const selectedCheckbox = document.querySelector(".selected");
+        const totalSelected = selectedCheckbox?.length;
+        const commentMessage = commentTextarea.value;
+        if (totalSelected === 0 || commentMessage.length === 0) {
+          alert("Please make sure you entered a message and selected 1 or more friends.");
+          return;
+        }
+
+        commentLogHead.innerHTML = "";
+        commentLogBody.innerHTML = "";
+
+        document.querySelectorAll('.selected').forEach((elem, i) => {
+          let profileID = elem.dataset.steamid;
+          setTimeout(() => {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', `//steamcommunity.com/comment/Profile/post/${profileID}/-1/`, true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            xhr.onloadend = (response) => {
+              // let logBody = document.querySelector('#log_body')[0];
+              commentLogBody.innerHTML += `<br>${response.success === false ? response.error : "Successfully posted comment on <a href=\"https://steamcommunity.com/profiles/${profileID}/#commentthread_Profile_${profileID}_0_area\">" + profileID + "</a>"}`;
+              document.querySelector(`.friend_block_v2[data-steamid="${profileID}"]`).classList.remove('selected');
+              document.querySelector(`.friend_block_v2[data-steamid="${profileID}"] .select_friend_checkbox`).checked = false;
+              UpdateSelection();
+            };
+            xhr.send(`comment=${commentMessage}&count=6&sessionid=${g_sessionID}`);
+          }, postingDelay * i * 1000);
+        });
+
+
+      });
     });
+  })();
 
-
-  });
 
 })();

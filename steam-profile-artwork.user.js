@@ -269,6 +269,9 @@
   #manage_friends.manage_friends_panel.manage {
     padding-bottom: 20px;
   }
+  .friend_block_v2 .indicator {
+    background-color: #1c4057;
+  }
   `,
     head = document.head || document.getElementsByTagName("head")[0],
     style = document.createElement("style");
@@ -989,7 +992,7 @@
     <span id="log_body"></span>
   </div>`;
 
-      ToggleManageFriends();
+      // ToggleManageFriends();
 
       manageFriendsSelectorParent.parentNode.appendChild(manageFriendsComments, manageFriendsSelectorParent);
 

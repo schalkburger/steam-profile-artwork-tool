@@ -227,6 +227,12 @@
   .upload-artwork-link, .change-profile-theme {
     position: relative;
   }
+  .upload-artwork-link:hover {
+    text-decoration: underline;
+  }
+  .change-profile-theme-container {
+    display: flex;
+  }
   .change-profile-theme {
     min-width: 130px;
     cursor: pointer;
@@ -275,106 +281,6 @@
   } else {
     style.appendChild(document.createTextNode(css));
   }
-  // ========================================================================== //
-  // Steam Profile Artwork Tool Buttons
-
-  (function () {
-    "use strict";
-    function rafAsync() {
-      return new Promise((resolve) => requestAnimationFrame(resolve));
-    }
-    async function checkElement(selector) {
-      let querySelector = null;
-      while (querySelector === null) {
-        await rafAsync();
-        querySelector = document.querySelector(selector);
-      }
-      return querySelector;
-    }
-    // Check if
-    checkElement("#mainContents").then((element) => {
-      console.log("#mainContents exists");
-      function setMainContents() {
-        // Create Steam Profile Artwork Tool Buttons Container
-        const steamProfileArtworkContainer = document.createElement("div");
-        steamProfileArtworkContainer.className = "steamProfileArtworkContainer";
-        // Create Buttons
-        steamProfileArtworkContainer.innerHTML = `
-  <div class="pageTitle">Steam Profile Artwork Tool</div>
-  <div class="buttonsContainer">
-    <a id="blankTitleButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px">
-    <span style="padding-left: 16px; padding-right: 16px;">Enter Blank Title</span>
-    </a>
-    <div class="customArtworkButtons">
-    <details>
-        <summary class="btn_darkblue_white_innerfade btn_medium enable-custom-artwork-button">Enable Custom Uploads</summary>
-        <div class="customArtworkButtonsWrapper">
-          <a id="customArtworkButton" class="btn_medium" style="margin: 2px;">
-          <span style="padding-left: 16px; padding-right: 16px;">Custom Artwork</span>
-          </a>
-          <a id="longScreenshotButton" class="btn_medium" style="margin: 2px;">
-          <span style="padding-left: 16px; padding-right: 16px;">Screenshot</span>
-          </a>
-          <a id="longWorkshopButton" class="btn_medium" style="margin: 2px;">
-          <span style="padding-left: 16px; padding-right: 16px;">Long Workshop</span>
-          </a>
-          <a id="longGuideButton" class="btn_medium" style="margin: 2px;">
-          <span style="padding-left: 16px; padding-right: 16px;">Long Guide</span>
-          </a>
-        </div>
-    </details>
-  </div>
-    <a id="resetButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 0 0 0 5px;background:#171a21">
-    <span style="padding-left: 16px; padding-right: 14px;background:#171a21">Reset</span>
-    </a>
-  </div>`;
-        // Grab mainContentsDiv element reference
-        const mainContentsDiv = document.querySelector("#mainContents");
-        // Insert the Buttons
-        mainContentsDiv.parentNode.insertBefore(steamProfileArtworkContainer, mainContentsDiv);
-      }
-      setTimeout(setMainContents, 0);
-    });
-  })();
-
-  (function () {
-    "use strict";
-    function rafAsync() {
-      return new Promise((resolve) => requestAnimationFrame(resolve));
-    }
-    async function checkElement(selector) {
-      let querySelector = null;
-      while (querySelector === null) {
-        await rafAsync();
-        querySelector = document.querySelector(selector);
-      }
-      return querySelector;
-    }
-    // Check if
-    checkElement(".titleField").then((element) => {
-      console.log(".titleField exists");
-      function setBlankTitleButton() {
-        // ----------------------------
-        // Fill Blank Title Button
-        // ----------------------------
-        const blankTitleCharacter = "⠀";
-        const alertBlankTitleSet = document.createElement("div");
-        alertBlankTitleSet.className = "alertBlankTitleSet";
-        alertBlankTitleSet.innerHTML = `<span><i>✔</i> Blank Title Set</span>`;
-        const titleFieldInput = document.querySelector(".titleField");
-        const blankTitleButton = document.querySelector("#blankTitleButton");
-        const titleFieldParent = titleFieldInput.parentNode;
-        blankTitleButton.addEventListener("click", () => {
-          blankTitleButton.classList.add("blank-title-added");
-          titleFieldInput.value = blankTitleCharacter;
-          titleFieldInput.classList.add("fieldInputSuccess");
-          alertBlankTitleSet.classList.add("fadeIn");
-          titleFieldParent.insertBefore(alertBlankTitleSet, titleFieldInput.nextSibling);
-        });
-      }
-      setTimeout(setBlankTitleButton, 0);
-    });
-  })();
 
   // ----------------------------
   // Upload Artwork & Enable Custom Uploads Buttons
@@ -401,24 +307,38 @@
         const uploadArtworkURL = `https://steamcommunity.com/sharedfiles/edititem/767/3/`;
         const uploadCustomArtworkButtonContainer = document.createElement("div");
         uploadCustomArtworkButtonContainer.className = "profile_artwork";
+        // Get body classes
+        const bodyClasses = Array.from(document.querySelectorAll("body"));
+        let bodyClassesOutput = bodyClasses.flatMap((div, idx) => {
+          let bodyClassesList = div.classList.value.split(" ");
+          // console.log(bodyClassesList);
+          let matches = bodyClassesList.filter((cls) => cls.includes("Theme"));
+          return [matches];
+        });
+        // console.log("Body class array bodyClassesOutput:", bodyClassesOutput);
+        const currentTheme = bodyClassesOutput[0].toString();
+        console.log("Body class theme:", bodyClassesOutput[0].toString());
         uploadCustomArtworkButtonContainer.setAttribute("data-panel", "{'maintainX':true,'bFocusRingRoot':true,'flow-children':'row'}");
         // Create Buttons
         uploadCustomArtworkButtonContainer.innerHTML = `
         <div class="profile_count_link">
           <a class="upload-artwork-link" href="https://steamcommunity.com/sharedfiles/edititem/767/3/"><span>Upload artwork</span></a>
         </div>
-        <div class="profile_count_link">
-          <div class="change-profile-theme"><details>
-          <summary>Preview Theme</summary>
-          <div class="color-themes">
-            <span class="change-theme" id="DefaultTheme">Default Theme</span>
-            <span class="change-theme" id="SummerTheme">Summer</span>
-            <span class="change-theme" id="MidnightTheme">Midnight</span>
-            <span class="change-theme" id="SteelTheme">Steel</span>
-            <span class="change-theme" id="CosmicTheme">Cosmic</span>
-            <span class="change-theme" id="DarkModeTheme">DarkMode</span>
+        <div class="profile_count_link change-profile-theme-container">
+          <div class="change-profile-theme">
+            <details>
+            <summary>Preview Theme</summary>
+              <div class="color-themes">
+                <span class="change-theme" id="DefaultTheme">Default Theme</span>
+                <span class="change-theme" id="SummerTheme">Summer</span>
+                <span class="change-theme" id="MidnightTheme">Midnight</span>
+                <span class="change-theme" id="SteelTheme">Steel</span>
+                <span class="change-theme" id="CosmicTheme">Cosmic</span>
+                <span class="change-theme" id="DarkModeTheme">DarkMode</span>
+              </div>
+            </details>
           </div>
-      </details></div>
+          <div class="active-theme"><span>${currentTheme}</span></div>
         </div>
         `;
         // Grab mainContentsDiv element reference
@@ -432,6 +352,7 @@
         // ========================================================================== //
         // Change profile theme
         const bodyClass = document.querySelector("body.profile_page");
+        const activeThemeSpan = document.querySelector(".active-theme span");
         const changeProfileThemeButtonsDetails = document.querySelector(".change-profile-theme details");
         const changeProfileThemeButtons = document.querySelectorAll(".change-theme");
         for (let i = 0; i < changeProfileThemeButtons.length; i++) {
@@ -442,6 +363,7 @@
             console.log("Change theme to:", changeProfileThemeButtonID);
             bodyClass.classList.remove(...themeColorArray);
             bodyClass.classList.add(changeProfileThemeButtonID);
+            activeThemeSpan.innerHTML = `<span>${changeProfileThemeButtonID}</span>`;
             // bodyClass.classList.replace("DarkModeTheme", changeProfileThemeButtonID)
             changeProfileThemeButtonsDetails.removeAttribute("open");
           });
@@ -769,6 +691,107 @@
         }
       }
       setTimeout(setCommentSymbolsPicker, 500);
+    });
+  })();
+
+  // ========================================================================== //
+  // Steam Profile Artwork Tool Buttons
+
+  (function () {
+    "use strict";
+    function rafAsync() {
+      return new Promise((resolve) => requestAnimationFrame(resolve));
+    }
+    async function checkElement(selector) {
+      let querySelector = null;
+      while (querySelector === null) {
+        await rafAsync();
+        querySelector = document.querySelector(selector);
+      }
+      return querySelector;
+    }
+    // Check if
+    checkElement("#mainContents").then((element) => {
+      console.log("#mainContents exists");
+      function setMainContents() {
+        // Create Steam Profile Artwork Tool Buttons Container
+        const steamProfileArtworkContainer = document.createElement("div");
+        steamProfileArtworkContainer.className = "steamProfileArtworkContainer";
+        // Create Buttons
+        steamProfileArtworkContainer.innerHTML = `
+  <div class="pageTitle">Steam Profile Artwork Tool</div>
+  <div class="buttonsContainer">
+    <a id="blankTitleButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px">
+    <span style="padding-left: 16px; padding-right: 16px;">Enter Blank Title</span>
+    </a>
+    <div class="customArtworkButtons">
+    <details>
+        <summary class="btn_darkblue_white_innerfade btn_medium enable-custom-artwork-button">Enable Custom Uploads</summary>
+        <div class="customArtworkButtonsWrapper">
+          <a id="customArtworkButton" class="btn_medium" style="margin: 2px;">
+          <span style="padding-left: 16px; padding-right: 16px;">Custom Artwork</span>
+          </a>
+          <a id="longScreenshotButton" class="btn_medium" style="margin: 2px;">
+          <span style="padding-left: 16px; padding-right: 16px;">Screenshot</span>
+          </a>
+          <a id="longWorkshopButton" class="btn_medium" style="margin: 2px;">
+          <span style="padding-left: 16px; padding-right: 16px;">Long Workshop</span>
+          </a>
+          <a id="longGuideButton" class="btn_medium" style="margin: 2px;">
+          <span style="padding-left: 16px; padding-right: 16px;">Long Guide</span>
+          </a>
+        </div>
+    </details>
+  </div>
+    <a id="resetButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 0 0 0 5px;background:#171a21">
+    <span style="padding-left: 16px; padding-right: 14px;background:#171a21">Reset</span>
+    </a>
+  </div>`;
+        // Grab mainContentsDiv element reference
+        const mainContentsDiv = document.querySelector("#mainContents");
+        // Insert the Buttons
+        mainContentsDiv.parentNode.insertBefore(steamProfileArtworkContainer, mainContentsDiv);
+      }
+      setTimeout(setMainContents, 0);
+    });
+  })();
+
+  (function () {
+    "use strict";
+    function rafAsync() {
+      return new Promise((resolve) => requestAnimationFrame(resolve));
+    }
+    async function checkElement(selector) {
+      let querySelector = null;
+      while (querySelector === null) {
+        await rafAsync();
+        querySelector = document.querySelector(selector);
+      }
+      return querySelector;
+    }
+    // Check if
+    checkElement(".titleField").then((element) => {
+      console.log(".titleField exists");
+      function setBlankTitleButton() {
+        // ----------------------------
+        // Fill Blank Title Button
+        // ----------------------------
+        const blankTitleCharacter = "⠀";
+        const alertBlankTitleSet = document.createElement("div");
+        alertBlankTitleSet.className = "alertBlankTitleSet";
+        alertBlankTitleSet.innerHTML = `<span><i>✔</i> Blank Title Set</span>`;
+        const titleFieldInput = document.querySelector(".titleField");
+        const blankTitleButton = document.querySelector("#blankTitleButton");
+        const titleFieldParent = titleFieldInput.parentNode;
+        blankTitleButton.addEventListener("click", () => {
+          blankTitleButton.classList.add("blank-title-added");
+          titleFieldInput.value = blankTitleCharacter;
+          titleFieldInput.classList.add("fieldInputSuccess");
+          alertBlankTitleSet.classList.add("fadeIn");
+          titleFieldParent.insertBefore(alertBlankTitleSet, titleFieldInput.nextSibling);
+        });
+      }
+      setTimeout(setBlankTitleButton, 0);
     });
   })();
 

@@ -15,10 +15,9 @@
 
 // TO-DO
 
-// 1. Profile theme switcher preview on profile page - body class change DefaultTheme / MidnightTheme
-// 3. Comment remover script - https://greasyfork.org/en/scripts/26473-steam-community-comments-remover
-// 4. Centering text in info box / bios
-// 5. Make workshop upload also use hex convert
+// 1. Comment remover script - https://greasyfork.org/en/scripts/26473-steam-community-comments-remover
+// 2. Centering text in info box / bios
+// 3. Make workshop upload also use hex convert
 
 (function () {
   "use strict";

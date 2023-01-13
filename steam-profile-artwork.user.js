@@ -4,10 +4,11 @@
 // @match       https://steamcommunity.com/sharedfiles/edititem/767/3/
 // @match       https://steamcommunity.com/id/*/edit/info
 // @match       https://steamcommunity.com/id/*
+// @match       https://steamcommunity.com/profiles/*
 // @match       https://steamcommunity.com/id/*/friends/
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
 // @exclude     https://steamcommunity.com/id/*/inventory/*
-// @version     1.4.1
+// @version     1.4.2
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A tool to make it easier to upload custom artwork for your profile.
 // @license MIT

@@ -8,7 +8,8 @@
 // @match       https://steamcommunity.com/id/*/friends/
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
 // @exclude     https://steamcommunity.com/id/*/inventory/*
-// @version     1.4.2
+// @exclude     https://steamcommunity.com/id/*/commentnotifications/*
+// @version     1.4.3
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A tool to make it easier to upload custom artwork for your profile.
 // @license MIT

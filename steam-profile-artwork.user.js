@@ -3,12 +3,12 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/sharedfiles/edititem/767/3/
 // @match       https://steamcommunity.com/id/*/edit/info
-// @match       https://steamcommunity.com/id/*/
+// @match       https://steamcommunity.com/id/*
 // @match       https://steamcommunity.com/profiles/*
 // @match       https://steamcommunity.com/id/*/friends/
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
 
-// @version     1.4.5
+// @version     1.4.5.1
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A tool to make it easier to upload custom artwork for your profile.
 // @license MIT

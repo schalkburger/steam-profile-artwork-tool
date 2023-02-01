@@ -3,13 +3,12 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/sharedfiles/edititem/767/3/
 // @match       https://steamcommunity.com/id/*/edit/info
-// @match       https://steamcommunity.com/id/*
+// @match       https://steamcommunity.com/id/*/
 // @match       https://steamcommunity.com/profiles/*
 // @match       https://steamcommunity.com/id/*/friends/
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @exclude     https://steamcommunity.com/id/*/inventory/*
-// @exclude     https://steamcommunity.com/id/*/commentnotifications/*
-// @version     1.4.3
+
+// @version     1.4.5
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A tool to make it easier to upload custom artwork for your profile.
 // @license MIT
@@ -339,6 +338,7 @@
                 <span class="change-theme" id="SteelTheme">Steel</span>
                 <span class="change-theme" id="CosmicTheme">Cosmic</span>
                 <span class="change-theme" id="DarkModeTheme">DarkMode</span>
+                <span class="change-theme" id="Steam3000Theme">Steam3000Theme</span>
               </div>
             </details>
           </div>
@@ -362,7 +362,7 @@
         for (let i = 0; i < changeProfileThemeButtons.length; i++) {
           const changeProfileThemeButton = changeProfileThemeButtons[i];
           const changeProfileThemeButtonID = changeProfileThemeButton.id;
-          const themeColorArray = ["DefaultTheme", "SummerTheme", "MidnightTheme", "SteelTheme", "CosmicTheme", "DarkModeTheme"];
+          const themeColorArray = ["DefaultTheme", "SummerTheme", "MidnightTheme", "SteelTheme", "CosmicTheme", "DarkModeTheme", "Steam3000Theme"];
           changeProfileThemeButton.addEventListener("click", () => {
             console.log("Change theme to:", changeProfileThemeButtonID);
             bodyClass.classList.remove(...themeColorArray);

@@ -7,8 +7,7 @@
 // @match       https://steamcommunity.com/profiles/*
 // @match       https://steamcommunity.com/id/*/friends/
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-
-// @version     1.4.5.2
+// @version     1.4.5.3
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A tool to make it easier to upload custom artwork for your profile.
 // @license MIT
@@ -187,15 +186,15 @@
     font-size: 18px;
   }
   .symbols-container {
-    position: relative;
-    left: 55px;
     max-width: 590px;
     max-height: 500px;
     overflow: auto;
     background: none;
+    position: relative;
+    top: 0;
   }
   .symbols-container details {
-        padding: 15px;
+    padding: 15px;
   }
   .symbols-container details[open] {
     padding: 15px;
@@ -272,12 +271,15 @@
   .friend_block_v2 .indicator {
     background-color: #1c4057;
   }
-  #favDialog {
+  #showSymbols {
+    margin-left: 52px;
+  }
+  #symbolsModal {
     width: 500px;
     height: 500px;
-    position: sticky;
+    position: fixed;
     top: 10px;
-    left: 100%;
+    left: 70%;
     background-color: #141414;
     color: #fff;
     padding: 15px;
@@ -286,17 +288,19 @@
     width: 500px;
     height: calc(95vh);
     border: none;
+    overflow: scroll;
+    display: none;
   }
-  #favDialog #close {
+  #symbolsModal.show {
+    display: block;
+  }
+  #symbolsModal #close {
     position: fixed;
     top: 20px;
     right: 20px;
     font-size: 14px;
     color: transparent;
     text-shadow: 0 0 0 white;
-  }
-  #favDialog::backdrop {
-    background: rgba(255, 0, 0, 0.25);
   }
   `,
     head = document.head || document.getElementsByTagName("head")[0],
@@ -412,8 +416,8 @@
         const symbolsDialogDetails = document.createElement("div");
         symbolsDialogDetails.className = "symbols-container ";
         symbolsDialogDetails.innerHTML = `
-        <a id="showDialog">Symbols & Characters</a>
-        <dialog id="favDialog">
+        <a id="showSymbols">Symbols & Characters</a>
+        <div id="symbolsModal">
         <div>
         <a id="close">❌</a>
         <div class="subSection detailBox" id="2050699">
@@ -636,18 +640,18 @@
         </div>
       </div>
         </div>
-      </dialog>
+      </div>
       `;
 
         function setSymbolsCharactersModal() {
-          const showButton = document.getElementById("showDialog");
-          const favDialog = document.getElementById("favDialog");
+          const showButton = document.getElementById("showSymbols");
+          const symbolsModal = document.getElementById("symbolsModal");
           const closeButton = document.getElementById("close");
           showButton.addEventListener("click", () => {
-            favDialog.showModal();
+            symbolsModal.classList.add("show");
           });
           closeButton.addEventListener("click", () => {
-            favDialog.close();
+            symbolsModal.classList.remove("show");
           });
         }
         // Reload page after 3 seconds

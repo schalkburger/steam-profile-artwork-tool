@@ -15,9 +15,9 @@
 
 // TO-DO
 
-// 1. Comment remover script - https://greasyfork.org/en/scripts/26473-steam-community-comments-remover
-// 2. Centering text in info box / bios
-// 3. Make workshop upload also use hex convert
+// 1. 6x6 comment function
+// 2. Comment remover script - https://greasyfork.org/en/scripts/26473-steam-community-comments-remover
+// 3. Centering text in info box / bios
 
 (function () {
   "use strict";

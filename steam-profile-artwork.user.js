@@ -8,7 +8,7 @@
 // @match       https://steamcommunity.com/profiles/*
 // @match       https://steamcommunity.com/id/*/friends/
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.4.5.5
+// @version     1.4.6.0
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A tool to make it easier to upload custom artwork for your profile.
 // @license MIT
@@ -18,7 +18,8 @@
 
 // 1. 6x6 comment function
 // 2. Comment remover script - https://greasyfork.org/en/scripts/26473-steam-community-comments-remover
-// 3. Centering text in info box / bios
+// 3. Rate Entire Activity Feed - https://steamcommunity.com/sharedfiles/filedetails/?id=1442281864 / https://steamcommunity.com/sharedfiles/filedetails/?id=1198512278
+// 4. Centering text in info box / bios
 
 (function () {
   "use strict";
@@ -273,7 +274,7 @@
     background-color: #1c4057;
   }
   #showSymbols {
-    margin-left: 52px;
+    margin-left: 0;
   }
   #symbolsModal {
     width: 500px;
@@ -291,6 +292,7 @@
     border: none;
     overflow: scroll;
     display: none;
+    z-index: 500;
   }
   #symbolsModal.show {
     display: block;
@@ -335,8 +337,8 @@
       return querySelector;
     }
     // Check if on profile page
-    checkElement(".btn_profile_action").then((element) => {
-      console.log("btn_profile_action");
+    checkElement(".profile_header_actions").then((element) => {
+      console.log("profile_header_actions");
       function setUploadArtworkButton() {
         const uploadArtworkURL = `https://steamcommunity.com/sharedfiles/edititem/767/3/`;
         const uploadCustomArtworkButtonContainer = document.createElement("div");
@@ -357,6 +359,9 @@
         uploadCustomArtworkButtonContainer.innerHTML = `
         <div class="profile_count_link">
           <a class="upload-artwork-link" href="https://steamcommunity.com/sharedfiles/edititem/767/3/"><span>Upload artwork</span></a>
+        </div>
+        <div class="profile_count_link symbols-container">
+        <a id="showSymbols">Symbols & Characters</a>
         </div>
         <div class="profile_count_link change-profile-theme-container">
           <div class="change-profile-theme">
@@ -417,7 +422,6 @@
         const symbolsDialogDetails = document.createElement("div");
         symbolsDialogDetails.className = "symbols-container ";
         symbolsDialogDetails.innerHTML = `
-        <a id="showSymbols">Symbols & Characters</a>
         <div id="symbolsModal">
         <div>
         <a id="close">❌</a>

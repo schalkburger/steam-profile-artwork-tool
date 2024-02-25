@@ -8,7 +8,7 @@
 // @match       https://steamcommunity.com/profiles/*
 // @match       https://steamcommunity.com/id/*/friends/
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.5.1
+// @version     1.5.2
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A tool to make it easier to upload custom artwork for your profile.
 // @license MIT
@@ -788,7 +788,7 @@
   }
 
   // Call the function to copy the src value to the clipboard
-  copySrcValueToClipboard();
+  // copySrcValueToClipboard();
 
   //* ==========================================================================
   //* Steam Replace Avatar Frame Source
@@ -825,7 +825,7 @@
   }
 
   // Call the function to replace the src value
-  replaceSrcValue();
+  // replaceSrcValue();
 
   //! End of line 24
 })();

@@ -1,15 +1,9 @@
 // ==UserScript==
 // @name        Steam Enhanced
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
-// @match       https://steamcommunity.com/sharedfiles/edititem/767/3/
-// @match       https://steamcommunity.com/id/*/edit/info
-// @match       https://steamcommunity.com/id/*
-// @match       https://steamcommunity.com/id/*/
-// @match       https://steamcommunity.com/profiles/*
-// @match       https://steamcommunity.com/id/*/friends/
-// @match       https://steamcommunity.com/market/*
+// @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.0.11
+// @version     1.1.1
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -23,6 +17,7 @@
 
 // 1. Upload Artwork & Enable Custom Uploads Buttons
 // 2. Steam Profile Artwork Tool Buttons
+// 3. Symbols & Characters
 // 3. Steam Mass Comments Poster Vanilla
 // 4. Steam Copy Avatar Frame Source
 // 5. Steam Replace Avatar Frame Source
@@ -34,6 +29,323 @@
   console.log(`Steam Enhanced Version ${version}`);
   // Inject Steam Profile Artwork Tool styles
   let css = `
+  .profile_artwork {
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgb(0 0 0 / 25%);
+    background: #141414;
+    opacity: 1;
+    width: 180px;
+  }
+  .profile_artwork:hover {
+    opacity: 1;
+  }
+  .profile_artwork h4 {
+    width: 100%;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .profile_artwork h4 span {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGklEQVR4nGNgQAPMfxgYGH8AGR+AOAFdlgEAUsADSd64CbwAAAAASUVORK5CYII=);
+    background-position: right center;
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    cursor: pointer;
+  }
+  .profile_artwork h4 span.toggle {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGUlEQVR4nGNgQAcJQPyBgYHxBwMD8x8MWQBLKANJzkSRZQAAAABJRU5ErkJggg==);
+  }
+  .profile_artwork a:hover {
+    text-decoration: underline;
+  }
+  .steam-enhanced-container.hide {
+    display: none;
+  }
+  .upload-artwork-link, .change-profile-theme {
+    position: relative;
+  }
+  .upload-artwork-link:hover {
+    text-decoration: underline;
+  }
+  .change-profile-theme-container {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #7d7f7f;
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+  .change-profile-theme {
+    min-width: 150px;
+    min-height: 20px;
+    cursor: pointer;
+    overflow: visible;
+    z-index: 400;
+    color: #fff;
+    margin-top: 5px;
+  }
+  .preview-background {
+    z-index: 300;
+  }
+  .preview-avatar-frame {
+    z-index: 200;
+  }
+  .useful-links {
+    z-index: 500;
+  }
+  .change-profile-theme .color-themes {
+    display: flex;
+    flex-direction: column;
+    background-color: #141414;
+    color: #fff;
+    padding: 15px;
+    padding-top: 5px;
+    padding-left: 25px;
+    margin-top: 0;
+    min-width: 150px;
+    margin-left: -15px;
+    border-radius: 10px 0 0 10px;
+  }
+  .change-profile-theme .useful-links {
+    display: flex;
+    flex-direction: column;
+    background-color: #141414;
+    color: #fff;
+    padding: 15px;
+    padding-top: 5px;
+    padding-left: 25px;
+    margin-top: 0;
+    min-width: 150px;
+    margin-left: -15px;
+    border-radius: 10px 0 0 10px;
+  }
+  .change-profile-theme .useful-links span {
+    margin-bottom: 4px;
+  }
+  .change-profile-theme .color-themes span {
+    margin: 6px 0 4px 0;
+    display: block;
+  }
+  .change-profile-theme .color-themes span:hover {
+    text-decoration: underline;
+  }
+  .change-profile-theme details {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #141414;
+  }
+  .change-profile-theme details summary{
+    user-select: none;
+  }
+  #manage_friends .friends-comments-textarea {
+    width: 100%;
+  }
+  #manage_friends.manage_friends_panel.manage {
+    padding-bottom: 20px;
+  }
+  .friend_block_v2 .indicator {
+    background-color: #1c4057;
+  }
+  #showSymbols {
+    margin-left: 0;
+  }
+  #symbolsModal {
+    position: fixed;
+    top: 10px;
+    right: 0;
+    background-color: #141414;
+    color: #fff;
+    padding: 15px;
+    padding-top: 0;
+    box-shadow: 0 0 12px #000000;
+    width: 340px;
+    height: calc(95vh);
+    border: none;
+    overflow: hidden;
+    overflow-y: scroll;
+    display: none;
+    z-index: 500;
+    cursor: auto;
+  }
+  #symbolsModal.show {
+    display: block;
+  }
+  #symbolsModal.hide {
+    display: none;
+  }
+  #symbolsModal #close {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 14px;
+    color: transparent;
+    text-shadow: 0 0 0 white;
+  }
+  #symbolsModal a {
+    color: #1a9fff;
+    display: block;
+  }
+  .profile_content.has_profile_background {
+    overflow: visible;
+  }
+  .profile_count_link {
+    font-size: 12px;
+    margin-bottom: 4px;
+    min-height: 20px;
+  }
+  .active-theme span {
+    color: #2e83c9;
+  }
+  .profile-autoreload-market {
+    line-height: auto;
+  }
+
+  @supports (-webkit-appearance: none) or (-moz-appearance: none) {
+    input[type=checkbox],
+  input[type=radio] {
+      --active: #51a0be;
+      --active-inner: #fff;
+      --focus: 2px rgba(39, 94, 254, .3);
+      --border: #c5c3c0;
+      --border-hover: #fff;
+      --background: #141414;
+      --disabled: #F6F8FF;
+      --disabled-inner: #E1E6F9;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      height: 14px;
+      outline: none;
+      display: inline-block;
+      vertical-align: top;
+      position: relative;
+      margin: 0;
+      cursor: pointer;
+      border: 1px solid var(--bc, var(--border));
+      background: var(--b, var(--background));
+      transition: background 0.3s, border-color 0.3s, box-shadow 0.2s;
+      margin-left: 2px;
+      margin-top: 1px;
+    }
+    input[type=checkbox]:after,
+  input[type=radio]:after {
+      content: "";
+      display: block;
+      left: 0;
+      top: 0;
+      position: absolute;
+      transition: transform var(--d-t, 0.3s) var(--d-t-e, ease), opacity var(--d-o, 0.2s);
+    }
+    input[type=checkbox]:checked,
+  input[type=radio]:checked {
+      --b: var(--active);
+      --bc: var(--active);
+      --d-o: .3s;
+      --d-t: .6s;
+      --d-t-e: cubic-bezier(.2, .85, .32, 1.2);
+    }
+    input[type=checkbox]:disabled,
+  input[type=radio]:disabled {
+      --b: var(--disabled);
+      cursor: not-allowed;
+      opacity: 0.9;
+    }
+    input[type=checkbox]:disabled:checked,
+  input[type=radio]:disabled:checked {
+      --b: var(--disabled-inner);
+      --bc: var(--border);
+    }
+    input[type=checkbox]:disabled + label,
+  input[type=radio]:disabled + label {
+      cursor: not-allowed;
+    }
+    input[type=checkbox]:hover:not(:checked):not(:disabled),
+  input[type=radio]:hover:not(:checked):not(:disabled) {
+      --bc: var(--border-hover);
+    }
+    input[type=checkbox]:focus,
+  input[type=radio]:focus {
+      box-shadow: 0 0 0 var(--focus);
+    }
+    input[type=checkbox]:not(.switch),
+  input[type=radio]:not(.switch) {
+      width: 21px;
+    }
+    input[type=checkbox]:not(.switch):after,
+  input[type=radio]:not(.switch):after {
+      opacity: var(--o, 0);
+    }
+    input[type=checkbox]:not(.switch):checked,
+  input[type=radio]:not(.switch):checked {
+      --o: 1;
+    }
+    input[type=checkbox] + label,
+  input[type=radio] + label {
+      font-size: 14px;
+      line-height: 21px;
+      display: inline-block;
+      vertical-align: top;
+      cursor: pointer;
+      margin-left: 4px;
+    }
+
+    input[type=checkbox]:not(.switch) {
+      border-radius: 7px;
+    }
+    input[type=checkbox]:not(.switch):after {
+      width: 5px;
+      height: 9px;
+      border: 2px solid var(--active-inner);
+      border-top: 0;
+      border-left: 0;
+      left: 7px;
+      top: 4px;
+      transform: rotate(var(--r, 20deg));
+    }
+    input[type=checkbox]:not(.switch):checked {
+      --r: 43deg;
+    }
+    input[type=checkbox].switch {
+      width: 33px;
+      border-radius: 11px;
+    }
+    input[type=checkbox].switch:after {
+      left: 2px;
+      top: 2px;
+      border-radius: 50%;
+      width: 8px;
+      height: 8px;
+      background: var(--ab, var(--border));
+      transform: translateX(var(--x, 0));
+    }
+    input[type=checkbox].switch:checked {
+      --ab: var(--active-inner);
+      --x: 17px;
+    }
+    input[type=checkbox].switch:disabled:not(:checked):after {
+      opacity: 0.6;
+    }
+
+    input[type=radio] {
+      border-radius: 50%;
+    }
+    input[type=radio]:after {
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      background: var(--active-inner);
+      opacity: 0;
+      transform: scale(var(--s, 0.7));
+    }
+    input[type=radio]:checked {
+      --s: .5;
+    }
   .steamProfileArtworkContainer {
     background: #17222f;
     display: block;
@@ -204,10 +516,11 @@
   }
   .symbols-container details {
     padding: 15px;
+    transition: all 0.3s ease-out;
   }
   .symbols-container details[open] {
     padding: 15px;
-    background: #111c34;
+    background: #141414;
   }
   .symbols-container summary {
     cursor: pointer;
@@ -226,97 +539,9 @@
   .customtext_showcase + .symbols-container details[open] {
     background-color: transparent;
   }
-  .profile_artwork {
-    border-top: 1px solid rgb(255 255 255 / 15%);
-    border-bottom: 1px solid rgb(255 255 255 / 15%);
-    padding: 10px 0 0 5px;
-    margin-bottom: 10px;
   }
-  .upload-artwork-link, .change-profile-theme {
-    position: relative;
-  }
-  .upload-artwork-link:hover {
-    text-decoration: underline;
-  }
-  .change-profile-theme-container {
-    display: flex;
-  }
-  .change-profile-theme {
-    min-width: 130px;
-    cursor: pointer;
-    overflow: visible;
-    z-index: 400;
-    color: #fff;
-  }
-  .change-profile-theme .color-themes {
-    display: flex;
-    flex-direction: column;
-    background-color: #171a21;
-    color: #fff;
-    padding: 15px;
-    padding-top: 10px;
-    box-shadow: 0 0 12px #000000;
-    margin-top: 10px;
-    min-width: 140px;
-  }
-  .change-profile-theme .color-themes span {
-    margin: 6px 0 4px 0;
-    display: block;
-  }
-  .change-profile-theme .color-themes span:hover {
-    text-decoration: underline;
-  }
-  .change-profile-theme details {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-  #manage_friends .friends-comments-textarea {
-    width: 100%;
-  }
-  #manage_friends.manage_friends_panel.manage {
-    padding-bottom: 20px;
-  }
-  .friend_block_v2 .indicator {
-    background-color: #1c4057;
-  }
-  #showSymbols {
-    margin-left: 0;
-  }
-  #symbolsModal {
-    position: fixed;
-    top: 10px;
-    right: 0;
-    background-color: #141414;
-    color: #fff;
-    padding: 15px;
-    padding-top: 0;
-    box-shadow: 0 0 12px #000000;
-    width: 370px;
-    height: calc(95vh);
-    border: none;
-    overflow: scroll;
-    display: none;
-    z-index: 500;
-    cursor: auto;
-  }
-  #symbolsModal.show {
-    display: block;
-  }
-  #symbolsModal.hide {
-    display: none;
-  }
-  #symbolsModal #close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 14px;
-    color: transparent;
-    text-shadow: 0 0 0 white;
-  }
-  .profile_content.has_profile_background {
-    overflow: visible;
-  }
+
+
   `,
     head = document.head || document.getElementsByTagName("head")[0],
     style = document.createElement("style");
@@ -349,8 +574,8 @@
       return querySelector;
     }
     // Check if on profile page
-    checkElement(".profile_header_actions").then((element) => {
-      console.log("profile_header_actions");
+    checkElement("#global_header").then((element) => {
+      console.log("global_header");
       function setUploadArtworkButton() {
         const uploadArtworkURL = `https://steamcommunity.com/sharedfiles/edititem/767/3/`;
         const uploadCustomArtworkButtonContainer = document.createElement("div");
@@ -369,38 +594,103 @@
         uploadCustomArtworkButtonContainer.setAttribute("data-panel", "{'maintainX':true,'bFocusRingRoot':true,'flow-children':'row'}");
         // Create Buttons
         uploadCustomArtworkButtonContainer.innerHTML = `
-        <div class="profile_count_link">
-          <a class="upload-artwork-link" href="https://steamcommunity.com/sharedfiles/edititem/767/3/"><span>Upload artwork</span></a>
-        </div>
-        <div class="profile_count_link">
-        <a id="showSymbols">Symbols & Characters</a>
-        </div>
-        <div class="profile_count_link change-profile-theme-container">
-          <div class="change-profile-theme">
-            <details>
-            <summary>Preview Theme</summary>
-              <div class="color-themes">
-                <span class="change-theme" id="DefaultTheme">Default Theme</span>
-                <span class="change-theme" id="SummerTheme">Summer</span>
-                <span class="change-theme" id="MidnightTheme">Midnight</span>
-                <span class="change-theme" id="SteelTheme">Steel</span>
-                <span class="change-theme" id="CosmicTheme">Cosmic</span>
-                <span class="change-theme" id="DarkModeTheme">DarkMode</span>
-                <span class="change-theme" id="Steam3000Theme">Steam3000Theme</span>
-                <span class="change-theme" id="GameProfileTheme">GameProfileTheme</span>
-                <span class="change-theme" id="SteamDeckTheme">SteamDeckTheme</span>
-              </div>
-            </details>
+         <h4>Steam Enhanced <span id="steamEnhancedToggle"></span></h4>
+         <div id="steamEnhancedContainer" class="steam-enhanced-container">
+          <div class="profile_count_link">
+            <a class="upload-artwork-link" href="https://steamcommunity.com/sharedfiles/edititem/767/3/"><span>Upload artwork</span></a>
           </div>
-          <div class="active-theme"><span>${currentTheme}</span></div>
+          <div class="profile_count_link">
+            <a id="reloadPage">Reload Page</a>
+          </div>
+          <div class="profile_count_link profile-autoreload-market">
+            <a id="#">Autoreload Market</a>
+            <input id="s1" type="checkbox" class="switch" />
+            <label for="s1"></label>
+          </div>
+          <div class="profile_count_link">
+            <a id="#">Autoclaim Stickers</a>
+          </div>
+          <div class="profile_count_link">
+            <a id="#">Clean Comments</a>
+          </div>
+          <div class="profile_count_link">
+            <a id="showSymbols">Symbols & Characters</a>
+          </div>
+          <div class="profile_count_link">
+            <div class="change-profile-theme useful-links">
+              <details>
+                <summary>Useful Links</summary>
+                <div class="useful-links">
+                  <span><a href="https://steamstat.us/" target="_blank">Steam Status</a></span>
+                  <span><a href="https://steamdb.info/sales/history/" target="_blank">Steam Sale Dates</a></span>
+                </div>
+              </details>
+            </div>
+          </div>
+          <div class="profile_count_link change-profile-theme-container">
+            <div class="change-profile-theme">
+              <details>
+                <summary>Preview Theme</summary>
+                <div class="active-theme" style="display:none"><span>(${currentTheme})</span></div>
+                <div class="color-themes">
+                  <span class="change-theme" id="DefaultTheme">Default Theme</span>
+                  <span class="change-theme" id="SummerTheme">Summer</span>
+                  <span class="change-theme" id="MidnightTheme">Midnight</span>
+                  <span class="change-theme" id="SteelTheme">Steel</span>
+                  <span class="change-theme" id="CosmicTheme">Cosmic</span>
+                  <span class="change-theme" id="DarkModeTheme">DarkMode</span>
+                  <span class="change-theme" id="Steam3000Theme">Steam3000Theme</span>
+                  <span class="change-theme" id="GameProfileTheme">GameProfileTheme</span>
+                  <span class="change-theme" id="SteamDeckTheme">SteamDeckTheme</span>
+                </div>
+              </details>
+            </div>
+          </div>
+          <div class="profile_count_link">
+            <div class="change-profile-theme preview-background">
+              <details>
+                <summary>Preview Background</summary>
+                <div class="color-themes">
+                  <span class="change-theme" id="DefaultTheme">Background</span>
+                </div>
+              </details>
+            </div>
+          </div>
+          <div class="profile_count_link">
+            <div class="change-profile-theme preview-avatar-frame">
+              <details>
+                <summary>Preview Avatar Frame</summary>
+                <div class="color-themes">
+                  <span class="change-theme" id="DefaultTheme">Avatar Frame</span>
+                </div>
+              </details>
+            </div>
+          </div>
         </div>
         `;
-        // Grab mainContentsDiv element reference
-        const uploadCustomArtworkButton = document.querySelector(".profile_header_actions .btn_profile_action:first-child");
-        const uploadArtworkButtonReferenceParent = document.querySelector(".responsive_count_link_area");
-        const uploadArtworkButtonReferenceChild = document.querySelector(".responsive_count_link_area > div:first-child");
-        // Insert the Buttons
-        uploadArtworkButtonReferenceParent.insertBefore(uploadCustomArtworkButtonContainer, uploadArtworkButtonReferenceChild);
+
+        // #mainContents
+        // const steamEnhancedContainer = document.getElementById("responsive_page_template_content");
+        const steamEnhancedWrapper = document.getElementById("responsive_page_template_content") || document.getElementById("mainContents");
+        if (steamEnhancedWrapper) {
+          steamEnhancedWrapper.appendChild(uploadCustomArtworkButtonContainer);
+        }
+
+        // Reload Page Functionality
+        const reloadPageButton = document.getElementById("reloadPage");
+        reloadPageButton.addEventListener("click", function () {
+          location.reload();
+        });
+
+        // Steam Enhanced Toggle
+        const steamEnhancedToggle = document.getElementById("steamEnhancedToggle");
+        const steamEnhancedContainer = document.getElementById("steamEnhancedContainer");
+        steamEnhancedToggle.addEventListener("click", function () {
+          console.log("steamEnhancedToggle clicked");
+          steamEnhancedToggle.classList.toggle("toggle");
+          steamEnhancedContainer.classList.toggle("hide");
+        });
+
         // ========================================================================== //
         // Change profile theme button
         // ========================================================================== //
@@ -426,9 +716,8 @@
       setTimeout(setUploadArtworkButton, 0);
     });
 
-    // Check if comment area exists
-    // console.log("flat_page exists");
-    checkElement(".flat_page").then((element) => {
+    // 3. Symbols & Characters
+    checkElement("#global_header").then((element) => {
       function setCommentSymbolsPicker() {
         console.log("setCommentSymbolsPicker");
         const symbolsDialogDetails = document.createElement("div");
@@ -440,11 +729,19 @@
           <div class="subSectionTitle">Invisible Spacers</div>
           <div class="subSectionDesc">
             For those needing spacers for anything they are doing, but regular spaces (using the space bar) do not properly register. Simply copy and paste the space between the two " | " and use that for
-            all your spacing needs. <br /><br />▼▼▼▼▼▼▼<br />  |⠀⠀⠀⠀⠀⠀⠀⠀⠀| <br />▲▲▲▲▲▲▲
-            <br /><div style="clear: both"></div>
+            all your spacing needs:  |⠀⠀⠀⠀⠀⠀⠀⠀⠀|
           </div>
         </div>
         <div style="clear: both"></div>
+        <div class="subSection detailBox" id="1356403">
+          <div class="subSectionTitle">Symbols & Fonts Websites</div>
+          <div class="subSectionDesc">
+              <a href="https://fsymbols.com/generators/" target="_blank">Font generator</a>
+              <a href="https://text-art.top/" target="_blank">Text art</a>
+              <a href="https://steam.tools/mosaticon/" target="_blank">Mosaticon</a>
+            <div style="clear: both"></div>
+          </div>
+        </div>
         <div class="subSection detailBox" id="1356403">
           <div class="subSectionTitle">Animals &amp; Insects</div>
           <div class="subSectionDesc">
@@ -549,7 +846,7 @@
             ℗ ℘ ℙ ℚ ℛ ℜ ℝ ℞ ℟ ℡ ™ ℣ ℤ ℥ Ω ℧ ℨ ℩ K Å ℬ ℭ ℮ ℯ ℰ ℱ Ⅎ ℳ ℴ ℵ ℶ ℷ ℸ<br /><br />𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫<br />𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ<br /><br />𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟<br />𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅<br /><br />𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏<br />𝒜𝐵𝒞𝒟𝐸𝐹𝒢𝐻𝐼𝒥𝒦𝐿𝑀𝒩𝒪𝒫𝒬𝑅𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵<br /><br />ᵃᵇᶜᵈᵉᶠᵍʰᶤʲᵏˡᵐᶰᵒᵖᵠʳˢᵗᵘᵛʷˣʸᶻ<br /><br />℃
             ℉ °∃ ∧ ∠ ∨ ∩ ⊂ ⊃ ∪ ⊥ ∀ Ξ Γ ɐ ə ɘ ε β ɟ ɥ ɯ ɔ и ๏ ɹ ʁ я ʌ ʍ λ ч ∞ Σ Π<br /><br />๖ۣۜA ๖ۣۜB ๖ۣۜC ๖ۣۜD ๖ۣۜE ๖ۣۜF ๖ۣۜG ๖ۣۜH ๖ۣۜI ๖ۣۜJ ๖ۣۜK ๖ۣۜL ๖ۣۜM ๖ۣۜN ๖ۣۜO ๖ۣۜP ๖ۣۜQ ๖ۣۜR ๖ۣۜS ๖ۣۜT ๖ۣۜU ๖ۣۜW ๖ۣۜV
             ๖ۣۜX ๖ۣۜY ๖ۣۜZ <br /><br />æ Æ ø Ø å Å ö Ö ä Ä ë Ê ï Î é É ß <br /><br />α в ¢ ∂ є f g н ι נ к ℓ м и σ ρ q я ѕ т υ ω ν χ у <br /><br />💤 | ᶠᵘᶜᵏᵧₒᵤ | Yᵒᵘ Oᶰˡʸ Lᶤᵛᵉ Oᶰᶜᵉ | ℓ٥ﻻ ﻉ√٥υ | ᶫᵒᵛᵉᵧₒᵤ<br /><br />🆕
-            🆒 🆙 🆖 🆓 🔤 🔠 🔡 <br /><br /><br /><br />
+            🆒 🆙 🆖 🆓 🔤 🔠 🔡 <br /><br />
             <div style="clear: both"></div>
           </div>
         </div>
@@ -658,7 +955,7 @@
       </div>
         `;
 
-        const symbolsDialogContainer = document.getElementById("global_header");
+        const symbolsDialogContainer = document.getElementById("responsive_page_template_content") || document.getElementById("mainContents");
         if (symbolsDialogContainer) {
           symbolsDialogContainer.appendChild(symbolsDialogDetails);
         }
@@ -758,8 +1055,8 @@
       return querySelector;
     }
     // Check if
-    checkElement(".titleField").then((element) => {
-      console.log(".titleField exists");
+    checkElement("mainContents").then((element) => {
+      console.log("mainContents exists");
       function setBlankTitleButton() {
         // ----------------------------
         // Fill Blank Title Button
@@ -1097,56 +1394,56 @@
 
   // 6. Reload Steam market function
 
-  (function () {
-    "use strict";
+  // (function () {
+  //   "use strict";
 
-    // Reload Steam market function
-    console.log("Reload Steam market function");
-    const targetNode = document.body;
+  //   // Reload Steam market function
+  //   console.log("Reload Steam market function");
+  //   const targetNode = document.body;
 
-    const config = { childList: true, subtree: true };
+  //   const config = { childList: true, subtree: true };
 
-    const createRefreshButton = function () {
-      const refreshButton = document.createElement("button");
-      refreshButton.textContent = "Refresh Page";
-      // refreshButton.style.position = "fixed";
-      refreshButton.style.top = "10px";
-      refreshButton.style.right = "10px";
-      refreshButton.style.zIndex = "9999";
-      refreshButton.style.minWidth = "auto";
-      refreshButton.style.padding = "10px";
-      refreshButton.style.margin = "10px 0 0 0";
-      refreshButton.classList.add("btn_green_white_innerfade", "btn_green_white_innerfade", "btn_medium", "market_commodity_buy_button");
-      refreshButton.addEventListener("click", function () {
-        location.reload();
-      });
+  //   const createRefreshButton = function () {
+  //     const refreshButton = document.createElement("button");
+  //     refreshButton.textContent = "Refresh Page";
+  //     // refreshButton.style.position = "fixed";
+  //     refreshButton.style.top = "10px";
+  //     refreshButton.style.right = "10px";
+  //     refreshButton.style.zIndex = "9999";
+  //     refreshButton.style.minWidth = "auto";
+  //     refreshButton.style.padding = "10px";
+  //     refreshButton.style.margin = "10px 0 0 0";
+  //     refreshButton.classList.add("btn_green_white_innerfade", "btn_green_white_innerfade", "btn_medium", "market_commodity_buy_button");
+  //     refreshButton.addEventListener("click", function () {
+  //       location.reload();
+  //     });
 
-      const searchResultsTable = document.getElementById("searchResultsTable");
-      if (searchResultsTable) {
-        searchResultsTable.appendChild(refreshButton);
-      }
-    };
+  //     const searchResultsTable = document.getElementById("searchResultsTable");
+  //     if (searchResultsTable) {
+  //       searchResultsTable.appendChild(refreshButton);
+  //     }
+  //   };
 
-    const callback = function (mutationsList, observer) {
-      for (const mutation of mutationsList) {
-        if (mutation.type === "childList") {
-          // Check if the added node is the desired div element
-          const errorDiv = document.querySelector(".market_listing_table_message");
-          if (errorDiv && errorDiv.textContent.trim() === "There was an error performing your search. Please try again later.") {
-            // Trigger a refresh after a short pause (e.g., 2 seconds)
-            console.log("There was an error");
-            createRefreshButton();
-            // Disconnect the observer to stop further checks
-            observer.disconnect();
-            break;
-          }
-        }
-      }
-    };
+  //   const callback = function (mutationsList, observer) {
+  //     for (const mutation of mutationsList) {
+  //       if (mutation.type === "childList") {
+  //         // Check if the added node is the desired div element
+  //         const errorDiv = document.querySelector(".market_listing_table_message");
+  //         if (errorDiv && errorDiv.textContent.trim() === "There was an error performing your search. Please try again later.") {
+  //           // Trigger a refresh after a short pause (e.g., 2 seconds)
+  //           console.log("There was an error");
+  //           createRefreshButton();
+  //           // Disconnect the observer to stop further checks
+  //           observer.disconnect();
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   };
 
-    const observer = new MutationObserver(callback);
+  //   const observer = new MutationObserver(callback);
 
-    // Start observing the target node for configured mutations
-    observer.observe(targetNode, config);
-  })();
+  //   // Start observing the target node for configured mutations
+  //   observer.observe(targetNode, config);
+  // })();
 })();

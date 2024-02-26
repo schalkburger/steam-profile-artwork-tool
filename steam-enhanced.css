@@ -1,0 +1,216 @@
+.steam-enhanced {
+  padding: 10px 10px 10px 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: #141414;
+  opacity: 1;
+  width: 180px;
+  z-index: 600;
+}
+.steam-enhanced:hover {
+  opacity: 1;
+}
+.steam-enhanced h4 {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.steam-enhanced h4 span {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGklEQVR4nGNgQAPMfxgYGH8AGR+AOAFdlgEAUsADSd64CbwAAAAASUVORK5CYII=);
+  background-position: right center;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  cursor: pointer;
+}
+.steam-enhanced h4 span.toggle {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGUlEQVR4nGNgQAcJQPyBgYHxBwMD8x8MWQBLKANJzkSRZQAAAABJRU5ErkJggg==);
+}
+.steam-enhanced a:hover {
+  text-decoration: underline;
+}
+.steam-enhanced-container {
+  padding: 10px 0 0 10px;
+}
+.steam-enhanced-container.hide {
+  display: none;
+}
+.upload-artwork-link,
+.change-profile-theme {
+  position: relative;
+}
+.upload-artwork-link:hover {
+  text-decoration: underline;
+}
+.change-profile-theme-container {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #7d7f7f;
+  padding-top: 10px;
+  margin-top: 10px;
+}
+.change-profile-theme {
+  min-width: 150px;
+  min-height: 20px;
+  cursor: pointer;
+  overflow: visible;
+  z-index: 400;
+  color: #fff;
+  margin-top: 5px;
+}
+.change-profile-theme details {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.change-profile-theme details[open] {
+  /* border-radius: 10px 0 10px 10px; */
+  /* box-shadow: 1px 4px 4px 0px #000; */
+}
+.change-profile-theme details summary {
+  user-select: none;
+}
+.preview-background {
+  z-index: 300;
+}
+.preview-avatar-frame {
+  z-index: 200;
+}
+.useful-links {
+  z-index: 500;
+}
+.change-profile-theme .color-themes,
+.change-profile-theme .useful-links {
+  display: flex;
+  flex-direction: column;
+  background-color: #141414;
+  color: #fff;
+  padding: 15px;
+  padding-top: 5px;
+  padding-left: 25px;
+  margin-top: 10px;
+  min-width: 150px;
+  margin-left: -5px;
+  border-radius: 8px;
+  box-shadow: 1px 2px 4px 2px rgb(0 0 0 / 50%);
+  border-top: 1px solid #202020;
+}
+.change-profile-theme .useful-links span {
+  margin: 6px 0 4px 0;
+  display: block;
+}
+.change-profile-theme .color-themes span {
+  margin: 6px 0 4px 0;
+  display: block;
+}
+.change-profile-theme .color-themes span:hover {
+  text-decoration: underline;
+}
+#manage_friends .friends-comments-textarea {
+  width: 100%;
+}
+#manage_friends.manage_friends_panel.manage {
+  padding-bottom: 20px;
+}
+.friend_block_v2 .indicator {
+  background-color: #1c4057;
+}
+#showSymbols {
+  margin-left: 0;
+}
+#symbolsModal {
+  position: fixed;
+  top: 10px;
+  right: 0;
+  background-color: #141414;
+  color: #fff;
+  padding: 15px;
+  padding-top: 0;
+  box-shadow: 0 0 12px #000000;
+  width: 340px;
+  height: calc(95vh);
+  border: none;
+  overflow: hidden;
+  overflow-y: scroll;
+  display: none;
+  z-index: 500;
+  cursor: auto;
+}
+#symbolsModal.show {
+  display: block;
+}
+#symbolsModal.hide {
+  display: none;
+}
+#symbolsModal #close {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 14px;
+  color: transparent;
+  text-shadow: 0 0 0 white;
+}
+#symbolsModal a {
+  color: #1a9fff;
+  display: block;
+}
+.profile_content.has_profile_background {
+  overflow: visible;
+}
+.profile_count_link {
+  font-size: 12px;
+  margin-bottom: 4px;
+  min-height: 20px;
+}
+.active-theme span {
+  color: #2e83c9;
+}
+.profile-autoreload-market {
+  line-height: auto;
+}
+.switch {
+  display: inline-block;
+}
+
+.switch input {
+  display: none;
+}
+
+.switch label {
+  display: block;
+  width: 60px;
+  height: 30px;
+  padding: 3px;
+  border-radius: 15px;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.switch label::after {
+  content: "";
+  display: inherit;
+  width: 20px;
+  height: 20px;
+  border-radius: 12px;
+  background: #ffffff;
+  transition: 0.3s;
+}
+
+.switch input:checked ~ label {
+  border-color: #ffffff;
+}
+
+.switch input:checked ~ label::after {
+  translate: 30px 0;
+  background: #ffffff;
+}
+
+.switch input:disabled ~ label {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

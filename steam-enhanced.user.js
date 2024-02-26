@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.1
+// @version     1.1.3
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -29,28 +29,28 @@
   console.log(`Steam Enhanced Version ${version}`);
   // Inject Steam Profile Artwork Tool styles
   let css = `
-  .profile_artwork {
-    padding: 15px;
+  .steam-enhanced {
+    padding: 10px 10px 10px 15px;
     border-radius: 10px;
     margin-bottom: 10px;
     position: fixed;
     top: 10px;
     right: 10px;
-    background: rgb(0 0 0 / 25%);
     background: #141414;
     opacity: 1;
-    width: 180px;
+    width: 100%;
+    max-width: 150px;
+    z-index: 600;
   }
-  .profile_artwork:hover {
+  .steam-enhanced:hover {
     opacity: 1;
   }
-  .profile_artwork h4 {
+  .steam-enhanced h4 {
     width: 100%;
-    margin-bottom: 8px;
     display: flex;
     justify-content: space-between;
   }
-  .profile_artwork h4 span {
+  .steam-enhanced h4 span {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGklEQVR4nGNgQAPMfxgYGH8AGR+AOAFdlgEAUsADSd64CbwAAAAASUVORK5CYII=);
     background-position: right center;
     background-repeat: no-repeat;
@@ -59,16 +59,20 @@
     display: inline-block;
     cursor: pointer;
   }
-  .profile_artwork h4 span.toggle {
+  .steam-enhanced h4 span.toggle {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGUlEQVR4nGNgQAcJQPyBgYHxBwMD8x8MWQBLKANJzkSRZQAAAABJRU5ErkJggg==);
   }
-  .profile_artwork a:hover {
+  .steam-enhanced a:hover {
     text-decoration: underline;
+  }
+  .steam-enhanced-container {
+    padding: 10px 0 0 5px;
   }
   .steam-enhanced-container.hide {
     display: none;
   }
-  .upload-artwork-link, .change-profile-theme {
+  .upload-artwork-link,
+  .change-profile-theme {
     position: relative;
   }
   .upload-artwork-link:hover {
@@ -90,6 +94,18 @@
     color: #fff;
     margin-top: 5px;
   }
+  .change-profile-theme details {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .change-profile-theme details[open] {
+    /* border-radius: 10px 0 10px 10px; */
+    /* box-shadow: 1px 4px 4px 0px #000; */
+  }
+  .change-profile-theme details summary {
+    user-select: none;
+  }
   .preview-background {
     z-index: 300;
   }
@@ -99,19 +115,7 @@
   .useful-links {
     z-index: 500;
   }
-  .change-profile-theme .color-themes {
-    display: flex;
-    flex-direction: column;
-    background-color: #141414;
-    color: #fff;
-    padding: 15px;
-    padding-top: 5px;
-    padding-left: 25px;
-    margin-top: 0;
-    min-width: 150px;
-    margin-left: -15px;
-    border-radius: 10px 0 0 10px;
-  }
+  .change-profile-theme .color-themes,
   .change-profile-theme .useful-links {
     display: flex;
     flex-direction: column;
@@ -120,13 +124,16 @@
     padding: 15px;
     padding-top: 5px;
     padding-left: 25px;
-    margin-top: 0;
-    min-width: 150px;
-    margin-left: -15px;
-    border-radius: 10px 0 0 10px;
+    margin-top: 10px;
+    min-width: 130px;
+    margin-left: -5px;
+    border-radius: 8px;
+    box-shadow: 1px 2px 4px 2px rgb(0 0 0 / 50%);
+    border-top: 1px solid #202020;
   }
   .change-profile-theme .useful-links span {
-    margin-bottom: 4px;
+    margin: 6px 0 4px 0;
+    display: block;
   }
   .change-profile-theme .color-themes span {
     margin: 6px 0 4px 0;
@@ -134,15 +141,6 @@
   }
   .change-profile-theme .color-themes span:hover {
     text-decoration: underline;
-  }
-  .change-profile-theme details {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: #141414;
-  }
-  .change-profile-theme details summary{
-    user-select: none;
   }
   #manage_friends .friends-comments-textarea {
     width: 100%;
@@ -159,7 +157,7 @@
   #symbolsModal {
     position: fixed;
     top: 10px;
-    right: 0;
+    right: 10px;
     background-color: #141414;
     color: #fff;
     padding: 15px;
@@ -171,7 +169,7 @@
     overflow: hidden;
     overflow-y: scroll;
     display: none;
-    z-index: 500;
+    z-index: 700;
     cursor: auto;
   }
   #symbolsModal.show {
@@ -183,8 +181,8 @@
   #symbolsModal #close {
     position: fixed;
     top: 20px;
-    right: 20px;
-    font-size: 14px;
+    right: 34px;
+    font-size: 18px;
     color: transparent;
     text-shadow: 0 0 0 white;
   }
@@ -192,7 +190,64 @@
     color: #1a9fff;
     display: block;
   }
-  .profile_content.has_profile_background {
+  .symbol-picker {
+    position: relative;
+  }
+  .commentthread_entry_quotebox .commentthread_textarea {
+    resize: vertical;
+    min-height: 80px;
+    padding: 5px;
+  }
+  .symbolsDialog {
+    background-color: #3b3938;
+    color: #fff;
+    padding: 15px;
+    padding-top: 0;
+    box-shadow: 0 0 12px #000000;
+    width: 500px;
+    height: calc(50vh);
+    border: none;
+  }
+  .subSectionTitle {
+    padding-top: 10px;
+    padding-bottom: 0px;
+    margin-bottom: 10px;
+    color: #fff;
+    font-size: 18px;
+  }
+  .symbols-container {
+    max-width: 590px;
+    max-height: 500px;
+    overflow: auto;
+    background: none;
+    position: relative;
+    top: 0;
+  }
+  .symbols-container details {
+    padding: 15px;
+    transition: all 0.3s ease-out;
+  }
+  .symbols-container details[open] {
+    padding: 15px;
+    background: #141414;
+  }
+  .symbols-container summary {
+    cursor: pointer;
+  }
+  .profileedit_ProfileBoxContent_3s6BB .symbols-container {
+    left: 0;
+    top: -32px;
+  }
+  .profileedit_ProfileBoxContent_3s6BB .symbols-container details[open] {
+    background-color: rgba(0, 0, 0, 0.25);
+  }
+  .customtext_showcase + .symbols-container {
+    left: 0;
+    top: 10px;
+  }
+  .customtext_showcase + .symbols-container details[open] {
+    background-color: transparent;
+  }  .profile_content.has_profile_background {
     overflow: visible;
   }
   .profile_count_link {
@@ -204,148 +259,10 @@
     color: #2e83c9;
   }
   .profile-autoreload-market {
-    line-height: auto;
+    line-height: normal;
+    display: flex;
+    align-items: center;
   }
-
-  @supports (-webkit-appearance: none) or (-moz-appearance: none) {
-    input[type=checkbox],
-  input[type=radio] {
-      --active: #51a0be;
-      --active-inner: #fff;
-      --focus: 2px rgba(39, 94, 254, .3);
-      --border: #c5c3c0;
-      --border-hover: #fff;
-      --background: #141414;
-      --disabled: #F6F8FF;
-      --disabled-inner: #E1E6F9;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      height: 14px;
-      outline: none;
-      display: inline-block;
-      vertical-align: top;
-      position: relative;
-      margin: 0;
-      cursor: pointer;
-      border: 1px solid var(--bc, var(--border));
-      background: var(--b, var(--background));
-      transition: background 0.3s, border-color 0.3s, box-shadow 0.2s;
-      margin-left: 2px;
-      margin-top: 1px;
-    }
-    input[type=checkbox]:after,
-  input[type=radio]:after {
-      content: "";
-      display: block;
-      left: 0;
-      top: 0;
-      position: absolute;
-      transition: transform var(--d-t, 0.3s) var(--d-t-e, ease), opacity var(--d-o, 0.2s);
-    }
-    input[type=checkbox]:checked,
-  input[type=radio]:checked {
-      --b: var(--active);
-      --bc: var(--active);
-      --d-o: .3s;
-      --d-t: .6s;
-      --d-t-e: cubic-bezier(.2, .85, .32, 1.2);
-    }
-    input[type=checkbox]:disabled,
-  input[type=radio]:disabled {
-      --b: var(--disabled);
-      cursor: not-allowed;
-      opacity: 0.9;
-    }
-    input[type=checkbox]:disabled:checked,
-  input[type=radio]:disabled:checked {
-      --b: var(--disabled-inner);
-      --bc: var(--border);
-    }
-    input[type=checkbox]:disabled + label,
-  input[type=radio]:disabled + label {
-      cursor: not-allowed;
-    }
-    input[type=checkbox]:hover:not(:checked):not(:disabled),
-  input[type=radio]:hover:not(:checked):not(:disabled) {
-      --bc: var(--border-hover);
-    }
-    input[type=checkbox]:focus,
-  input[type=radio]:focus {
-      box-shadow: 0 0 0 var(--focus);
-    }
-    input[type=checkbox]:not(.switch),
-  input[type=radio]:not(.switch) {
-      width: 21px;
-    }
-    input[type=checkbox]:not(.switch):after,
-  input[type=radio]:not(.switch):after {
-      opacity: var(--o, 0);
-    }
-    input[type=checkbox]:not(.switch):checked,
-  input[type=radio]:not(.switch):checked {
-      --o: 1;
-    }
-    input[type=checkbox] + label,
-  input[type=radio] + label {
-      font-size: 14px;
-      line-height: 21px;
-      display: inline-block;
-      vertical-align: top;
-      cursor: pointer;
-      margin-left: 4px;
-    }
-
-    input[type=checkbox]:not(.switch) {
-      border-radius: 7px;
-    }
-    input[type=checkbox]:not(.switch):after {
-      width: 5px;
-      height: 9px;
-      border: 2px solid var(--active-inner);
-      border-top: 0;
-      border-left: 0;
-      left: 7px;
-      top: 4px;
-      transform: rotate(var(--r, 20deg));
-    }
-    input[type=checkbox]:not(.switch):checked {
-      --r: 43deg;
-    }
-    input[type=checkbox].switch {
-      width: 33px;
-      border-radius: 11px;
-    }
-    input[type=checkbox].switch:after {
-      left: 2px;
-      top: 2px;
-      border-radius: 50%;
-      width: 8px;
-      height: 8px;
-      background: var(--ab, var(--border));
-      transform: translateX(var(--x, 0));
-    }
-    input[type=checkbox].switch:checked {
-      --ab: var(--active-inner);
-      --x: 17px;
-    }
-    input[type=checkbox].switch:disabled:not(:checked):after {
-      opacity: 0.6;
-    }
-
-    input[type=radio] {
-      border-radius: 50%;
-    }
-    input[type=radio]:after {
-      width: 19px;
-      height: 19px;
-      border-radius: 50%;
-      background: var(--active-inner);
-      opacity: 0;
-      transform: scale(var(--s, 0.7));
-    }
-    input[type=radio]:checked {
-      --s: .5;
-    }
   .steamProfileArtworkContainer {
     background: #17222f;
     display: block;
@@ -361,11 +278,11 @@
     height: 60px;
     align-items: center;
   }
-
   input[type="text"].fieldInputSuccess {
     position: relative;
   }
-  .alertBlankTitleSet, .alertCustomArtworkEnabled {
+  .alertBlankTitleSet,
+  .alertCustomArtworkEnabled {
     position: relative;
     left: 0;
     top: 0;
@@ -381,12 +298,10 @@
     margin: 15px 0 0 0px;
     opacity: 1;
   }
-  .alertBlankTitleSet, .alertCustomArtworkEnabled.longWorkshopGuideEnabled {
+  .alertBlankTitleSet,
+  .alertCustomArtworkEnabled.longWorkshopGuideEnabled {
     margin-top: 0;
   }
-  // .alertCustomArtworkEnabled.longWorkshopEnabled, .alertCustomArtworkEnabled.longGuideEnabled {
-  //   display: none;
-  // }
   .modifyArtworkInstructions blockquote {
     font-size: 14px;
     line-height: 1.6;
@@ -481,66 +396,44 @@
     opacity: 0.5;
     pointer-events: none;
   }
-  .symbol-picker {
-    position: relative;
+  .switch {
+    display: block;
+    margin-left: 8px;
   }
-  .commentthread_entry_quotebox .commentthread_textarea {
-    resize: vertical;
-    min-height: 80px;
-    padding: 5px;
+  .switch input {
+    display: none;
   }
-  .symbolsDialog {
-    background-color: #3b3938;
-    color: #fff;
-    padding: 15px;
-    padding-top: 0;
-    box-shadow: 0 0 12px #000000;
-    width: 500px;
-    height: calc(50vh);
-    border: none;
-  }
-  .subSectionTitle {
-    padding-top: 10px;
-    padding-bottom: 0px;
-    margin-bottom: 10px;
-    color: #fff;
-    font-size: 18px;
-  }
-  .symbols-container {
-    max-width: 590px;
-    max-height: 500px;
-    overflow: auto;
-    background: none;
-    position: relative;
-    top: 0;
-  }
-  .symbols-container details {
-    padding: 15px;
-    transition: all 0.3s ease-out;
-  }
-  .symbols-container details[open] {
-    padding: 15px;
-    background: #141414;
-  }
-  .symbols-container summary {
+  .switch label {
+    display: block;
+    width: 20px;
+    height: 7px;
+    padding: 3px;
+    border-radius: 15px;
+    border: 1px solid #ffffff;
     cursor: pointer;
+    transition: 0.3s;
   }
-  .profileedit_ProfileBoxContent_3s6BB .symbols-container {
-    left: 0;
-    top: -32px;
+  .switch label::after {
+    content: "";
+    display: inherit;
+    width: 6px;
+    height: 6px;
+    border-radius: 12px;
+    background: #ffffff;
+    transition: 0.3s;
   }
-  .profileedit_ProfileBoxContent_3s6BB .symbols-container details[open] {
-    background-color: rgba(0,0,0,.25);
+  .switch input:checked ~ label {
+    border-color: #ffffff;
+    background: #343434;
   }
-  .customtext_showcase + .symbols-container {
-    left: 0;
-    top: 10px;
+  .switch input:checked ~ label::after {
+    translate: 14px 0;
+    background: #ffffff;
   }
-  .customtext_showcase + .symbols-container details[open] {
-    background-color: transparent;
+  .switch input:disabled ~ label {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
-  }
-
 
   `,
     head = document.head || document.getElementsByTagName("head")[0],
@@ -579,7 +472,7 @@
       function setUploadArtworkButton() {
         const uploadArtworkURL = `https://steamcommunity.com/sharedfiles/edititem/767/3/`;
         const uploadCustomArtworkButtonContainer = document.createElement("div");
-        uploadCustomArtworkButtonContainer.className = "profile_artwork";
+        uploadCustomArtworkButtonContainer.className = "steam-enhanced";
         // Get body classes
         const bodyClasses = Array.from(document.querySelectorAll("body"));
         let bodyClassesOutput = bodyClasses.flatMap((div, idx) => {
@@ -597,15 +490,14 @@
          <h4>Steam Enhanced <span id="steamEnhancedToggle"></span></h4>
          <div id="steamEnhancedContainer" class="steam-enhanced-container">
           <div class="profile_count_link">
-            <a class="upload-artwork-link" href="https://steamcommunity.com/sharedfiles/edititem/767/3/"><span>Upload artwork</span></a>
-          </div>
-          <div class="profile_count_link">
             <a id="reloadPage">Reload Page</a>
           </div>
           <div class="profile_count_link profile-autoreload-market">
             <a id="#">Autoreload Market</a>
-            <input id="s1" type="checkbox" class="switch" />
-            <label for="s1"></label>
+            <span class="switch">
+              <input id="switch-rounded" type="checkbox" />
+              <label for="switch-rounded"></label>
+            </span>
           </div>
           <div class="profile_count_link">
             <a id="#">Autoclaim Stickers</a>
@@ -628,6 +520,9 @@
             </div>
           </div>
           <div class="profile_count_link change-profile-theme-container">
+            <div class="profile_count_link">
+            <a class="upload-artwork-link" href="https://steamcommunity.com/sharedfiles/edititem/767/3/"><span>Upload artwork</span></a>
+            </div>
             <div class="change-profile-theme">
               <details>
                 <summary>Preview Theme</summary>
@@ -724,7 +619,7 @@
         symbolsDialogDetails.className = "symbols-container symbols-modal-container";
         symbolsDialogDetails.innerHTML = `
         <div id="symbolsModal" class="symbols-modal">
-        <a id="close">❌</a>
+        <a id="close">×</a>
         <div class="subSection detailBox" id="2050699">
           <div class="subSectionTitle">Invisible Spacers</div>
           <div class="subSectionDesc">

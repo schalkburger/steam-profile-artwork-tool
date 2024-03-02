@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.3
+// @version     1.1.5
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -30,33 +30,37 @@
   // Inject Steam Profile Artwork Tool styles
   let css = `
   .steam-enhanced {
-    padding: 10px 10px 10px 15px;
-    border-radius: 10px;
-    margin-bottom: 10px;
+    box-shadow: 1px 1px 0px 0px rgb(8 17 30 / 75%);
     position: fixed;
+    z-index: 600;
     top: 10px;
-    right: 10px;
-    background: #141414;
+    right: 20px;
     opacity: 1;
     width: 100%;
     max-width: 150px;
-    z-index: 600;
+    margin-bottom: 10px;
+    padding: 6px 6px 6px 15px;
+    background: #171d25;
+    border-radius: 4px;
   }
   .steam-enhanced:hover {
     opacity: 1;
   }
   .steam-enhanced h4 {
-    width: 100%;
     display: flex;
     justify-content: space-between;
+    width: 100%;
+    font-size: 13px;
+    font-weight: 500;
+    color: #b8b6b4;
   }
   .steam-enhanced h4 span {
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGklEQVR4nGNgQAPMfxgYGH8AGR+AOAFdlgEAUsADSd64CbwAAAAASUVORK5CYII=);
-    background-position: right center;
-    background-repeat: no-repeat;
+    display: inline-block;
     width: 20px;
     height: 20px;
-    display: inline-block;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGklEQVR4nGNgQAPMfxgYGH8AGR+AOAFdlgEAUsADSd64CbwAAAAASUVORK5CYII=);
+    background-repeat: no-repeat;
+    background-position: right center;
     cursor: pointer;
   }
   .steam-enhanced h4 span.toggle {
@@ -81,27 +85,19 @@
   .change-profile-theme-container {
     display: flex;
     flex-direction: column;
-    border-top: 1px solid #7d7f7f;
-    padding-top: 10px;
-    margin-top: 10px;
   }
   .change-profile-theme {
+    z-index: 400;
+    overflow: visible;
     min-width: 150px;
     min-height: 20px;
     cursor: pointer;
-    overflow: visible;
-    z-index: 400;
     color: #fff;
-    margin-top: 5px;
   }
   .change-profile-theme details {
     position: absolute;
     top: 0;
     left: 0;
-  }
-  .change-profile-theme details[open] {
-    /* border-radius: 10px 0 10px 10px; */
-    /* box-shadow: 1px 4px 4px 0px #000; */
   }
   .change-profile-theme details summary {
     user-select: none;
@@ -117,27 +113,27 @@
   }
   .change-profile-theme .color-themes,
   .change-profile-theme .useful-links {
+    box-shadow: 0px 1px 2px 2px rgb(8 17 30 / 75%);
     display: flex;
     flex-direction: column;
-    background-color: #141414;
-    color: #fff;
+    min-width: 130px;
+    margin-top: 10px;
+    margin-left: -5px;
     padding: 15px;
     padding-top: 5px;
-    padding-left: 25px;
-    margin-top: 10px;
-    min-width: 130px;
-    margin-left: -5px;
-    border-radius: 8px;
-    box-shadow: 1px 2px 4px 2px rgb(0 0 0 / 50%);
+    padding-left: 15px;
+    background-color: #171d25;
     border-top: 1px solid #202020;
+    border-radius: 4px;
+    color: #fff;
   }
   .change-profile-theme .useful-links span {
-    margin: 6px 0 4px 0;
     display: block;
+    margin: 6px 0 4px 0;
   }
   .change-profile-theme .color-themes span {
-    margin: 6px 0 4px 0;
     display: block;
+    margin: 6px 0 4px 0;
   }
   .change-profile-theme .color-themes span:hover {
     text-decoration: underline;
@@ -155,22 +151,22 @@
     margin-left: 0;
   }
   #symbolsModal {
+    box-shadow: 0 0 12px #000000;
+    display: none;
     position: fixed;
+    z-index: 700;
     top: 10px;
     right: 10px;
-    background-color: #141414;
-    color: #fff;
-    padding: 15px;
-    padding-top: 0;
-    box-shadow: 0 0 12px #000000;
-    width: 340px;
-    height: calc(95vh);
-    border: none;
     overflow: hidden;
     overflow-y: scroll;
-    display: none;
-    z-index: 700;
+    width: 340px;
+    height: calc(95vh);
+    padding: 15px;
+    padding-top: 0;
+    background-color: #171d25;
     cursor: auto;
+    border: none;
+    color: #fff;
   }
   #symbolsModal.show {
     display: block;
@@ -187,8 +183,8 @@
     text-shadow: 0 0 0 white;
   }
   #symbolsModal a {
-    color: #1a9fff;
     display: block;
+    color: #1a9fff;
   }
   .symbol-picker {
     position: relative;
@@ -199,29 +195,29 @@
     padding: 5px;
   }
   .symbolsDialog {
-    background-color: #3b3938;
-    color: #fff;
-    padding: 15px;
-    padding-top: 0;
     box-shadow: 0 0 12px #000000;
     width: 500px;
     height: calc(50vh);
+    padding: 15px;
+    padding-top: 0;
+    background-color: #3b3938;
     border: none;
+    color: #fff;
   }
   .subSectionTitle {
+    margin-bottom: 10px;
     padding-top: 10px;
     padding-bottom: 0px;
-    margin-bottom: 10px;
-    color: #fff;
     font-size: 18px;
+    color: #fff;
   }
   .symbols-container {
-    max-width: 590px;
-    max-height: 500px;
-    overflow: auto;
-    background: none;
     position: relative;
     top: 0;
+    overflow: auto;
+    max-width: 590px;
+    max-height: 500px;
+    background: none;
   }
   .symbols-container details {
     padding: 15px;
@@ -229,74 +225,74 @@
   }
   .symbols-container details[open] {
     padding: 15px;
-    background: #141414;
+    background: #171d25;
   }
   .symbols-container summary {
     cursor: pointer;
   }
   .profileedit_ProfileBoxContent_3s6BB .symbols-container {
-    left: 0;
     top: -32px;
+    left: 0;
   }
   .profileedit_ProfileBoxContent_3s6BB .symbols-container details[open] {
     background-color: rgba(0, 0, 0, 0.25);
   }
   .customtext_showcase + .symbols-container {
-    left: 0;
     top: 10px;
+    left: 0;
   }
   .customtext_showcase + .symbols-container details[open] {
     background-color: transparent;
-  }  .profile_content.has_profile_background {
+  }
+  .profile_content.has_profile_background {
     overflow: visible;
   }
   .profile_count_link {
-    font-size: 12px;
-    margin-bottom: 4px;
     min-height: 20px;
+    margin-bottom: 4px;
+    font-size: 11px;
   }
   .active-theme span {
     color: #2e83c9;
   }
   .profile-autoreload-market {
-    line-height: normal;
     display: flex;
-    align-items: center;
+    line-height: normal;
   }
   .steamProfileArtworkContainer {
-    background: #17222f;
     display: block;
     width: 100%;
     height: auto;
+    background: #17222f;
   }
   .steamProfileArtworkContainer > div {
     padding-left: 20px;
   }
   .buttonsContainer {
     display: flex;
+    align-items: center;
     width: 100%;
     height: 60px;
-    align-items: center;
   }
   input[type="text"].fieldInputSuccess {
     position: relative;
   }
   .alertBlankTitleSet,
   .alertCustomArtworkEnabled {
-    position: relative;
-    left: 0;
-    top: 0;
-    line-height: 1;
-    background: transparent;
-    width: auto;
-    height: 37px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    color: #22830f;
-    font-size: 16px;
-    margin: 15px 0 0 0px;
+    position: relative;
+    top: 0;
+    left: 0;
     opacity: 1;
+    width: auto;
+    height: 37px;
+    margin: 15px 0 0 0px;
+    background: transparent;
+    font-size: 16px;
+    line-height: 1;
+    color: #22830f;
   }
   .alertBlankTitleSet,
   .alertCustomArtworkEnabled.longWorkshopGuideEnabled {
@@ -317,13 +313,13 @@
     background: #1a1a1a;
   }
   .hexEditInstructionsVideo {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    padding-top: 10px;
     background-image: url(https://store.akamai.steamstatic.com/public/images/v6/maincol_gradient_rule.png);
     background-repeat: no-repeat;
     background-position: top left;
-    padding-top: 10px;
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
   }
   .hexEditInstructionsVideo details {
     margin-left: 5px;
@@ -334,10 +330,10 @@
   }
   .embed-container {
     position: relative;
-    padding-bottom: 56.25%;
-    height: 0;
     overflow: hidden;
     max-width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
   }
   .embed-container iframe,
   .embed-container object,
@@ -350,10 +346,10 @@
   }
   .customArtworkButtons {
     display: flex;
-    height: auto;
-    min-height: 32px;
     justify-content: center;
     align-items: center;
+    height: auto;
+    min-height: 32px;
     padding: 0 5px;
     font-size: 15px;
   }
@@ -372,17 +368,17 @@
     display: flex;
     flex-direction: column;
     position: absolute;
-    left: 0;
-    top: calc(100% + 2px);
-    width: 100%;
-    background: rgb(29 77 104);
     z-index: 400;
+    top: calc(100% + 2px);
+    left: 0;
+    width: 100%;
     padding-bottom: 10px;
+    background: rgb(29 77 104);
   }
   .customArtworkButtonsWrapper a {
-    min-width: 140px;
     position: relative;
     z-index: 400;
+    min-width: 140px;
     padding: 2px 0;
   }
   .enable-custom-artwork-button {
@@ -393,8 +389,8 @@
     margin-bottom: 10px;
   }
   .blank-title-added {
-    opacity: 0.5;
     pointer-events: none;
+    opacity: 0.5;
   }
   .switch {
     display: block;
@@ -408,23 +404,23 @@
     width: 20px;
     height: 7px;
     padding: 3px;
-    border-radius: 15px;
-    border: 1px solid #ffffff;
-    cursor: pointer;
     transition: 0.3s;
+    cursor: pointer;
+    border: 1px solid #ffffff;
+    border-radius: 15px;
   }
   .switch label::after {
     content: "";
     display: inherit;
     width: 6px;
     height: 6px;
-    border-radius: 12px;
-    background: #ffffff;
     transition: 0.3s;
+    background: #ffffff;
+    border-radius: 12px;
   }
   .switch input:checked ~ label {
-    border-color: #ffffff;
     background: #343434;
+    border-color: #ffffff;
   }
   .switch input:checked ~ label::after {
     translate: 14px 0;
@@ -433,6 +429,15 @@
   .switch input:disabled ~ label {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+  .detailBox {
+    background: transparent;
+  }
+  .divider {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #7d7f7f;
+    display: block;
   }
 
   `,
@@ -488,7 +493,10 @@
         // Create Buttons
         uploadCustomArtworkButtonContainer.innerHTML = `
          <h4>Steam Enhanced <span id="steamEnhancedToggle"></span></h4>
-         <div id="steamEnhancedContainer" class="steam-enhanced-container">
+         <div id="steamEnhancedContainer" class="steam-enhanced-container hide">
+          <div class="profile_count_link">
+            <a id="backToTop">Back To Top</a>
+          </div>
           <div class="profile_count_link">
             <a id="reloadPage">Reload Page</a>
           </div>
@@ -515,10 +523,13 @@
                 <div class="useful-links">
                   <span><a href="https://steamstat.us/" target="_blank">Steam Status</a></span>
                   <span><a href="https://steamdb.info/sales/history/" target="_blank">Steam Sale Dates</a></span>
+                  <span><a href="https://steamrep.com/" target="_blank">SteamRep</a></span>
+                  <span><a href="https://steamid.io/" target="_blank">Steam ID Lookup</a></span>
                 </div>
               </details>
             </div>
           </div>
+          <div class="divider"></div>
           <div class="profile_count_link change-profile-theme-container">
             <div class="profile_count_link">
             <a class="upload-artwork-link" href="https://steamcommunity.com/sharedfiles/edititem/767/3/"><span>Upload artwork</span></a>
@@ -570,6 +581,16 @@
         if (steamEnhancedWrapper) {
           steamEnhancedWrapper.appendChild(uploadCustomArtworkButtonContainer);
         }
+
+        const backToTopButton = document.getElementById("backToTop");
+        // Add a click event listener to the element
+        backToTopButton.addEventListener("click", function () {
+          // Scroll to the top of the page
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth", // You can use 'auto' or 'smooth' for smooth scrolling
+          });
+        });
 
         // Reload Page Functionality
         const reloadPageButton = document.getElementById("reloadPage");

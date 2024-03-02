@@ -434,10 +434,12 @@
     background: transparent;
   }
   .divider {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #7d7f7f;
+    margin: 5px 0 10px 0;
     display: block;
+    width: 90%;
+    height: 1px;
+    background: transparent;
+    box-shadow: 0px 1px 0px 0px rgb(255 255 255 / 25%);
   }
 
   `,
@@ -530,10 +532,10 @@
             </div>
           </div>
           <div class="divider"></div>
-          <div class="profile_count_link change-profile-theme-container">
-            <div class="profile_count_link">
-            <a class="upload-artwork-link" href="https://steamcommunity.com/sharedfiles/edititem/767/3/"><span>Upload artwork</span></a>
-            </div>
+          <div class="profile_count_link">
+          <a class="upload-artwork-link" href="https://steamcommunity.com/sharedfiles/edititem/767/3/"><span>Upload artwork</span></a>
+        </div>
+          <div class="profile_count_link">
             <div class="change-profile-theme">
               <details>
                 <summary>Preview Theme</summary>

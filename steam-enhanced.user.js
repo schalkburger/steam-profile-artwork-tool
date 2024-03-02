@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.6
+// @version     1.1.9
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -37,9 +37,9 @@
     right: 20px;
     opacity: 1;
     width: 100%;
-    max-width: 150px;
+    max-width: 160px;
     margin-bottom: 10px;
-    padding: 6px 6px 6px 15px;
+    padding: 6px 6px 6px 10px;
     background: #171d25;
     border-radius: 4px;
   }
@@ -57,7 +57,13 @@
     font-weight: 500;
     color: #b8b6b4;
   }
-  .steam-enhanced h4 span#steamEnhancedToggle {
+  .steam-enhanced h4 span {
+    display: flex;
+    width: 100%;
+    max-width: 50px;
+    justify-content: space-around;
+  }
+  .steam-enhanced h4 i#steamEnhancedToggle {
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -66,10 +72,10 @@
     background-position: right center;
     cursor: pointer;
   }
-  .steam-enhanced h4 span#steamEnhancedToggle.toggle {
+  .steam-enhanced h4 i#steamEnhancedToggle.toggle {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGUlEQVR4nGNgQAcJQPyBgYHxBwMD8x8MWQBLKANJzkSRZQAAAABJRU5ErkJggg==);
   }
-  .steam-enhanced h4 span#steamEnhancedPin {
+  .steam-enhanced h4 i#steamEnhancedPin {
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -79,7 +85,7 @@
     cursor: pointer;
     background-size: 12px 12px;
   }
-  .steam-enhanced h4 span#steamEnhancedPin.toggle {
+  .steam-enhanced h4 i#steamEnhancedPin.toggle {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAKdJREFUOE9jZKAQMFKonwHDgCuXLv7HZ6iOnj6KHiwGXJjPwMCYgN2Q/wt09AwSkeUwDLh66VLCf4b/87EZwMjAmKitp7dgsBtw+WL9//8MDWSFwfXz5xX+MjPdxxMLD/4z/kvU1TU8AFODEohXLuGLAZgW1JhAMQASA//sES5gdICw/yPZyHQQOSbwpkSIixgY0OMebzQiSw4DAy5fPg8ORORoQ49iAFq1UxFzHZ4rAAAAAElFTkSuQmCC);
   }
   .steam-enhanced a:hover {
@@ -110,10 +116,30 @@
     cursor: pointer;
     color: #fff;
   }
+  details>summary {
+    list-style: none;
+    display: flex;
+  }
+  summary::-webkit-details-marker {
+    display: none
+  }
+  summary::after {
+    content: "";
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='rgba(243,240,240,1)'%3E%3Cpath d='M12 15.0006L7.75732 10.758L9.17154 9.34375L12 12.1722L14.8284 9.34375L16.2426 10.758L12 15.0006Z'%3E%3C/path%3E%3C/svg%3E");
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background-size: cover;
+  }
+  details[open] summary:after {
+    content: "";
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='rgba(255,255,255,1)'%3E%3Cpath d='M12 11.8284L9.17154 14.6569L7.75732 13.2426L12 9L16.2426 13.2426L14.8284 14.6569L12 11.8284Z'%3E%3C/path%3E%3C/svg%3E");
+  }
   .change-profile-theme details {
     position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
   }
   .change-profile-theme details summary {
     user-select: none;
@@ -139,7 +165,7 @@
     padding-top: 5px;
     padding-left: 15px;
     background-color: #171d25;
-    border-top: 1px solid #202020;
+    border-top: 1px solid rgb(255 255 255 / 25%);
     border-radius: 4px;
     color: #fff;
   }
@@ -266,7 +292,7 @@
   .profile_count_link {
     min-height: 20px;
     margin-bottom: 4px;
-    font-size: 11px;
+    font-size: 12px;
   }
   .active-theme span {
     color: #2e83c9;
@@ -511,7 +537,8 @@
         uploadCustomArtworkButtonContainer.setAttribute("data-panel", "{'maintainX':true,'bFocusRingRoot':true,'flow-children':'row'}");
         // Create Buttons
         uploadCustomArtworkButtonContainer.innerHTML = `
-         <h4>Steam Enhanced <span id="steamEnhancedPin"></span> <span id="steamEnhancedToggle"></span></h4>
+
+        <header><h4>Steam Enhanced <span><i id="steamEnhancedPin"></i> <i id="steamEnhancedToggle"></i></span></h4></header>
          <div id="steamEnhancedContainer" class="steam-enhanced-container hide">
           <div class="profile_count_link">
             <a id="backToTop">Back To Top</a>
@@ -520,33 +547,39 @@
             <a id="reloadPage">Reload Page</a>
           </div>
           <div class="profile_count_link profile-autoreload-market">
-            <a id="#">Autoreload Market</a>
+            <a id="#">Reload Market</a>
             <span class="switch">
               <input id="switch-rounded" type="checkbox" />
               <label for="switch-rounded"></label>
             </span>
           </div>
           <div class="profile_count_link">
-            <a id="#">Autoclaim Stickers</a>
-          </div>
-          <div class="profile_count_link">
-            <a id="#">Clean Comments</a>
-          </div>
-          <div class="divider"></div>
-          <div class="profile_count_link">
-            <a href="https://steamcommunity.com/my/inventory">Inventory</a>
-          </div>
-          <div class="profile_count_link">
-            <a href="https://steamcommunity.com/my/tradeoffers">Trade Offers</a>
-          </div>
-          <div class="profile_count_link">
-            <a href="https://steamcommunity.com/my/friends/add">Add Friend</a>
-          </div>
-          <div class="profile_count_link">
             <div class="change-profile-theme useful-links">
               <details>
-                <summary>Useful Links</summary>
+                <summary>Quick Links</summary>
                 <div class="useful-links">
+                <div class="profile_count_link">
+                  <a href="https://steamcommunity.com/my/">Profile</a>
+                </div>
+                <div class="profile_count_link">
+                  <a href="https://steamcommunity.com/my/friends">Friends</a>
+                </div>
+                <div class="profile_count_link">
+                  <a href="https://steamcommunity.com/my/inventory">Inventory</a>
+                </div>
+                <div class="profile_count_link">
+                  <a href="https://steamcommunity.com/my/tradeoffers">Trade Offers</a>
+                </div>
+                <div class="profile_count_link">
+                  <a href="https://steamcommunity.com/my/friends/add">Add Friend</a>
+                </div>
+                <div class="profile_count_link">
+                  <a id="steamChatLink">Chat</a>
+                </div>
+                <div class="profile_count_link">
+                  <a id="steamIDLink" target="_blank">SteamID</a>
+                </div>
+                <div class="divider"></div>
                   <span><a href="https://steamstat.us/" target="_blank">Steam Status</a></span>
                   <span><a href="https://steamdb.info/sales/history/" target="_blank">Steam Sale Dates</a></span>
                   <span><a href="https://steamrep.com/" target="_blank">SteamRep</a></span>
@@ -555,7 +588,6 @@
               </details>
             </div>
           </div>
-          <div class="divider"></div>
           <div class="profile_count_link">
             <a id="showSymbols">Symbols & Characters</a>
           </div>
@@ -601,6 +633,7 @@
               </details>
             </div>
           </div>
+          <div class="divider"></div>
         </div>
         `;
 
@@ -655,6 +688,81 @@
 
           // Toggle 'toggle' class on steamEnhancedPin
           steamEnhancedPin.classList.toggle("toggle");
+        });
+
+        // Steam Chat Popup
+        function openSteamChat() {
+          // URL to open in the popup window
+          const url = "https://steamcommunity.com/chat/";
+
+          // Define the properties of the popup window
+          const popupWidth = 1035;
+          const popupHeight = 800;
+          const popupOptions = `width=${popupWidth},height=${popupHeight},top=${(window.innerHeight - popupHeight) / 2},left=${
+            (window.innerWidth - popupWidth) / 2
+          },resizable=yes,scrollbars=yes,status=yes`;
+
+          // Open the popup window
+          const popupWindow = window.open(url, "SteamChatPopup", popupOptions);
+
+          // Focus the popup window (optional)
+          if (popupWindow) {
+            popupWindow.focus();
+          }
+        }
+
+        const steamChatLink = document.getElementById("steamChatLink"); // Replace with the actual ID or selector of your link
+        if (steamChatLink) {
+          steamChatLink.addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent the default link behavior
+            openSteamChat(); // Call the function to open the popup window
+          });
+        }
+
+        // SteamID Lookup
+        let userinfo = null;
+        let steamID = null;
+        if (window.application_config?.dataset?.userinfo) {
+          userinfo = JSON.parse(window.application_config.dataset.userinfo);
+          steamID = userinfo.steamid;
+          console.log("SteamID:", steamID);
+          // Example: Call the function with the specific URL when a link is clicked
+          const steamIDLink = document.getElementById("steamIDLink"); // Replace with the actual ID or selector of your link
+          // const steamID = "123456"; // Replace with your actual steamID
+
+          if (steamIDLink) {
+            steamIDLink.addEventListener("click", function (event) {
+              event.preventDefault(); // Prevent the default link behavior
+              const steamIDURL = "https://steamid.io/lookup/" + steamID;
+              openInNewTab(steamIDURL); // Call the function to open the specific URL in a new tab
+            });
+          }
+        } else {
+          console.log("No valid userinfo found, are you logged in?");
+          return;
+        }
+
+        function openInNewTab(url) {
+          const newTab = window.open(url, "_blank");
+          if (newTab) {
+            newTab.focus();
+          }
+        }
+
+        // Toggle details elements to close
+        // Get all details elements
+        const detailsElements = document.querySelectorAll("details");
+
+        // Add event listener to each details element
+        detailsElements.forEach((detailsElement) => {
+          detailsElement.addEventListener("click", () => {
+            // Close all other details elements
+            detailsElements.forEach((otherDetails) => {
+              if (otherDetails !== detailsElement) {
+                otherDetails.removeAttribute("open");
+              }
+            });
+          });
         });
 
         // ========================================================================== //

@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.5
+// @version     1.1.6
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -31,7 +31,7 @@
   let css = `
   .steam-enhanced {
     box-shadow: 1px 1px 0px 0px rgb(8 17 30 / 75%);
-    position: fixed;
+    position: absolute;
     z-index: 600;
     top: 10px;
     right: 20px;
@@ -42,6 +42,9 @@
     padding: 6px 6px 6px 15px;
     background: #171d25;
     border-radius: 4px;
+  }
+  .steam-enhanced.pinned {
+    position: fixed;
   }
   .steam-enhanced:hover {
     opacity: 1;
@@ -54,7 +57,7 @@
     font-weight: 500;
     color: #b8b6b4;
   }
-  .steam-enhanced h4 span {
+  .steam-enhanced h4 span#steamEnhancedToggle {
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -63,8 +66,21 @@
     background-position: right center;
     cursor: pointer;
   }
-  .steam-enhanced h4 span.toggle {
+  .steam-enhanced h4 span#steamEnhancedToggle.toggle {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGUlEQVR4nGNgQAcJQPyBgYHxBwMD8x8MWQBLKANJzkSRZQAAAABJRU5ErkJggg==);
+  }
+  .steam-enhanced h4 span#steamEnhancedPin {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAALtJREFUOE/Vk9ERwiAMhv+og3QPBDsKTGKdhG5SBXuO4SaNV671CPXqQ1+UJ46QL8n/A2Hjoo35WAD6GHgNqrQROUvAPXgwLBhOgAgehFYdjThfAkKwIPiyUuqM4ZQxbQ7+RUCMZ4CbjyN80+DRddVw2D8BapTWl3zWfgQT24HJaa2vc0xo0M8OEIRQ42ViVAzUpRMSMDqwwymrXE/7d0UMuOVOrL7E1BGA0vtVG8Xc/w+IMSYRc9vKj/YChYhmESTC7boAAAAASUVORK5CYII=);
+    background-repeat: no-repeat;
+    background-position: right center;
+    cursor: pointer;
+    background-size: 12px 12px;
+  }
+  .steam-enhanced h4 span#steamEnhancedPin.toggle {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAKdJREFUOE9jZKAQMFKonwHDgCuXLv7HZ6iOnj6KHiwGXJjPwMCYgN2Q/wt09AwSkeUwDLh66VLCf4b/87EZwMjAmKitp7dgsBtw+WL9//8MDWSFwfXz5xX+MjPdxxMLD/4z/kvU1TU8AFODEohXLuGLAZgW1JhAMQASA//sES5gdICw/yPZyHQQOSbwpkSIixgY0OMebzQiSw4DAy5fPg8ORORoQ49iAFq1UxFzHZ4rAAAAAElFTkSuQmCC);
   }
   .steam-enhanced a:hover {
     text-decoration: underline;
@@ -479,6 +495,7 @@
       function setUploadArtworkButton() {
         const uploadArtworkURL = `https://steamcommunity.com/sharedfiles/edititem/767/3/`;
         const uploadCustomArtworkButtonContainer = document.createElement("div");
+        uploadCustomArtworkButtonContainer.id = "steamEnhanced";
         uploadCustomArtworkButtonContainer.className = "steam-enhanced";
         // Get body classes
         const bodyClasses = Array.from(document.querySelectorAll("body"));
@@ -494,7 +511,7 @@
         uploadCustomArtworkButtonContainer.setAttribute("data-panel", "{'maintainX':true,'bFocusRingRoot':true,'flow-children':'row'}");
         // Create Buttons
         uploadCustomArtworkButtonContainer.innerHTML = `
-         <h4>Steam Enhanced <span id="steamEnhancedToggle"></span></h4>
+         <h4>Steam Enhanced <span id="steamEnhancedPin"></span> <span id="steamEnhancedToggle"></span></h4>
          <div id="steamEnhancedContainer" class="steam-enhanced-container hide">
           <div class="profile_count_link">
             <a id="backToTop">Back To Top</a>
@@ -515,8 +532,15 @@
           <div class="profile_count_link">
             <a id="#">Clean Comments</a>
           </div>
+          <div class="divider"></div>
           <div class="profile_count_link">
-            <a id="showSymbols">Symbols & Characters</a>
+            <a href="https://steamcommunity.com/my/inventory">Inventory</a>
+          </div>
+          <div class="profile_count_link">
+            <a href="https://steamcommunity.com/my/tradeoffers">Trade Offers</a>
+          </div>
+          <div class="profile_count_link">
+            <a href="https://steamcommunity.com/my/friends/add">Add Friend</a>
           </div>
           <div class="profile_count_link">
             <div class="change-profile-theme useful-links">
@@ -533,8 +557,11 @@
           </div>
           <div class="divider"></div>
           <div class="profile_count_link">
-          <a class="upload-artwork-link" href="https://steamcommunity.com/sharedfiles/edititem/767/3/"><span>Upload artwork</span></a>
-        </div>
+            <a id="showSymbols">Symbols & Characters</a>
+          </div>
+          <div class="profile_count_link">
+            <a class="upload-artwork-link" href="https://steamcommunity.com/sharedfiles/edititem/767/3/"><span>Upload artwork</span></a>
+          </div>
           <div class="profile_count_link">
             <div class="change-profile-theme">
               <details>
@@ -607,6 +634,27 @@
           console.log("steamEnhancedToggle clicked");
           steamEnhancedToggle.classList.toggle("toggle");
           steamEnhancedContainer.classList.toggle("hide");
+        });
+
+        // Steam Enhanced Pin
+        const steamEnhancedPin = document.getElementById("steamEnhancedPin");
+        const steamEnhanced = document.getElementById("steamEnhanced");
+        const isPinned = localStorage.getItem("steamEnhancedPinned") === "true";
+        if (isPinned) {
+          steamEnhanced.classList.add("pinned");
+          steamEnhancedPin.classList.add("toggle");
+        }
+
+        steamEnhancedPin.addEventListener("click", function () {
+          console.log("steamEnhancedPin clicked");
+          steamEnhanced.classList.toggle("pinned");
+
+          // Save 'pinned' class state to local storage
+          const isCurrentlyPinned = steamEnhanced.classList.contains("pinned");
+          localStorage.setItem("steamEnhancedPinned", isCurrentlyPinned);
+
+          // Toggle 'toggle' class on steamEnhancedPin
+          steamEnhancedPin.classList.toggle("toggle");
         });
 
         // ========================================================================== //

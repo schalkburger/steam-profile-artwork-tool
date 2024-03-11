@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.9
+// @version     1.1.13
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -30,16 +30,16 @@
   // Inject Steam Profile Artwork Tool styles
   let css = `
   .steam-enhanced {
-    box-shadow: 1px 1px 0px 0px rgb(8 17 30 / 75%);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     position: absolute;
     z-index: 600;
-    top: 10px;
+    top: 20px;
     right: 20px;
     opacity: 1;
     width: 100%;
-    max-width: 160px;
+    max-width: 175px;
     margin-bottom: 10px;
-    padding: 6px 6px 6px 10px;
+    padding: 0;
     background: #171d25;
     border-radius: 4px;
   }
@@ -48,6 +48,9 @@
   }
   .steam-enhanced:hover {
     opacity: 1;
+  }
+  .steam-enhanced header {
+    padding: 5px 5px 5px 10px;
   }
   .steam-enhanced h4 {
     display: flex;
@@ -72,7 +75,7 @@
     background-position: right center;
     cursor: pointer;
   }
-  .steam-enhanced h4 i#steamEnhancedToggle.toggle {
+  .steam-enhanced.expanded h4 i#steamEnhancedToggle {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGUlEQVR4nGNgQAcJQPyBgYHxBwMD8x8MWQBLKANJzkSRZQAAAABJRU5ErkJggg==);
   }
   .steam-enhanced h4 i#steamEnhancedPin {
@@ -89,10 +92,13 @@
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAKdJREFUOE9jZKAQMFKonwHDgCuXLv7HZ6iOnj6KHiwGXJjPwMCYgN2Q/wt09AwSkeUwDLh66VLCf4b/87EZwMjAmKitp7dgsBtw+WL9//8MDWSFwfXz5xX+MjPdxxMLD/4z/kvU1TU8AFODEohXLuGLAZgW1JhAMQASA//sES5gdICw/yPZyHQQOSbwpkSIixgY0OMebzQiSw4DAy5fPg8ORORoQ49iAFq1UxFzHZ4rAAAAAElFTkSuQmCC);
   }
   .steam-enhanced a:hover {
-    text-decoration: underline;
+    text-decoration: none;
   }
   .steam-enhanced-container {
-    padding: 10px 0 0 5px;
+    padding: 5px 5px 5px 15px;
+    margin: 5px 0 5px 0;
+    // box-shadow: 0 1px 0px 0px inset #4f5660;
+    user-select: none;
   }
   .steam-enhanced-container.hide {
     display: none;
@@ -125,15 +131,31 @@
   }
   summary::after {
     content: "";
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='rgba(243,240,240,1)'%3E%3Cpath d='M12 15.0006L7.75732 10.758L9.17154 9.34375L12 12.1722L14.8284 9.34375L16.2426 10.758L12 15.0006Z'%3E%3C/path%3E%3C/svg%3E");
-    width: 16px;
-    height: 16px;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGklEQVR4nGNgQAPMfxgYGH8AGR+AOAFdlgEAUsADSd64CbwAAAAASUVORK5CYII=);
+    width: 20px;
+    height: 20px;
     display: inline-block;
-    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right center;
   }
   details[open] summary:after {
     content: "";
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='rgba(255,255,255,1)'%3E%3Cpath d='M12 11.8284L9.17154 14.6569L7.75732 13.2426L12 9L16.2426 13.2426L14.8284 14.6569L12 11.8284Z'%3E%3C/path%3E%3C/svg%3E");
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGUlEQVR4nGNgQAcJQPyBgYHxBwMD8x8MWQBLKANJzkSRZQAAAABJRU5ErkJggg==);
+  }
+  .quick-links.hide {
+    display: none;
+  }
+  .quick-links-toggle, .quick-links-toggle span {
+    display: flex;
+  }
+  .quick-links-toggle i {
+    content: "";
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGklEQVR4nGNgQAPMfxgYGH8AGR+AOAFdlgEAUsADSd64CbwAAAAASUVORK5CYII=);
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-position: right center;
   }
   .change-profile-theme details {
     position: absolute;
@@ -143,6 +165,9 @@
   }
   .change-profile-theme details summary {
     user-select: none;
+  }
+  .change-profile-theme details summary:hover {
+    color: #66C0F4;
   }
   .preview-background {
     z-index: 300;
@@ -159,10 +184,10 @@
     display: flex;
     flex-direction: column;
     min-width: 130px;
-    margin-top: 10px;
+    margin-top: 5px;
     margin-left: -5px;
     padding: 15px;
-    padding-top: 5px;
+    padding-top: 10px;
     padding-left: 15px;
     background-color: #171d25;
     border-top: 1px solid rgb(255 255 255 / 25%);
@@ -178,7 +203,8 @@
     margin: 6px 0 4px 0;
   }
   .change-profile-theme .color-themes span:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    color: #66C0F4;
   }
   #manage_friends .friends-comments-textarea {
     width: 100%;
@@ -193,7 +219,7 @@
     margin-left: 0;
   }
   #symbolsModal {
-    box-shadow: 0 0 12px #000000;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     display: none;
     position: fixed;
     z-index: 700;
@@ -201,11 +227,11 @@
     right: 10px;
     overflow: hidden;
     overflow-y: scroll;
-    width: 340px;
+    width: 380px;
     height: calc(95vh);
     padding: 15px;
     padding-top: 0;
-    background-color: #171d25;
+    background: #171d25;
     cursor: auto;
     border: none;
     color: #fff;
@@ -219,10 +245,13 @@
   #symbolsModal #close {
     position: fixed;
     top: 20px;
-    right: 34px;
+    right: 20px;
     font-size: 18px;
     color: transparent;
     text-shadow: 0 0 0 white;
+    width: 20px;
+    height: 20px;
+    z-index: 800;
   }
   #symbolsModal a {
     display: block;
@@ -461,7 +490,7 @@
     border-radius: 12px;
   }
   .switch input:checked ~ label {
-    background: #343434;
+    background: #2b475e;
     border-color: #ffffff;
   }
   .switch input:checked ~ label::after {
@@ -476,12 +505,30 @@
     background: transparent;
   }
   .divider {
-    margin: 5px 0 10px 0;
+    margin: 10px 0 10px 0;
     display: block;
-    width: 90%;
+    width: 100%;
     height: 1px;
     background: transparent;
-    box-shadow: 0px 1px 0px 0px rgb(255 255 255 / 25%);
+    box-shadow: 1px 1px 0px 0px #293942;
+    max-width: 95%;
+  }
+  .quick-icons-container {
+    display: flex;
+  }
+  .quick-icon {
+    background: #242c36;
+    margin: 0 8px 0 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    padding: 3px;
+  }
+  .quick-icon:hover {
+    background: #3b4858;
   }
 
   `,
@@ -540,12 +587,36 @@
 
         <header><h4>Steam Enhanced <span><i id="steamEnhancedPin"></i> <i id="steamEnhancedToggle"></i></span></h4></header>
          <div id="steamEnhancedContainer" class="steam-enhanced-container hide">
-          <div class="profile_count_link">
-            <a id="backToTop">Back To Top</a>
+         <div class="quick-icons-container">
+            <div class="profile_count_link">
+              <a id="backToTop" title="Back To Top" class="quick-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
+            </svg>
+              </a>
+            </div>
+            <div class="profile_count_link">
+              <a id="goToBottom" title="Go To Bottom" class="quick-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
+            </svg>
+              </a>
+            </div>
+            <div class="profile_count_link">
+              <a id="reloadPage" title="Reload Page" class="quick-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+                <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+                </svg>
+              </a>
+            </div>
+            <div class="profile_count_link">
+              <a id="showSymbols" title="=Symbols & Characters" class="quick-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M5 5V19H19V5H5ZM4 3H20C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3ZM9.86885 15L9.04918 17H6.83333L11 7H13L17.1667 17H14.9508L14.1311 15H9.86885ZM10.6885 13H13.3115L12 9.8L10.6885 13Z"></path></svg>
+              </a>
+            </div>
           </div>
-          <div class="profile_count_link">
-            <a id="reloadPage">Reload Page</a>
-          </div>
+          <div class="divider"></div>
           <div class="profile_count_link profile-autoreload-market">
             <a id="#">Reload Market</a>
             <span class="switch">
@@ -558,38 +629,43 @@
               <details>
                 <summary>Quick Links</summary>
                 <div class="useful-links">
-                <div class="profile_count_link">
-                  <a href="https://steamcommunity.com/my/">Profile</a>
-                </div>
-                <div class="profile_count_link">
-                  <a href="https://steamcommunity.com/my/friends">Friends</a>
-                </div>
-                <div class="profile_count_link">
-                  <a href="https://steamcommunity.com/my/inventory">Inventory</a>
-                </div>
-                <div class="profile_count_link">
-                  <a href="https://steamcommunity.com/my/tradeoffers">Trade Offers</a>
-                </div>
-                <div class="profile_count_link">
-                  <a href="https://steamcommunity.com/my/friends/add">Add Friend</a>
-                </div>
-                <div class="profile_count_link">
-                  <a id="steamChatLink">Chat</a>
-                </div>
-                <div class="profile_count_link">
+                  <div class="profile_count_link">
+                    <a href="https://steamcommunity.com/my/">Profile</a>
+                  </div>
+                  <div class="profile_count_link">
                   <a id="steamIDLink" target="_blank">SteamID</a>
-                </div>
-                <div class="divider"></div>
-                  <span><a href="https://steamstat.us/" target="_blank">Steam Status</a></span>
-                  <span><a href="https://steamdb.info/sales/history/" target="_blank">Steam Sale Dates</a></span>
-                  <span><a href="https://steamrep.com/" target="_blank">SteamRep</a></span>
-                  <span><a href="https://steamid.io/" target="_blank">Steam ID Lookup</a></span>
+                  </div>
+                  <div class="profile_count_link">
+                    <a href="https://steamcommunity.com/my/friends">Friends</a>
+                  </div>
+                  <div class="profile_count_link">
+                    <a href="https://steamcommunity.com/my/friends/add">Add Friend</a>
+                  </div>
+                  <div class="profile_count_link">
+                    <a href="https://steamcommunity.com/my/inventory">Inventory</a>
+                  </div>
+                  <div class="profile_count_link">
+                    <a href="https://steamcommunity.com/my/tradeoffers">Trade Offers</a>
+                  </div>
+                  <div class="profile_count_link">
+                    <a id="steamChatLink">Chat</a>
+                  </div>
+                  <div class="divider"></div>
+                  <div class="profile_count_link">
+                    <a href="https://steamstat.us/" target="_blank">Steam Status</a>
+                  </div>
+                  <div class="profile_count_link">
+                    <a href="https://steamdb.info/sales/history/" target="_blank">Steam Sale Dates</a>
+                  </div>
+                  <div class="profile_count_link">
+                    <a href="https://steamrep.com/" target="_blank">SteamRep</a>
+                  </div>
+                  <div class="profile_count_link">
+                    <a href="https://steamid.io/" target="_blank">Steam ID Lookup</a>
+                  </div>
                 </div>
               </details>
             </div>
-          </div>
-          <div class="profile_count_link">
-            <a id="showSymbols">Symbols & Characters</a>
           </div>
           <div class="profile_count_link">
             <a class="upload-artwork-link" href="https://steamcommunity.com/sharedfiles/edititem/767/3/"><span>Upload artwork</span></a>
@@ -633,7 +709,6 @@
               </details>
             </div>
           </div>
-          <div class="divider"></div>
         </div>
         `;
 
@@ -654,6 +729,16 @@
           });
         });
 
+        const goToBottomButton = document.getElementById("goToBottom");
+        // Add a click event listener to the element
+        goToBottomButton.addEventListener("click", function () {
+          // Scroll to the bottom of the page
+          window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: "smooth", // You can use 'auto' or 'smooth' for smooth scrolling
+          });
+        });
+
         // Reload Page Functionality
         const reloadPageButton = document.getElementById("reloadPage");
         reloadPageButton.addEventListener("click", function () {
@@ -663,15 +748,30 @@
         // Steam Enhanced Toggle
         const steamEnhancedToggle = document.getElementById("steamEnhancedToggle");
         const steamEnhancedContainer = document.getElementById("steamEnhancedContainer");
-        steamEnhancedToggle.addEventListener("click", function () {
-          console.log("steamEnhancedToggle clicked");
+        const steamEnhanced = document.getElementById("steamEnhanced");
+        const isExpanded = localStorage.getItem("steamEnhancedExpanded") === "true";
+        if (isExpanded) {
+          steamEnhanced.classList.add("expanded");
           steamEnhancedToggle.classList.toggle("toggle");
           steamEnhancedContainer.classList.toggle("hide");
+        }
+
+        steamEnhancedToggle.addEventListener("click", function () {
+          console.log("steamEnhancedToggle clicked");
+          steamEnhanced.classList.toggle("expanded");
+          steamEnhancedToggle.classList.toggle("toggle");
+          steamEnhancedContainer.classList.toggle("hide");
+
+          // Save 'pinned' class state to local storage
+          const isCurrentlyExpanded = steamEnhanced.classList.contains("expanded");
+          localStorage.setItem("steamEnhancedExpanded", isCurrentlyExpanded);
+
+          // Toggle 'toggle' class on steamEnhancedPin
+          steamEnhancedToggle.classList.toggle("toggle");
         });
 
         // Steam Enhanced Pin
         const steamEnhancedPin = document.getElementById("steamEnhancedPin");
-        const steamEnhanced = document.getElementById("steamEnhanced");
         const isPinned = localStorage.getItem("steamEnhancedPinned") === "true";
         if (isPinned) {
           steamEnhanced.classList.add("pinned");
@@ -688,6 +788,30 @@
 
           // Toggle 'toggle' class on steamEnhancedPin
           steamEnhancedPin.classList.toggle("toggle");
+        });
+
+        // Quick Links Expand
+
+        // Steam Enhanced Toggle
+        const quickLinksToggle = document.getElementById("quickLinksToggle");
+        const quickLinksContainer = document.getElementById("quickLinksContainer");
+        const isQuickLinkExpanded = localStorage.getItem("quickLinksExpanded") === "true";
+        if (isQuickLinkExpanded) {
+          quickLinksToggle.classList.toggle("toggle");
+          quickLinksContainer.classList.toggle("hide");
+        }
+
+        quickLinksToggle.addEventListener("click", function () {
+          console.log("quickLinksToggle clicked");
+          quickLinksToggle.classList.toggle("toggle");
+          quickLinksContainer.classList.toggle("hide");
+
+          // Save 'pinned' class state to local storage
+          const isQuickLinksCurrentlyExpanded = steamEnhanced.classList.contains("expanded");
+          localStorage.setItem("quickLinksExpanded", isQuickLinksCurrentlyExpanded);
+
+          // Toggle 'toggle' class on steamEnhancedPin
+          quickLinksToggle.classList.toggle("toggle");
         });
 
         // Steam Chat Popup
@@ -802,70 +926,69 @@
         <div class="subSection detailBox" id="2050699">
           <div class="subSectionTitle">Invisible Spacers</div>
           <div class="subSectionDesc">
-            For those needing spacers for anything they are doing, but regular spaces (using the space bar) do not properly register. Simply copy and paste the space between the two " | " and use that for
-            all your spacing needs:  |⠀⠀⠀⠀⠀⠀⠀⠀⠀|
+            Copy the space between these brackets:&nbsp; (⠀⠀⠀⠀⠀)
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="1356403">
           <div class="subSectionTitle">Symbols & Fonts Websites</div>
           <div class="subSectionDesc">
               <a href="https://fsymbols.com/generators/" target="_blank">Font generator</a>
               <a href="https://text-art.top/" target="_blank">Text art</a>
               <a href="https://steam.tools/mosaticon/" target="_blank">Mosaticon</a>
-            <div style="clear: both"></div>
           </div>
         </div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="1356403">
           <div class="subSectionTitle">Animals &amp; Insects</div>
           <div class="subSectionDesc">
             🐸 🐢 🐍 🐲🐉 🙈 🙊 🙉🐒🦍🐶🐕🐩🐺🦊🐱🐈🦁🐯🐅🐆🐴🐎🦄🦓🐮🐂🐃🐄🐷🐖🐗🐽🐏🐑 🐐 🐪 🐫 🦒 🐘 🦏 🐭 🐁 🐀 🐹 🐰 🐇 🐿 🦔 🦇 🐻 🐨 🐼 🐾 🦃 🐔 🐓🐣 🐤 🐥 🐦 🐧 🦅 🦆 🦉🦕🦖 🐳🐋 🐬 🐟 🐠 🐡 🐡🐙 🐌
             🦈 🐚 🦀 🦐 🦑 🐌 🦋 🐛🐜 🐝 🐞 🦗 🕷 🕸 🦂
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="1355840">
           <div class="subSectionTitle">Arrows</div>
           <div class="subSectionDesc">
             ➟ ➡ ➢ ➣ ➤ ➥ ➦ ➧ ➨ ➚ ➘ ➙ ➛ ➜ ➝ ➞ ➸ ➲ ➳ ➳ ➴ ➵ ➶ ➷ ➸ ➹ ➺ ➻ ➼ ➽ ← ↑ → ↓ ↔ ↕ ↖ ↗ ↘ ↙ ↚ ↛ ↜ ↝ ↞ ↟ ↠ ↡ ↢ ↣ ↤ ↥ ↦ ↧ ↨ ➫ ➬ ➩ ➪ ➭ ➮ ➯ ➱ ↩ ↪ ↫ ↬ ↭ ↮ ↯ ↰ ↱ ↲ ↳ ↴ ↵ ↶ ↷ ↸ ↹ ↺ ↻ ↼ ↽ ↾ ↿ ⇀ ⇁ ⇂ ⇃ ⇄ ⇅ ⇆ ⇇ ⇈ ⇉ ⇊
             ⇋ ⇌ ⇍ ⇎ ⇏ ⇐ ⇑ ⇒ ⇓ ⇔ ⇕ ⇖ ⇗ ⇘ ⇙ ⇚ ⇛ ⇜ ⇝ ⇞ ⇟ ⇠ ⇡ ⇢ ⇣ ⇫ ⇬ ⇭ ⇮ ⇯ ⇰ ⇱ ⇲ ⇳ ⇴ ⇵ ⇶ ⇷ ⇸ ⇹ ⇺ ⇻ ⇼ ⇽ ⇾ ⇿ ☇ ☈
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="2050601">
           <div class="subSectionTitle">Chess Pieces</div>
           <div class="subSectionDesc">
             ♔ ♕ ♖ ♗ ♘ ♙ ♚ ♛ ♜ ♝ ♞ ♟
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="2050598">
           <div class="subSectionTitle">Crosses</div>
           <div class="subSectionDesc">
             † ✞ ✛ ✙ ☩ † ☨ ✞ ✝ ☥ ☦✞ ✜✝✙ ✠
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="2050526">
           <div class="subSectionTitle">Emergency &amp; Medicine</div>
           <div class="subSectionDesc">
             🚓 🚑 🚒 🏥 💉 💊
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="1356343">
           <div class="subSectionTitle">Food</div>
           <div class="subSectionDesc">
             🍄🍏🍎🍐🍊🍋🍌🍉🍇🍓🍈🍒🍑🍍🥝🥑🍅🍆🥒🥕🌽🌶🥔🍠🌰🥜🍯🥐🍞🥖🧀🥚🍳🥓🥞🍤🍗🍖🍕🌭🍔🍟🥙🌮🌯🥗🥘🍝🍜🍲🍥🍣🍱🍛🍙🍚🍘🍢🍡🍧 🎂 🍰🍨🍦🍮🍭🍬🍫🍿🍩🍪🥛🍼☕🍵🍶🍺🍻🥂🍷🥃🍸🍹🍾🥄🍴🍽🔪
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="1356328">
           <div class="subSectionTitle">Hands, Faces &amp; People</div>
           <div class="subSectionDesc">
@@ -874,26 +997,26 @@
             👨‍✈️ 👩‍✈️ 👨‍🚀 👩‍🚀 <br />👨‍🚒 👩‍🚒 👮 👮‍♂️ 👮‍♀️ 🕵 🕵️‍♂️ 🕵️‍♀️ 💂 💂‍♂️ 💂‍♀️ 👷 👷‍♂️ 👷‍♀️ 🤴 👸 👳👳‍♂️ 👳‍♀️ 👲 🧕 🧔 👱 <br />👱‍♂️👱‍♀️ 🤵 👰 🤰🤱 👼 🎅 🤶 🧙‍♀️ 🧙‍♂️ 🧚‍♀️ 🧚‍♂️ 🧛‍♀️ 🧛‍♂️ 🧜‍♀️ 🧜‍♂️ 🧝‍♀️ 🧝‍♂️ 🧞‍♀️ 🧞‍♂️🧟‍♀️ <br />🧟‍♂️🙍 🙍‍♂️ 🙍‍♀️ 🙎 🙎‍♂️ 🙎‍♀️ 🙅 🙅‍♂️ 🙅‍♀️ 🙆
             🙆‍♂️ 🙆‍♀️💁 💁‍♂️💁‍♀️ 🙋 🙋‍♂️ 🙋‍♀️ 🙇 🙇‍♂️<br />🙇‍♀️ 🤦 🤦‍♂️ 🤦‍♀️ 🤷 🤷‍♂️🤷‍♀️ 💆 💆‍♂️ 💆‍♀️💇 💇‍♂️ 💇‍♀️ 🤷🚶 🚶‍♂️ 🚶‍♀️ 🏃🏃‍♂️ 🏃‍♀️ 💃 🕺 👯👯‍♂️ <br />👯‍♀️ 🧖‍♀️ 🧖‍♂️ 🕴 🗣👤 👥 👫👬 👭💏 👨‍❤️‍💋‍👨 👩‍❤️‍💋‍👩 💑 👨‍❤️‍👨 👩‍❤️‍👩 👪 👨‍👩‍👦 👨‍👩‍👧 👨‍👩‍👧‍👦 👨‍👩‍👦‍👦 👨‍👩‍👧‍👧 👨‍👨‍👦 👨‍👨‍👧 👨‍👨‍👧‍👦 👨‍👨‍👦‍👦 <br />👨‍👨‍👧‍👧 👩‍👩‍👦 👩‍👩‍👧
             👩‍👩‍👧‍👦 👩‍👩‍👦‍👦 👩‍👩‍👧‍👧 👨‍👦 👨‍👦‍👦 👨‍👧 👨‍👧‍👦 👨‍👧‍👧 👩‍👦 👩‍👦‍👦 👩‍👧 👩‍👧‍👦 👩‍👧‍👧 🤳 💪 👈 👉 ☝ 👆 🖕 👇 ✌ 🤞 🖖 🤘 🖐 <br />✋ 👌 👍 👎 ✊ 👊🤛 🤜 🤚 👋 🤟 ✍ 👏 👐 🙌 🤲 🙏 🤝 💅 👂 👃 👣 👀 🧠 👅 👄 💋 👨‍🎤 <br />👩‍🎤 💃 🕺 👯‍♂️ 👯‍♀️
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="2050605">
           <div class="subSectionTitle">Gender Signs</div>
           <div class="subSectionDesc">
             ♀ ♂ ⚢ ⚣ ⚤ ⚥ ☿ ♁ ⚧
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="2050535">
           <div class="subSectionTitle">Geometric</div>
           <div class="subSectionDesc">
             ☐ Ↄ ■ □ ▢ ▣ ▤ ▥ ▦ ▧ ▨ ▩ ▪ ▫ ▬ ▭ ▮ ▯ ▰ ▱ ◆ ◇ ◈ ◉ ◊ ○ ◌ ◍ ◎ ● ◐ ◑ ◒ ◓ ◔ ◕ ◖ ◗ ◘ ◙ ◚ ◛ ◜ ◝ ◞ ◟ ◠ ◡ ▲▼△▽⊿ ◤ ◥ ◣ ◢ ◦ ◧ ◨ ◩ ◪ ◫ ◬ ◭ ◮ ◯ ⍁ ⍂ ⍃ ⍄ ⌷ ⌸ ⌹ ⌺ ⌻ ⌼ ⌿ ⍀ ⍅ ⍆ ⍇ ⍈ ⍉ ⍊ ⍋ ⍌ ⍍ ⍎ ⍏ ⍐ ⍑ ⍒ ⍓ ⍔
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="2534949">
           <div class="subSectionTitle">Halloween</div>
           <div class="subSectionDesc">
@@ -901,18 +1024,18 @@
             🧛 🧛‍♀️ 🧛‍♂️ 🧜 🧜‍♀️ 🧜‍♂️ 🧝 🧝‍♀️ 🧝‍♂️ 🧞 🧞‍♀️ 🧞‍♂️ 🧟 🧟‍♀️ 🧟‍♂️ 🕴 💚🖤 🦄 🦇🦉 🕷️🕸️🥀 <br />
             🍫 🍬 🍭 🌃 🛸🌕 🌚 ⚡🎃 🔮🎭 🕯️🗡️<br /><br />
             <br />
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="1356331">
           <div class="subSectionTitle">Hearts &amp; Love</div>
           <div class="subSectionDesc">
             ღ ♥ ♡ ❤ ➳♥ ❥ ❦ ❧ ❣ 💕 💔💘 💓 💔 💖 💗 💌🖤 💜 💙 💚 💛🧡 💞 💟 💝<br /><br />👰 💍 💒 🏩 💑 💏<br /><br /><br /><br />
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="1355831">
           <div class="subSectionTitle">Letters</div>
           <div class="subSectionDesc">
@@ -921,30 +1044,30 @@
             ℉ °∃ ∧ ∠ ∨ ∩ ⊂ ⊃ ∪ ⊥ ∀ Ξ Γ ɐ ə ɘ ε β ɟ ɥ ɯ ɔ и ๏ ɹ ʁ я ʌ ʍ λ ч ∞ Σ Π<br /><br />๖ۣۜA ๖ۣۜB ๖ۣۜC ๖ۣۜD ๖ۣۜE ๖ۣۜF ๖ۣۜG ๖ۣۜH ๖ۣۜI ๖ۣۜJ ๖ۣۜK ๖ۣۜL ๖ۣۜM ๖ۣۜN ๖ۣۜO ๖ۣۜP ๖ۣۜQ ๖ۣۜR ๖ۣۜS ๖ۣۜT ๖ۣۜU ๖ۣۜW ๖ۣۜV
             ๖ۣۜX ๖ۣۜY ๖ۣۜZ <br /><br />æ Æ ø Ø å Å ö Ö ä Ä ë Ê ï Î é É ß <br /><br />α в ¢ ∂ є f g н ι נ к ℓ м и σ ρ q я ѕ т υ ω ν χ у <br /><br />💤 | ᶠᵘᶜᵏᵧₒᵤ | Yᵒᵘ Oᶰˡʸ Lᶤᵛᵉ Oᶰᶜᵉ | ℓ٥ﻻ ﻉ√٥υ | ᶫᵒᵛᵉᵧₒᵤ<br /><br />🆕
             🆒 🆙 🆖 🆓 🔤 🔠 🔡 <br /><br />
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="1355839">
           <div class="subSectionTitle">Lines, Bars &amp; Dashes</div>
           <div class="subSectionDesc">
             ▂▃▅▆█▆▅▃▂ <br /><br />ılı.lıllılı.ıllı..ılı.lıllılı.ıllı <br /><br />║▌│█║▌│ █║▌│█│║▌║ <br /><br />▂ ▃ ▄ ▅ ▆ ▇ █ █ ▇ ▆ ▅ ▄ ▃ ▂<br /><br />· ¨ … ¦ ┅ ┆ ┈ ┊ ╱ ╲ ╳ ¯ – —<br /><br />≡ ჻ ░ ▒ ▓ ▤ ▥ ▦ ▧
             ▨ ▩ █ ▌ ▐ ▀ ▄<br /><br />◠ ◡ ╭ ╮ ╯ ╰<br /><br />│ ┤ ╡ ╢ ╖ ╕ ╣ ║ ╝ ╜ ╛ ┐ └ ┴ ┬ ├ ─ ┼ ╞ ╟ ╚ ╔ ╩ ╦ ╠ ═ ╬ ╧ ╨ ╤ ╥ ╙ ╘ ╒ ╓ ╫ ╪ ┘ ┌<br /><br />
             ⊢ ⊣ ⊤ ⊥ ⊦ ⊧ ⊨ ⊩ ⊪ ⊫ ⊬ ⊭ ⊮ ⊯<br /><br />☰ ☱ ☲ ☳ ☴ ☵ ☶ ☷
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="2050595">
           <div class="subSectionTitle">Marks, Signs &amp; Symbols</div>
           <div class="subSectionDesc">
             ☢️☣️ 🆗 🏧 🚮 🚰 ♿ 🚹 🚺 🚻 🚼 🚾 ▶️ ⏩ ◀️⏪ 🔼 ⏫ 🔽 ⏬ ⏹️ ⏏️ 🎦 🔅 🔆 📶 📳 📴 ♻️ #️⃣ 0️⃣ 1️⃣2️⃣ 3️⃣ 4️⃣ 5️⃣6️⃣ 7️⃣ 8️⃣ 9️⃣ 🔟 💯 🔠 🔡 🔢 🔣 🔤 🅰 🆎 🅱 🆑🆒 🆓🆕 🆖 🅾 🆗 🅿 🆘 🆙 🆚 🈁 🈂️ 🈷️ 🈶 🈯 🉐 🈹
             🈚 🈲 🉑 🈸 🈴 🈳 ㊗️ ㊙️ 🈺🈵 ◽ ◾ ⬛ ⬜ 🔶 🔷 🔸 🔹 🔺 🔻 💠 🔲 🔳 ⚪ ⚫ 🔴 🔵 <br /><br />🛐⚛️🕉️✡️☸️☯️✝️☦️☪️☮️🕎 🔯 ♈ ♉ ♊ ♋ ♌ ♍ ♎ ♏ ♐ ♑ ♒ ♓ ⛎ <br /><br />⚠️🚸 ⛔ 🚫 🚳 🚭 🚯 🚱
             🚷🔞 <br /><br />⬆️➡️↗️➡️↘️⬇️↙️⬅️↖️↩️↪️⤴️⤵️🔃🔄🔙🔚🔛 🔜 🔝 <br /><br />🔱📛 🔰⭕ ✅ ☑️✔️✖️❌❎➕➖➗➰➿〽️✳️✴️❇️❓❔❕ ❗ Ⓜ️<br />
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="1355841">
           <div class="subSectionTitle">Miscellaneous Characters &amp; Symbols</div>
           <div class="subSectionDesc">
@@ -955,75 +1078,75 @@
             ☤ ⚛ ☊ ☋ ☌ ☍ ☓ ☖ ☗ ☘ ☙ ☟ ☠ ☡ ☢ ☣ ☤ ☥ ☦ ☧ ☨ ☩ ☪ ☫ ☬ ☭ ☸ ☼ ♃ ♄ ♅ ♇ ♨ ♰ ♱ ☫ ª ↀ ↁ ↂ ϡ ☤ ☥ ☦ ☧ ☨ ☩ ☪ ☫ ☬ ☭ ⁉ ⁈ ؟ ﹖ ¿ Ƹ̵̡Ӝ̵̨̄Ʒ [̲̅$̲̅(̲̅ιοο̲̅)̲̅$̲̅] 🏳 ๖ۣۜ ‡ ☮ ☪ ⚔ ✡ ☭ ✯ <br /><br />
             🎀 🎄 🎅 🎆 🎈 🎊 ⚔ 🎃 👻 🎁 🎉🔥💣👑🔥 🎆 🎭🔫 🏁 🚩🎌 🏴 🏳️‍🌈 🏴‍☠️ 💺🌠 ⛱️🏖️🎆 🎇 🎑 💴 💵💶 💷 🗿 🗾 🏔️🌋 🗻 🏕️🏜️🏝️🏞️🏟️🏛️🏗️🏘️🏚️🏠 🏡 🏢 🏣 🏤 🏥 🏦 🏨 🏩 🏪 🏫 🏬 🏭 🏯 🏰 💒 🗼 🗽 ⛪ 🕌 🕍 ⛩ 🕋
             ⛲ ⛺ 🌁 🌃 🏙️🌄 🌅 🌆 🌇 🌉 🌌🎠 🎡 🎢🎥 🎬 💣 👑 🔥 🎭 🔫 ⌚ ⌛☕ 🗯️💭💢♨️💤🌀<br /><br /><br /><br />
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="2050555">
           <div class="subSectionTitle">Music</div>
           <div class="subSectionDesc">
             ♩ ♫ ♭ ♪ ♯ ♬ ♮ 🔇🔈 🔉 🔊 📢📣 📯 🔔 🔕 🎵 🎶 🎧🎼🎷 🎸 🎹 🎺 🎻 🥁
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="1355832">
           <div class="subSectionTitle">Numbers</div>
           <div class="subSectionDesc">
             ⓵ ⓶ ⓷ ⓸ ⓹ ⓺ ⓻ ⓼ ⓽ ⓾ ⓫ ⓬ ⓭ ⓮ ⓯ ⓰ ⓱ ⓲ ⓳ ⓴<br /><br />① ② ③ ④ ⑤ ⑥ ⑦ ⑧ ⑨ ⑩ ⑪ ⑫ ⑬ ⑭ ⑮ ⑯ ⑰ ⑱ ⑲ ⑳<br /><br />
             ⒉ ⒊ ⒋ ⒌ ⒍ ⒎ ⒏ ⒐ ⒑ ⒒ ⒓ ⒔ ⒕ ⒖ ⒗ ⒘ ⒙ ⒚ ⒛ <br /><br />𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫 <br /><br />𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡𝟘<br /><br />√ ∛ ∜ <br /><br />⅟ ½ ⅓ ⅕<br />⅙ ⅛ ⅔ ⅖<br />⅚ ⅜ ¾ ⅗<br />⅝ ⅞ ⅘<br />
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="2436771">
           <div class="subSectionTitle">Plants</div>
           <div class="subSectionDesc">
             💐 🌸 💮 🌹 🥀 🌺 🌻 🌼 🌷 🌱🌲 🌳 🌴 🌵🌾 🌿 ☘🍀 🍁 🍂🍃 🍄 🌰
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="1356327">
           <div class="subSectionTitle">Stars &amp; Circular Shapes</div>
           <div class="subSectionDesc">
             ✸✤ ✥✦✧ ◈ ★ ☆ ✩ ✫ ✬ ✭ ✮ ✯ ✰ 【★】 ✱ ✲ ✳ ❃ ❂ ❁ ❀ ✿ ✾ ✽ ✼ ✻ ✺ ✹ ✸ ✷ ❃ ❂ ❁ ❀ ✿ ✾ ✽ ✼ ✻ ✺ ✹ ✸ ✷ ✶ ✵ ✴ ❄ ❅ ❆ ❇ ❈ ❉ ❊ ❋ ✪ ⋆ 💫 🌠 ✨🌟
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="1356354">
           <div class="subSectionTitle">Sports</div>
           <div class="subSectionDesc">
             🏆 🏁 ♕ ♛ ♔ ♚ 🏂 🏄 🏊 🎯 ⚽ ⚾ 🎾 🏀⚽ 🏈🏉 🎳 ⛳ 🎱 🎲 🎮 👾 ♖ ♗ ♘ ♙ ♜ ♝ ♞ ♟ 🃏 ♤ ♧ ♡ ♢ ♠ ♣ ♥ ♦🏅 🥇 🥈 🥉 🏒⛸ 🎿 🛷 🥌 🏹🧗‍♀️ 🧗‍♂️ 🧘‍♀️ 🧘‍♂️ 🕴 🏇 ⛷ 🏂 🏌 🏌️‍♂️ 🏌️‍♀️ 🏄 🏄‍♂️ 🏄‍♀️ 🚣 🚣‍♂️ 🚣‍♀️ 🏊 🏊‍♂️ 🏊‍♀️ ⛹ ⛹️‍♂️ ⛹️‍♀️ 🏋
             🏋️‍♂️ 🏋️‍♀️ 🚴 🚴‍♂️🚴‍♀️ 🚵 🚵‍♂️ 🚵‍♀️ 🤸 🤸‍♂️ 🤸‍♀️ 🤼 🤼‍♂️ 🤼‍♀️ 🤽 🤽‍♂️ 🤽‍♀️ 🤾 🤾‍♂️ 🤾‍♀️ 🤹 🤹‍♂️ 🤹‍♀️ 🎪🎫 🎾<br />🎳 🏏 🏑 🏒 🏓 🏸 🥊 🥋 ⛳🎣 🎽 🛷 🥌 🎯 🎱 🎮 🎰 🎲
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="2436791">
           <div class="subSectionTitle">Transportation</div>
           <div class="subSectionDesc">
             🏎️🏍️🚂 🚃 🚄 🚅 🚆🚇 🚈 🚊 🚝 🚞 🚋 🚌 🚍🚎 🚐 🚑 🚒 🚓 🚔 🚕 🚖 🚗 🚘 🚚 🚛 <br />🚜🚲 🛴 🛵 🛥️⛵ 🚤 🚢 ✈️🛩️🛫 🛬 🚁 🚟 🚠 🚡 🚀 🛸 ⚓🚧🚦🚥🚨🚏 ⛽ 🛤️
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="2050539">
           <div class="subSectionTitle">Weather &amp; Space</div>
           <div class="subSectionDesc">
             🌪️🌠🌈 🌂 ⚡ ❄🔥💧 🌊 🚀🌍 🌎 🌏🌐☔☂️🌡️🌬️⛄🌁🌂🏂🌨️☁️🌩️⛅🌫️⛆
-            <div style="clear: both"></div>
+
           </div>
         </div>
-        <div style="clear: both"></div>
+        <div class="divider"></div>
         <div class="subSection detailBox" id="1356348">
           <div class="subSectionTitle">Work &amp; Office</div>
           <div class="subSectionDesc">
             📅 📆 🔧 🔨 🔩 🚪 🔑 🔐 🔏 🔒 🔓 🎬 🎥 📹 📼 📷 📡 📺 🔌 🔋 💡 🔦 ☎ ☏ 📞📟 ✂ ✃ ✄ 📌 📎 🔗 ✏ ✒ 🔎 🔍 📏 📐 🎨 💻 📠 📇 💾 💽 📀 💿 📊 📈 📉 📇 📠 💻 ✉ 📧 📨 📩 📮 📪 📫 📥 📤 📲 📱 📁 📂 📰 📄 📃
             📑 📜 📋 📝 📦 🎫 🔖 📖 📔 📒 📓 📕 📙 📗 📘 📚 💄 👓 👑 🎩 👒 🎓 👛 👜 👝 🎒 💼 🎽 👗 👔 👕 👚 👘 👙 👖 👠 👢 👞 👡 👟 🕛🕧🕐 🕜 🕑🕝 🕒 🕞 🕓🕟 🕔 🕠🕕 🕡 🕖🕢 🕗🕣 🕘 🕤 🕙 🕥 🕚 🕦 📫 📪📬
             📭
-            <div style="clear: both"></div>
+
           </div>
         </div>
       </div>
@@ -1081,7 +1204,7 @@
   <div class="pageTitle">Steam Profile Artwork Tool</div>
   <div class="buttonsContainer">
     <a id="blankTitleButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px">
-    <span style="padding-left: 16px; padding-right: 16px;">Enter Blank Title</span>
+      <span style="padding-left: 16px; padding-right: 16px;">Set Blank Title</span>
     </a>
     <div class="customArtworkButtons">
     <details>
@@ -1129,7 +1252,7 @@
       return querySelector;
     }
     // Check if
-    checkElement("mainContents").then((element) => {
+    checkElement("#mainContents").then((element) => {
       console.log("mainContents exists");
       function setBlankTitleButton() {
         // ----------------------------
@@ -1143,6 +1266,7 @@
         const blankTitleButton = document.querySelector("#blankTitleButton");
         const titleFieldParent = titleFieldInput.parentNode;
         blankTitleButton.addEventListener("click", () => {
+          console.log("#blankTitleButton clicked");
           blankTitleButton.classList.add("blank-title-added");
           titleFieldInput.value = blankTitleCharacter;
           titleFieldInput.classList.add("fieldInputSuccess");

@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.13
+// @version     1.1.14
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -788,30 +788,6 @@
 
           // Toggle 'toggle' class on steamEnhancedPin
           steamEnhancedPin.classList.toggle("toggle");
-        });
-
-        // Quick Links Expand
-
-        // Steam Enhanced Toggle
-        const quickLinksToggle = document.getElementById("quickLinksToggle");
-        const quickLinksContainer = document.getElementById("quickLinksContainer");
-        const isQuickLinkExpanded = localStorage.getItem("quickLinksExpanded") === "true";
-        if (isQuickLinkExpanded) {
-          quickLinksToggle.classList.toggle("toggle");
-          quickLinksContainer.classList.toggle("hide");
-        }
-
-        quickLinksToggle.addEventListener("click", function () {
-          console.log("quickLinksToggle clicked");
-          quickLinksToggle.classList.toggle("toggle");
-          quickLinksContainer.classList.toggle("hide");
-
-          // Save 'pinned' class state to local storage
-          const isQuickLinksCurrentlyExpanded = steamEnhanced.classList.contains("expanded");
-          localStorage.setItem("quickLinksExpanded", isQuickLinksCurrentlyExpanded);
-
-          // Toggle 'toggle' class on steamEnhancedPin
-          quickLinksToggle.classList.toggle("toggle");
         });
 
         // Steam Chat Popup

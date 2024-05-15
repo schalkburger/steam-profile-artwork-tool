@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.17
+// @version     1.1.27
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -587,7 +587,7 @@
     }
     // Check if on profile page
     checkElement("#global_header").then((element) => {
-      console.log("global_header");
+      // console.log("global_header");
       function setUploadArtworkButton() {
         const uploadArtworkURL = `https://steamcommunity.com/sharedfiles/edititem/767/3/`;
         const uploadCustomArtworkButtonContainer = document.createElement("div");
@@ -1648,10 +1648,11 @@
     "use strict";
 
     // Reload page button if Steam encountered an error or auto reload is enabled.
-    console.log("Reload Steam market function");
+    // console.log("Reload Steam market function");
     const targetNode = document.body;
 
     const config = { childList: true, subtree: true };
+    let reloadInProgress = false;
 
     const createReloadText = function () {
       const reloadText = document.createElement("div");
@@ -1691,7 +1692,30 @@
       return refreshButton;
     };
 
+    const autoReload = function () {
+      const autoReloadErrors = localStorage.getItem("autoReloadErrors");
+      if (autoReloadErrors === "true") {
+        console.log("Auto reload errors enabled. Reloading page in 5 seconds...");
+        const reloadText = createReloadText();
+        reloadInProgress = true;
+        // Reload the page every 5 seconds if autoReloadErrors is enabled
+        setTimeout(() => {
+          if (reloadInProgress) {
+            console.log("Reloading page due to error...");
+            location.reload();
+          }
+        }, 5000);
+      } else {
+        console.log("Auto reload errors not enabled. Creating reload button.");
+        // Create reload button if auto reload is not enabled
+        createRefreshButton();
+        // Disconnect the observer to stop further checks
+        observer.disconnect();
+      }
+    };
+
     const callback = function (mutationsList, observer) {
+      if (reloadInProgress) return; // If reload in progress, do nothing
       for (const mutation of mutationsList) {
         if (mutation.type === "childList") {
           // Check if the added node is the desired div element
@@ -1701,27 +1725,7 @@
             (errorDiv.textContent.trim() === "There was an error performing your search. Please try again later." ||
               errorDiv.textContent.trim() === "There was an error getting listings for this item. Please try again later.")
           ) {
-            const autoReloadErrors = localStorage.getItem("autoReloadErrors");
-            if (autoReloadErrors === "true") {
-              console.log("Auto reload errors enabled. Reloading page in 5 seconds...");
-              const reloadText = createReloadText();
-              // Reload the page every 5 seconds if autoReloadErrors is enabled
-              const interval = setInterval(() => {
-                if (document.querySelector(".market_listing_table_message")) {
-                  console.log("Reloading page due to error...");
-                  location.reload();
-                } else {
-                  clearInterval(interval); // Stop reloading once the error is gone
-                  document.body.removeChild(reloadText);
-                }
-              }, 5000);
-            } else {
-              console.log("Auto reload errors not enabled. Creating reload button.");
-              // Create reload button if auto reload is not enabled
-              const refreshButton = createRefreshButton();
-              // Disconnect the observer to stop further checks
-              observer.disconnect();
-            }
+            autoReload();
             break;
           }
         }

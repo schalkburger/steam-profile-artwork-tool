@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.14
+// @version     1.1.16
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -32,7 +32,7 @@
   .steam-enhanced {
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     position: absolute;
-    z-index: 600;
+    z-index: 99999;
     top: 20px;
     right: 20px;
     opacity: 1;
@@ -59,6 +59,7 @@
     font-size: 13px;
     font-weight: 500;
     color: #b8b6b4;
+    padding-top: 4px;
   }
   .steam-enhanced h4 span {
     display: flex;
@@ -70,13 +71,14 @@
     display: inline-block;
     width: 20px;
     height: 20px;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGklEQVR4nGNgQAPMfxgYGH8AGR+AOAFdlgEAUsADSd64CbwAAAAASUVORK5CYII=);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='18' height='18' fill='rgba(255,255,255,1)'%3E%3Cpath d='M12 8L18 14H6L12 8Z'%3E%3C/path%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right center;
+    background-size: contain;
     cursor: pointer;
   }
   .steam-enhanced.expanded h4 i#steamEnhancedToggle {
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGUlEQVR4nGNgQAcJQPyBgYHxBwMD8x8MWQBLKANJzkSRZQAAAABJRU5ErkJggg==);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='18' height='18' fill='rgba(255,255,255,1)'%3E%3Cpath d='M12 16L6 10H18L12 16Z'%3E%3C/path%3E%3C/svg%3E");
   }
   .steam-enhanced h4 i#steamEnhancedPin {
     display: inline-block;
@@ -93,6 +95,7 @@
   }
   .steam-enhanced a:hover {
     text-decoration: none;
+    color: #66C0F4;
   }
   .steam-enhanced-container {
     padding: 5px 5px 5px 15px;
@@ -131,7 +134,7 @@
   }
   summary::after {
     content: "";
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGklEQVR4nGNgQAPMfxgYGH8AGR+AOAFdlgEAUsADSd64CbwAAAAASUVORK5CYII=);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='rgba(255,255,255,1)'%3E%3Cpath d='M11.9999 13.1714L16.9497 8.22168L18.3639 9.63589L11.9999 15.9999L5.63599 9.63589L7.0502 8.22168L11.9999 13.1714Z'%3E%3C/path%3E%3C/svg%3E");
     width: 20px;
     height: 20px;
     display: inline-block;
@@ -140,7 +143,7 @@
   }
   details[open] summary:after {
     content: "";
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMAQMAAAC6HhTBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAxcPCp77KdQAAAAJ0Uk5TAP9bkSK1AAAAGUlEQVR4nGNgQAcJQPyBgYHxBwMD8x8MWQBLKANJzkSRZQAAAABJRU5ErkJggg==);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='rgba(255,255,255,1)'%3E%3Cpath d='M11.9999 10.8284L7.0502 15.7782L5.63599 14.364L11.9999 8L18.3639 14.364L16.9497 15.7782L11.9999 10.8284Z'%3E%3C/path%3E%3C/svg%3E");
   }
   .quick-links.hide {
     display: none;
@@ -175,10 +178,14 @@
   .preview-avatar-frame {
     z-index: 200;
   }
-  .useful-links {
+  .quick-navigation {
     z-index: 500;
   }
+  .useful-links {
+    z-index: 100;
+  }
   .change-profile-theme .color-themes,
+  .change-profile-theme .quick-navigation,
   .change-profile-theme .useful-links {
     box-shadow: 0px 1px 2px 2px rgb(8 17 30 / 75%);
     display: flex;
@@ -194,7 +201,7 @@
     border-radius: 4px;
     color: #fff;
   }
-  .change-profile-theme .useful-links span {
+  .change-profile-theme .quick-navigation span, .change-profile-theme .useful-links span {
     display: block;
     margin: 6px 0 4px 0;
   }
@@ -320,8 +327,16 @@
   }
   .profile_count_link {
     min-height: 20px;
-    margin-bottom: 4px;
+    margin-top: 4px;
+    margin-bottom: 8px;
     font-size: 12px;
+  }
+  .profile_count_link a {
+    display: block;
+    width: 100%;
+  }
+  .quick-icon-container {
+    margin-top: 0;
   }
   .active-theme span {
     color: #2e83c9;
@@ -515,17 +530,20 @@
   }
   .quick-icons-container {
     display: flex;
+    margin-bottom: 10px;
   }
   .quick-icon {
     background: #242c36;
+    color: #fff;
     margin: 0 8px 0 0;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 4px;
     padding: 3px;
+    cursor: pointer;
   }
   .quick-icon:hover {
     background: #3b4858;
@@ -588,47 +606,42 @@
         <header><h4>Steam Enhanced <span><i id="steamEnhancedPin"></i> <i id="steamEnhancedToggle"></i></span></h4></header>
          <div id="steamEnhancedContainer" class="steam-enhanced-container hide">
          <div class="quick-icons-container">
-            <div class="profile_count_link">
-              <a id="backToTop" title="Back To Top" class="quick-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
-            </svg>
-              </a>
+            <div class="quick-icon-container profile_count_link">
+              <span id="backToTop" title="Back To Top" class="quick-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="rgba(255,255,255,1)"><path d="M13.0001 7.82843V20H11.0001V7.82843L5.63614 13.1924L4.22192 11.7782L12.0001 4L19.7783 11.7782L18.3641 13.1924L13.0001 7.82843Z"></path></svg>
+              </span>
             </div>
-            <div class="profile_count_link">
-              <a id="goToBottom" title="Go To Bottom" class="quick-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
-            </svg>
-              </a>
+            <div class="quick-icon-container profile_count_link">
+              <span id="goToBottom" title="Go To Bottom" class="quick-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="rgba(255,255,255,1)"><path d="M13.0001 16.1716L18.3641 10.8076L19.7783 12.2218L12.0001 20L4.22192 12.2218L5.63614 10.8076L11.0001 16.1716V4H13.0001V16.1716Z"></path></svg>
+              </span>
             </div>
-            <div class="profile_count_link">
-              <a id="reloadPage" title="Reload Page" class="quick-icon">
+            <div class="quick-icon-container profile_count_link">
+              <span id="reloadPage" title="Reload Page" class="quick-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
                 <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
                 </svg>
-              </a>
+              </span>
             </div>
-            <div class="profile_count_link">
-              <a id="showSymbols" title="=Symbols & Characters" class="quick-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M5 5V19H19V5H5ZM4 3H20C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3ZM9.86885 15L9.04918 17H6.83333L11 7H13L17.1667 17H14.9508L14.1311 15H9.86885ZM10.6885 13H13.3115L12 9.8L10.6885 13Z"></path></svg>
-              </a>
+            <div class="quick-icon-container profile_count_link">
+              <span id="showSymbols" title="Symbols & Characters" class="quick-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="rgba(255,255,255,1)"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM8 13C8 15.2091 9.79086 17 12 17C14.2091 17 16 15.2091 16 13H8ZM8 11C8.82843 11 9.5 10.3284 9.5 9.5C9.5 8.67157 8.82843 8 8 8C7.17157 8 6.5 8.67157 6.5 9.5C6.5 10.3284 7.17157 11 8 11ZM16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"></path></svg>
+              </span>
             </div>
           </div>
-          <div class="divider"></div>
           <div class="profile_count_link profile-autoreload-market">
-            <a id="#">Reload Market</a>
+            <a id="#">Reload Market Fix</a>
             <span class="switch">
               <input id="switch-rounded" type="checkbox" />
               <label for="switch-rounded"></label>
             </span>
           </div>
           <div class="profile_count_link">
-            <div class="change-profile-theme useful-links">
+            <div class="change-profile-theme quick-navigation">
               <details>
-                <summary>Quick Links</summary>
-                <div class="useful-links">
+                <summary>Quick Navigation</summary>
+                <div class="quick-navigation">
                   <div class="profile_count_link">
                     <a href="https://steamcommunity.com/my/">Profile</a>
                   </div>
@@ -650,25 +663,13 @@
                   <div class="profile_count_link">
                     <a id="steamChatLink">Chat</a>
                   </div>
-                  <div class="divider"></div>
-                  <div class="profile_count_link">
-                    <a href="https://steamstat.us/" target="_blank">Steam Status</a>
-                  </div>
-                  <div class="profile_count_link">
-                    <a href="https://steamdb.info/sales/history/" target="_blank">Steam Sale Dates</a>
-                  </div>
-                  <div class="profile_count_link">
-                    <a href="https://steamrep.com/" target="_blank">SteamRep</a>
-                  </div>
-                  <div class="profile_count_link">
-                    <a href="https://steamid.io/" target="_blank">Steam ID Lookup</a>
-                  </div>
                 </div>
               </details>
             </div>
           </div>
+          <div class="divider"></div>
           <div class="profile_count_link">
-            <a class="upload-artwork-link" href="https://steamcommunity.com/sharedfiles/edititem/767/3/"><span>Upload artwork</span></a>
+            <a class="upload-artwork-link" href="https://steamcommunity.com/sharedfiles/edititem/767/3/"><span>Upload Artwork</span></a>
           </div>
           <div class="profile_count_link">
             <div class="change-profile-theme">
@@ -689,6 +690,8 @@
               </details>
             </div>
           </div>
+          ${
+            /*
           <div class="profile_count_link">
             <div class="change-profile-theme preview-background">
               <details>
@@ -699,6 +702,10 @@
               </details>
             </div>
           </div>
+           */ ""
+          }
+          ${
+            /*
           <div class="profile_count_link">
             <div class="change-profile-theme preview-avatar-frame">
               <details>
@@ -709,6 +716,41 @@
               </details>
             </div>
           </div>
+           */ ""
+          }
+          <div class="profile_count_link">
+          <div class="change-profile-theme useful-links">
+            <details>
+              <summary>Useful Links</summary>
+              <div class="useful-links">
+                <div class="profile_count_link">
+                  <a href="https://steamstat.us/" target="_blank">Steam Status</a>
+                </div>
+                <div class="profile_count_link">
+                  <a href="https://steamdb.info/sales/history/" target="_blank">Steam Sale Dates</a>
+                </div>
+                <div class="profile_count_link">
+                  <a href="https://steamrep.com/" target="_blank">SteamRep</a>
+                </div>
+                <div class="profile_count_link">
+                  <a href="https://steamid.io/" target="_blank">Steam ID Lookup</a>
+                </div>
+                <div class="profile_count_link">
+                  <a href="https://backgrounds.gallery/" target="_blank">Backgrounds.Gallery</a>
+                </div>
+                <div class="profile_count_link">
+                  <a href="https://steam.tools/backgrounds/#/" target="_blank">Steam Tools Backgrounds</a>
+                </div>
+                <div class="profile_count_link">
+                  <a href="https://www.steamcardexchange.net/index.php?backgroundviewer" target="_blank">Background Viewer</a>
+                </div>
+                <div class="profile_count_link">
+                  <a href="https://steambackgrounds.com/" target="_blank">Steam Backgrounds</a>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
         </div>
         `;
 
@@ -893,7 +935,7 @@
     // 3. Symbols & Characters
     checkElement("#global_header").then((element) => {
       function setCommentSymbolsPicker() {
-        console.log("setCommentSymbolsPicker");
+        // console.log("setCommentSymbolsPicker");
         const symbolsDialogDetails = document.createElement("div");
         symbolsDialogDetails.className = "symbols-container symbols-modal-container";
         symbolsDialogDetails.innerHTML = `

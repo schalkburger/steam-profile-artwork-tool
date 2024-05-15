@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.16
+// @version     1.1.17
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -56,7 +56,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
     color: #b8b6b4;
     padding-top: 4px;
@@ -341,10 +341,6 @@
   .active-theme span {
     color: #2e83c9;
   }
-  .profile-autoreload-market {
-    display: flex;
-    line-height: normal;
-  }
   .steamProfileArtworkContainer {
     display: block;
     width: 100%;
@@ -470,6 +466,8 @@
   .enable-custom-artwork-button {
     padding: 0 15px;
     line-height: 30px;
+    display: flex;
+    align-items: center;
   }
   #mainContents .pageTitle {
     margin-bottom: 10px;
@@ -478,14 +476,21 @@
     pointer-events: none;
     opacity: 0.5;
   }
-  .switch {
-    display: block;
-    margin-left: 8px;
+  .profile-autoreload-market {
+    display: flex;
+    line-height: normal;
+    align-items: center;
   }
-  .switch input {
+  .auto-reload-switch {
+    display: block;
+    position: relative;
+    top: 1px;
+    left: -8px;
+  }
+  .auto-reload-switch input {
     display: none;
   }
-  .switch label {
+  .auto-reload-switch label {
     display: block;
     width: 20px;
     height: 7px;
@@ -495,7 +500,7 @@
     border: 1px solid #ffffff;
     border-radius: 15px;
   }
-  .switch label::after {
+  .auto-reload-switch label::after {
     content: "";
     display: inherit;
     width: 6px;
@@ -504,15 +509,15 @@
     background: #ffffff;
     border-radius: 12px;
   }
-  .switch input:checked ~ label {
+  .auto-reload-switch input:checked ~ label {
     background: #2b475e;
     border-color: #ffffff;
   }
-  .switch input:checked ~ label::after {
+  .auto-reload-switch input:checked ~ label::after {
     translate: 14px 0;
     background: #ffffff;
   }
-  .switch input:disabled ~ label {
+  .auto-reload-switch input:disabled ~ label {
     opacity: 0.5;
     cursor: not-allowed;
   }
@@ -607,16 +612,6 @@
          <div id="steamEnhancedContainer" class="steam-enhanced-container hide">
          <div class="quick-icons-container">
             <div class="quick-icon-container profile_count_link">
-              <span id="backToTop" title="Back To Top" class="quick-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="rgba(255,255,255,1)"><path d="M13.0001 7.82843V20H11.0001V7.82843L5.63614 13.1924L4.22192 11.7782L12.0001 4L19.7783 11.7782L18.3641 13.1924L13.0001 7.82843Z"></path></svg>
-              </span>
-            </div>
-            <div class="quick-icon-container profile_count_link">
-              <span id="goToBottom" title="Go To Bottom" class="quick-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="rgba(255,255,255,1)"><path d="M13.0001 16.1716L18.3641 10.8076L19.7783 12.2218L12.0001 20L4.22192 12.2218L5.63614 10.8076L11.0001 16.1716V4H13.0001V16.1716Z"></path></svg>
-              </span>
-            </div>
-            <div class="quick-icon-container profile_count_link">
               <span id="reloadPage" title="Reload Page" class="quick-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
@@ -629,10 +624,20 @@
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="rgba(255,255,255,1)"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM8 13C8 15.2091 9.79086 17 12 17C14.2091 17 16 15.2091 16 13H8ZM8 11C8.82843 11 9.5 10.3284 9.5 9.5C9.5 8.67157 8.82843 8 8 8C7.17157 8 6.5 8.67157 6.5 9.5C6.5 10.3284 7.17157 11 8 11ZM16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"></path></svg>
               </span>
             </div>
+            <div class="quick-icon-container profile_count_link">
+              <span id="backToTop" title="Back To Top" class="quick-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="rgba(255,255,255,1)"><path d="M13.0001 7.82843V20H11.0001V7.82843L5.63614 13.1924L4.22192 11.7782L12.0001 4L19.7783 11.7782L18.3641 13.1924L13.0001 7.82843Z"></path></svg>
+              </span>
+            </div>
+            <div class="quick-icon-container profile_count_link">
+              <span id="goToBottom" title="Go To Bottom" class="quick-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="rgba(255,255,255,1)"><path d="M13.0001 16.1716L18.3641 10.8076L19.7783 12.2218L12.0001 20L4.22192 12.2218L5.63614 10.8076L11.0001 16.1716V4H13.0001V16.1716Z"></path></svg>
+              </span>
+            </div>
           </div>
           <div class="profile_count_link profile-autoreload-market">
-            <a id="#">Reload Market Fix</a>
-            <span class="switch">
+            <a id="#">Auto Reload Errors</a>
+            <span class="auto-reload-switch">
               <input id="switch-rounded" type="checkbox" />
               <label for="switch-rounded"></label>
             </span>
@@ -906,6 +911,35 @@
             });
           });
         });
+
+        // Get the checkbox element
+        const checkbox = document.getElementById("switch-rounded");
+
+        // Function to toggle class and update localStorage
+        function toggleSwitch() {
+          // Toggle class based on checkbox state
+          if (checkbox.checked) {
+            // Add class if checkbox is checked
+            document.body.classList.add("switch-on");
+          } else {
+            // Remove class if checkbox is unchecked
+            document.body.classList.remove("switch-on");
+          }
+
+          // Update localStorage with checkbox state
+          localStorage.setItem("autoReloadErrors", checkbox.checked);
+        }
+
+        // Add event listener to checkbox for change event
+        checkbox.addEventListener("change", toggleSwitch);
+
+        // Check localStorage for initial switch state
+        const autoReloadErrors = localStorage.getItem("autoReloadErrors");
+        if (autoReloadErrors === "true") {
+          // If switch state is true, check the checkbox and toggle the class
+          checkbox.checked = true;
+          toggleSwitch();
+        }
 
         // ========================================================================== //
         // Change profile theme button
@@ -1270,8 +1304,8 @@
       return querySelector;
     }
     // Check if
-    checkElement("#mainContents").then((element) => {
-      console.log("mainContents exists");
+    checkElement(".apphub_HomeHeader").then((element) => {
+      console.log("apphub_HomeHeader exists");
       function setBlankTitleButton() {
         // ----------------------------
         // Fill Blank Title Button
@@ -1608,58 +1642,95 @@
   // Call the function to replace the src value
   // replaceSrcValue();
 
-  // 6. Reload Steam market function
+  // 6. Reload page button if Steam encountered an error.
 
-  // (function () {
-  //   "use strict";
+  (function () {
+    "use strict";
 
-  //   // Reload Steam market function
-  //   console.log("Reload Steam market function");
-  //   const targetNode = document.body;
+    // Reload page button if Steam encountered an error or auto reload is enabled.
+    console.log("Reload Steam market function");
+    const targetNode = document.body;
 
-  //   const config = { childList: true, subtree: true };
+    const config = { childList: true, subtree: true };
 
-  //   const createRefreshButton = function () {
-  //     const refreshButton = document.createElement("button");
-  //     refreshButton.textContent = "Refresh Page";
-  //     // refreshButton.style.position = "fixed";
-  //     refreshButton.style.top = "10px";
-  //     refreshButton.style.right = "10px";
-  //     refreshButton.style.zIndex = "9999";
-  //     refreshButton.style.minWidth = "auto";
-  //     refreshButton.style.padding = "10px";
-  //     refreshButton.style.margin = "10px 0 0 0";
-  //     refreshButton.classList.add("btn_green_white_innerfade", "btn_green_white_innerfade", "btn_medium", "market_commodity_buy_button");
-  //     refreshButton.addEventListener("click", function () {
-  //       location.reload();
-  //     });
+    const createReloadText = function () {
+      const reloadText = document.createElement("div");
+      reloadText.textContent = "Auto Reload Errors is enabled. Reloading page in 5 seconds";
+      reloadText.style.position = "fixed";
+      reloadText.style.top = "10px";
+      reloadText.style.right = "10px";
+      reloadText.style.zIndex = "9999";
+      reloadText.style.color = "#ffffff";
+      reloadText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+      reloadText.style.padding = "10px";
+      reloadText.style.borderRadius = "5px";
+      reloadText.classList.add("auto-reload-text");
 
-  //     const searchResultsTable = document.getElementById("searchResultsTable");
-  //     if (searchResultsTable) {
-  //       searchResultsTable.appendChild(refreshButton);
-  //     }
-  //   };
+      document.body.appendChild(reloadText);
 
-  //   const callback = function (mutationsList, observer) {
-  //     for (const mutation of mutationsList) {
-  //       if (mutation.type === "childList") {
-  //         // Check if the added node is the desired div element
-  //         const errorDiv = document.querySelector(".market_listing_table_message");
-  //         if (errorDiv && errorDiv.textContent.trim() === "There was an error performing your search. Please try again later.") {
-  //           // Trigger a refresh after a short pause (e.g., 2 seconds)
-  //           console.log("There was an error");
-  //           createRefreshButton();
-  //           // Disconnect the observer to stop further checks
-  //           observer.disconnect();
-  //           break;
-  //         }
-  //       }
-  //     }
-  //   };
+      return reloadText;
+    };
 
-  //   const observer = new MutationObserver(callback);
+    const createRefreshButton = function () {
+      const refreshButton = document.createElement("button");
+      refreshButton.textContent = "Reload Page";
+      refreshButton.style.position = "fixed";
+      refreshButton.style.top = "10px";
+      refreshButton.style.right = "10px";
+      refreshButton.style.zIndex = "9999";
+      refreshButton.style.minWidth = "auto";
+      refreshButton.style.padding = "10px";
+      refreshButton.style.margin = "10px 0 0 0";
+      refreshButton.classList.add("btn_blue_white_innerfade", "btn_medium");
+      refreshButton.addEventListener("click", function () {
+        location.reload();
+      });
 
-  //   // Start observing the target node for configured mutations
-  //   observer.observe(targetNode, config);
-  // })();
+      document.body.appendChild(refreshButton);
+
+      return refreshButton;
+    };
+
+    const callback = function (mutationsList, observer) {
+      for (const mutation of mutationsList) {
+        if (mutation.type === "childList") {
+          // Check if the added node is the desired div element
+          const errorDiv = document.querySelector(".market_listing_table_message");
+          if (
+            errorDiv &&
+            (errorDiv.textContent.trim() === "There was an error performing your search. Please try again later." ||
+              errorDiv.textContent.trim() === "There was an error getting listings for this item. Please try again later.")
+          ) {
+            const autoReloadErrors = localStorage.getItem("autoReloadErrors");
+            if (autoReloadErrors === "true") {
+              console.log("Auto reload errors enabled. Reloading page in 5 seconds...");
+              const reloadText = createReloadText();
+              // Reload the page every 5 seconds if autoReloadErrors is enabled
+              const interval = setInterval(() => {
+                if (document.querySelector(".market_listing_table_message")) {
+                  console.log("Reloading page due to error...");
+                  location.reload();
+                } else {
+                  clearInterval(interval); // Stop reloading once the error is gone
+                  document.body.removeChild(reloadText);
+                }
+              }, 5000);
+            } else {
+              console.log("Auto reload errors not enabled. Creating reload button.");
+              // Create reload button if auto reload is not enabled
+              const refreshButton = createRefreshButton();
+              // Disconnect the observer to stop further checks
+              observer.disconnect();
+            }
+            break;
+          }
+        }
+      }
+    };
+
+    const observer = new MutationObserver(callback);
+
+    // Start observing the target node for configured mutations
+    observer.observe(targetNode, config);
+  })();
 })();

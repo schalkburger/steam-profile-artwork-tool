@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.29
+// @version     1.1.30
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -32,7 +32,7 @@
   .steam-enhanced {
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     position: absolute;
-    z-index: 99999;
+    z-index: 500;
     top: 20px;
     right: 20px;
     opacity: 1;
@@ -975,6 +975,104 @@
         symbolsDialogDetails.innerHTML = `
         <div id="symbolsModal" class="symbols-modal">
         <a id="close">×</a>
+        <div class="subSection detailBox">
+         <div class="subSectionTitle">Text Formatting</div>
+        <p>These markup tags allow you to add formatting to the text of your comments and posts, similar to HTML.</p>
+        <div class="tagrow tagrow_header">
+          <div class="tagsyntax">Syntax</div>
+          <div class="tagexample">Example</div>
+          <div style="clear: both;"></div>
+        </div>
+            <div class="tagrow">
+          <div class="tagsyntax">
+            <span class="tag">[h1]</span>
+            Header text			<span class="tag">[/h1]</span>
+          </div>
+          <div class="tagexample"><div class="bb_h1">Header text</div></div>
+          <div style="clear: both;"></div>
+        </div>
+            <div class="tagrow">
+          <div class="tagsyntax">
+            <span class="tag">[h2]</span>
+            Header text			<span class="tag">[/h2]</span>
+          </div>
+          <div class="tagexample"><div class="bb_h2">Header text</div></div>
+          <div style="clear: both;"></div>
+        </div>
+            <div class="tagrow">
+          <div class="tagsyntax">
+            <span class="tag">[h3]</span>
+            Header text			<span class="tag">[/h3]</span>
+          </div>
+          <div class="tagexample"><div class="bb_h3">Header text</div></div>
+          <div style="clear: both;"></div>
+        </div>
+            <div class="tagrow">
+          <div class="tagsyntax">
+            <span class="tag">[b]</span>
+            Bold text			<span class="tag">[/b]</span>
+          </div>
+          <div class="tagexample"><b>Bold text</b></div>
+          <div style="clear: both;"></div>
+        </div>
+            <div class="tagrow">
+          <div class="tagsyntax">
+            <span class="tag">[u]</span>
+            Underlined text			<span class="tag">[/u]</span>
+          </div>
+          <div class="tagexample"><u>Underlined text</u></div>
+          <div style="clear: both;"></div>
+        </div>
+            <div class="tagrow">
+          <div class="tagsyntax">
+            <span class="tag">[i]</span>
+            Italic text			<span class="tag">[/i]</span>
+          </div>
+          <div class="tagexample"><i>Italic text</i></div>
+          <div style="clear: both;"></div>
+        </div>
+            <div class="tagrow">
+          <div class="tagsyntax">
+            <span class="tag">[strike]</span>
+            Strikethrough text			<span class="tag">[/strike]</span>
+          </div>
+          <div class="tagexample"><span class="bb_strike">Strikethrough text</span></div>
+          <div style="clear: both;"></div>
+        </div>
+            <div class="tagrow">
+          <div class="tagsyntax">
+            <span class="tag">[spoiler]</span>
+            Spoiler text			<span class="tag">[/spoiler]</span>
+          </div>
+          <div class="tagexample"><span class="bb_spoiler"><span>Spoiler text</span></span></div>
+          <div style="clear: both;"></div>
+        </div>
+            <div class="tagrow">
+          <div class="tagsyntax">
+            <span class="tag">[noparse]</span>
+            Doesn't parse [b]tags[/b] 			<span class="tag">[/noparse]</span>
+          </div>
+          <div class="tagexample">Doesn't parse [b]tags[/b] </div>
+          <div style="clear: both;"></div>
+        </div>
+          <div class="tagrow">
+              <div class="tagsyntax">
+                  <span class="tag">[hr][/hr]</span>
+              </div>
+              <div class="tagexample">
+            Render a horizontal rule            <br><br>
+              </div>
+              <div style="clear: both;"></div>
+          </div>
+            <div class="tagrow">
+          <div class="tagsyntax">
+            <span class="tag">[url=store.steampowered.com]</span>
+            Website link			<span class="tag">[/url]</span>
+          </div>
+          <div class="tagexample"><a class="bb_link" href="http://store.steampowered.com" target="_blank" rel="">Website link</a></div>
+          <div style="clear: both;"></div>
+        </div>
+      </div>
         <div class="subSection detailBox" id="2050699">
           <div class="subSectionTitle">Invisible Spacers</div>
           <div class="subSectionDesc">

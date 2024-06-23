@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.27
+// @version     1.1.29
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -1736,5 +1736,66 @@
 
     // Start observing the target node for configured mutations
     observer.observe(targetNode, config);
+  })();
+
+  (function () {
+    // Define the interval in milliseconds
+    var interval = 1000;
+
+    // Check if elements with href containing 'CCommentThread.DeleteComment' exist
+    if (document.querySelector("[href*='CCommentThread.DeleteComment']")) {
+      // Get all elements with href containing 'CCommentThread.DeleteComment'
+      var deleteLinks = document.querySelectorAll("[href*='CCommentThread.DeleteComment']");
+      deleteLinks.forEach(function (link) {
+        // Insert the custom action links after each found element
+        link.insertAdjacentHTML(
+          "afterend",
+          '<a class="actionlink"> | </a><a class="actionlink delAllComments">Delete Everything</a><a class="actionlink"> | </a><a class="actionlink delAuthorComments">Delete Everything From This Author</a>'
+        );
+      });
+
+      // Add event listener to "Delete Everything" link
+      document.querySelectorAll(".delAllComments").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          if (confirm("Are you sure you want to delete all comments?")) {
+            var delComments = setInterval(function () {
+              var deleteLink = document.querySelector("[href*='CCommentThread.DeleteComment']");
+              if (deleteLink) {
+                // Using eval is not recommended. Replace this with safer code if possible.
+                eval(deleteLink.getAttribute("href"));
+              } else {
+                clearInterval(delComments);
+              }
+            }, interval);
+          }
+        });
+      });
+
+      // Add event listener to "Delete Everything From This Author" link
+      document.querySelectorAll(".delAuthorComments").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          if (confirm("Are you sure you want to delete all comments from this author?")) {
+            var author = btn.parentElement.querySelector(".commentthread_author_link").getAttribute("data-miniprofile");
+            var delComments = setInterval(function () {
+              var authorComments = document.querySelectorAll(".commentthread_comment_author [data-miniprofile='" + author + "']");
+              if (authorComments.length > 0) {
+                authorComments.forEach(function (comment) {
+                  var deleteLink = comment.closest(".comment").querySelector("[href*='CCommentThread.DeleteComment']");
+                  if (deleteLink) {
+                    // Using eval is not recommended. Replace this with safer code if possible.
+                    eval(deleteLink.getAttribute("href"));
+                  }
+                });
+              } else if (document.querySelector(".commentthread_pagelinks .active + *")) {
+                // Click the next page link if it exists
+                document.querySelector(".commentthread_pagelinks .active + *").click();
+              } else {
+                clearInterval(delComments);
+              }
+            }, interval);
+          }
+        });
+      });
+    }
   })();
 })();

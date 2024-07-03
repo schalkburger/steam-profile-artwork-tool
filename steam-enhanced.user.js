@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.30
+// @version     1.1.32
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -481,16 +481,16 @@
     line-height: normal;
     align-items: center;
   }
-  .auto-reload-switch {
+  .toggle-switch {
     display: block;
     position: relative;
     top: 1px;
     left: -8px;
   }
-  .auto-reload-switch input {
+  .toggle-switch input {
     display: none;
   }
-  .auto-reload-switch label {
+  .toggle-switch label {
     display: block;
     width: 20px;
     height: 7px;
@@ -500,7 +500,7 @@
     border: 1px solid #ffffff;
     border-radius: 15px;
   }
-  .auto-reload-switch label::after {
+  .toggle-switch label::after {
     content: "";
     display: inherit;
     width: 6px;
@@ -509,15 +509,15 @@
     background: #ffffff;
     border-radius: 12px;
   }
-  .auto-reload-switch input:checked ~ label {
+  .toggle-switch input:checked ~ label {
     background: #2b475e;
     border-color: #ffffff;
   }
-  .auto-reload-switch input:checked ~ label::after {
+  .toggle-switch input:checked ~ label::after {
     translate: 14px 0;
     background: #ffffff;
   }
-  .auto-reload-switch input:disabled ~ label {
+  .toggle-switch input:disabled ~ label {
     opacity: 0.5;
     cursor: not-allowed;
   }
@@ -637,9 +637,16 @@
           </div>
           <div class="profile_count_link profile-autoreload-market">
             <a id="#">Auto Reload Errors</a>
-            <span class="auto-reload-switch">
+            <span class="toggle-switch">
               <input id="switch-rounded" type="checkbox" />
               <label for="switch-rounded"></label>
+            </span>
+          </div>
+          <div class="profile_count_link profile-autoreload-market">
+            <a id="#">Auto Claim Stickers</a>
+            <span class="toggle-switch">
+              <input id="switch-rounded-claim-stickers" type="checkbox" />
+              <label for="switch-rounded-claim-stickers"></label>
             </span>
           </div>
           <div class="profile_count_link">
@@ -792,6 +799,12 @@
           location.reload();
         });
 
+        // Reload Page Functionality
+        const switchClaimStickers = document.getElementById("switch-rounded-claim-stickers");
+        switchClaimStickers.addEventListener("click", function () {
+          location.reload();
+        });
+
         // Steam Enhanced Toggle
         const steamEnhancedToggle = document.getElementById("steamEnhancedToggle");
         const steamEnhancedContainer = document.getElementById("steamEnhancedContainer");
@@ -912,33 +925,62 @@
           });
         });
 
-        // Get the checkbox element
-        const checkbox = document.getElementById("switch-rounded");
+        // Get the Auto Reload checkbox element
+        const checkboxAutoReload = document.getElementById("switch-rounded");
 
         // Function to toggle class and update localStorage
-        function toggleSwitch() {
-          // Toggle class based on checkbox state
-          if (checkbox.checked) {
-            // Add class if checkbox is checked
+        function toggleSwitchAutoReload() {
+          // Toggle class based on checkboxAutoReload state
+          if (checkboxAutoReload.checked) {
+            // Add class if checkboxAutoReload is checked
             document.body.classList.add("switch-on");
           } else {
-            // Remove class if checkbox is unchecked
+            // Remove class if checkboxAutoReload is unchecked
             document.body.classList.remove("switch-on");
           }
 
-          // Update localStorage with checkbox state
-          localStorage.setItem("autoReloadErrors", checkbox.checked);
+          // Update localStorage with checkboxAutoReload state
+          localStorage.setItem("autoReloadErrors", checkboxAutoReload.checked);
         }
 
-        // Add event listener to checkbox for change event
-        checkbox.addEventListener("change", toggleSwitch);
+        // Add event listener to checkboxAutoReload for change event
+        checkboxAutoReload.addEventListener("change", toggleSwitchAutoReload);
 
         // Check localStorage for initial switch state
         const autoReloadErrors = localStorage.getItem("autoReloadErrors");
         if (autoReloadErrors === "true") {
-          // If switch state is true, check the checkbox and toggle the class
-          checkbox.checked = true;
-          toggleSwitch();
+          // If switch state is true, check the checkboxAutoReload and toggle the class
+          checkboxAutoReload.checked = true;
+          toggleSwitchAutoReload();
+        }
+
+        // Get the Auto Reload checkbox element
+        const checkboxClaimStickers = document.getElementById("switch-rounded-claim-stickers");
+
+        // Function to toggle class and update localStorage
+        function toggleSwitchClaimStickers() {
+          // Toggle class based on checkboxClaimStickers state
+          if (checkboxClaimStickers.checked) {
+            // Add class if checkboxClaimStickers is checked
+            document.body.classList.add("switch-on");
+          } else {
+            // Remove class if checkboxClaimStickers is unchecked
+            document.body.classList.remove("switch-on");
+          }
+
+          // Update localStorage with checkboxClaimStickers state
+          localStorage.setItem("autoClaimStickers", checkboxClaimStickers.checked);
+        }
+
+        // Add event listener to checkboxClaimStickers for change event
+        checkboxClaimStickers.addEventListener("change", toggleSwitchClaimStickers);
+
+        // Check localStorage for initial switch state
+        const autoClaimStickers = localStorage.getItem("autoClaimStickers");
+        if (autoClaimStickers === "true") {
+          // If switch state is true, check the checkboxClaimStickers and toggle the class
+          checkboxClaimStickers.checked = true;
+          toggleSwitchClaimStickers();
         }
 
         // ========================================================================== //
@@ -1835,6 +1877,62 @@
     // Start observing the target node for configured mutations
     observer.observe(targetNode, config);
   })();
+
+  // 7. Auto Claim stickers
+
+  (async function () {
+    "use strict";
+
+    // Reload page button if Steam encountered an error or auto reload is enabled.
+    // console.log("Reload Steam market function");
+    let claimStickersInProgress = false;
+
+    const autoClaimStickers = localStorage.getItem("autoClaimStickers");
+    if (autoClaimStickers === "true") {
+      console.log("AutoClaimStickers is enabled");
+      claimStickersInProgress = true;
+      // Reload the page every 5 seconds if autoClaimStickers is enabled
+      console.log("autoClaimStickers is true");
+
+      let webapi_token = null;
+      if (window.application_config?.dataset?.loyalty_webapi_token) {
+        webapi_token = JSON.parse(window.application_config.dataset.loyalty_webapi_token);
+      } else {
+        const res = await fetch("/category/action");
+        const html = await res.text();
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const token = doc.getElementById("application_config")?.dataset?.loyalty_webapi_token;
+        if (!token) {
+          console.log("No valid API token found, are you logged in?");
+          return;
+        }
+        webapi_token = JSON.parse(token);
+      }
+
+      // can claim check
+      const res = await fetch(`https://api.steampowered.com/ISaleItemRewardsService/CanClaimItem/v1/?access_token=${webapi_token}`);
+      const json = await res.json();
+
+      const can_claim = !!json.response?.can_claim;
+      const next_claim_time = json.response?.next_claim_time;
+
+      // request to /ClaimItem
+      if (can_claim) {
+        await fetch(`https://api.steampowered.com/ISaleItemRewardsService/ClaimItem/v1/?access_token=${webapi_token}`, { method: "POST" });
+        console.log("Collection completed");
+      } else {
+        if (next_claim_time) {
+          console.log("Sticker already claimed today, the next item will be available at: " + new Date(next_claim_time * 1000).toLocaleString("en-GB"));
+        } else {
+          console.log("No content to collect, skipping.");
+        }
+      }
+    } else {
+      console.log("autoClaimStickers is false");
+    }
+  })();
+
+  // 8. Steam Comments Deleter
 
   (function () {
     // Define the interval in milliseconds

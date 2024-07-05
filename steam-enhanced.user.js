@@ -3,25 +3,20 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.32
+// @version     1.1.33
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
 // ==/UserScript==
 
-// TODO
-
-// 1. Auto refresh Steam market when it doesn't load
-// Code change
-//  sdfsd
-
 // 1. Upload Artwork & Enable Custom Uploads Buttons
-// 2. Steam Profile Artwork Tool Buttons
-// 3. Symbols & Characters
-// 3. Steam Mass Comments Poster Vanilla
-// 4. Steam Copy Avatar Frame Source
-// 5. Steam Replace Avatar Frame Source
-// 6. Reload Steam market function
+// 2. Symbols & Characters
+// 3. Steam Profile Artwork Tool Buttons
+// 4. Steam Mass Comments Poster Vanilla
+// 5. Steam Copy Avatar Frame Source
+// 6. Steam Replace Avatar Frame Source
+// 7. Reload Steam market function
+// 8. Auto Claim stickers
 
 (function () {
   "use strict";
@@ -1008,7 +1003,10 @@
       setTimeout(setUploadArtworkButton, 0);
     });
 
-    // 3. Symbols & Characters
+    //* ========================================================================== //
+    //* 2. Symbols & Characters
+    //* =======================================================================
+
     checkElement("#global_header").then((element) => {
       function setCommentSymbolsPicker() {
         // console.log("setCommentSymbolsPicker");
@@ -1368,7 +1366,7 @@
   })();
 
   //* ========================================================================== //
-  //* 2. Steam Profile Artwork Tool Buttons
+  //* 3. Steam Profile Artwork Tool Buttons
   //* =======================================================================
 
   (function () {
@@ -1618,7 +1616,7 @@
   })();
 
   //* ==========================================================================
-  //* 3. Steam Mass Comments Poster Vanilla
+  //* 4. Steam Mass Comments Poster Vanilla
   //* ==========================================================================
 
   (function () {
@@ -1715,7 +1713,7 @@
   })();
 
   //* ==========================================================================
-  //* 4. Steam Copy Avatar Frame Source
+  //* 5. Steam Copy Avatar Frame Source
   //* ==========================================================================
 
   function copySrcValueToClipboard() {
@@ -1746,7 +1744,7 @@
   // copySrcValueToClipboard();
 
   //* ==========================================================================
-  //* 5. Steam Replace Avatar Frame Source
+  //* 6. Steam Replace Avatar Frame Source
   //* ==========================================================================
 
   function replaceSrcValue() {
@@ -1782,7 +1780,11 @@
   // Call the function to replace the src value
   // replaceSrcValue();
 
-  // 6. Reload page button if Steam encountered an error.
+  //* ==========================================================================
+  //* 7. Reload Steam market function
+  //* ==========================================================================
+
+  //
 
   (function () {
     "use strict";
@@ -1835,7 +1837,7 @@
     const autoReload = function () {
       const autoReloadErrors = localStorage.getItem("autoReloadErrors");
       if (autoReloadErrors === "true") {
-        console.log("Auto reload errors enabled. Reloading page in 5 seconds...");
+        console.log("Auto Reload Errors enabled. Reloading page in 5 seconds...");
         const reloadText = createReloadText();
         reloadInProgress = true;
         // Reload the page every 5 seconds if autoReloadErrors is enabled
@@ -1846,7 +1848,7 @@
           }
         }, 5000);
       } else {
-        console.log("Auto reload errors not enabled. Creating reload button.");
+        console.log("Auto Reload Errors not enabled. Creating reload button.");
         // Create reload button if auto reload is not enabled
         createRefreshButton();
         // Disconnect the observer to stop further checks
@@ -1878,18 +1880,18 @@
     observer.observe(targetNode, config);
   })();
 
-  // 7. Auto Claim stickers
+  //* ==========================================================================
+  //* 8. Auto Claim stickers
+  //* ==========================================================================
 
   (async function () {
     "use strict";
 
-    // Reload page button if Steam encountered an error or auto reload is enabled.
-    // console.log("Reload Steam market function");
     let claimStickersInProgress = false;
 
     const autoClaimStickers = localStorage.getItem("autoClaimStickers");
     if (autoClaimStickers === "true") {
-      console.log("AutoClaimStickers is enabled");
+      console.log("autoClaimStickers is enabled");
       claimStickersInProgress = true;
       // Reload the page every 5 seconds if autoClaimStickers is enabled
       console.log("autoClaimStickers is true");
@@ -1919,7 +1921,7 @@
       // request to /ClaimItem
       if (can_claim) {
         await fetch(`https://api.steampowered.com/ISaleItemRewardsService/ClaimItem/v1/?access_token=${webapi_token}`, { method: "POST" });
-        console.log("Collection completed");
+        console.log("Sticker claimed!");
       } else {
         if (next_claim_time) {
           console.log("Sticker already claimed today, the next item will be available at: " + new Date(next_claim_time * 1000).toLocaleString("en-GB"));

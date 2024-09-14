@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.33
+// @version     1.1.35
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -1800,12 +1800,13 @@
       const reloadText = document.createElement("div");
       reloadText.textContent = "Auto Reload Errors is enabled. Reloading page in 5 seconds";
       reloadText.style.position = "fixed";
-      reloadText.style.top = "10px";
-      reloadText.style.right = "10px";
+      reloadText.style.bottom = "10px";
+      reloadText.style.right = "50%";
+      reloadText.style.transform = "translateX(-50%)";
       reloadText.style.zIndex = "9999";
       reloadText.style.color = "#ffffff";
-      reloadText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-      reloadText.style.padding = "10px";
+      reloadText.style.backgroundColor = "#171d25";
+      reloadText.style.padding = "10px 15px";
       reloadText.style.borderRadius = "5px";
       reloadText.classList.add("auto-reload-text");
 
@@ -1829,7 +1830,7 @@
         location.reload();
       });
 
-      document.body.appendChild(refreshButton);
+      // document.body.appendChild(refreshButton);
 
       return refreshButton;
     };

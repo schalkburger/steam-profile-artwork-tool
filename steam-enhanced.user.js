@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.35
+// @version     1.1.37.12
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -17,6 +17,8 @@
 // 6. Steam Replace Avatar Frame Source
 // 7. Reload Steam market function
 // 8. Auto Claim stickers
+// 9. Steam Comments Deleter
+// 10. Steam Screenshots Middle Click
 
 (function () {
   "use strict";
@@ -548,6 +550,11 @@
   .quick-icon:hover {
     background: #3b4858;
   }
+  .blotter_userstatus {
+  max-height: 500px;
+  overflow: hidden;
+  overflow-y: scroll;
+  }
 
   `,
     head = document.head || document.getElementsByTagName("head")[0],
@@ -770,23 +777,27 @@
 
         const backToTopButton = document.getElementById("backToTop");
         // Add a click event listener to the element
-        backToTopButton.addEventListener("click", function () {
-          // Scroll to the top of the page
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth", // You can use 'auto' or 'smooth' for smooth scrolling
+        if (backToTopButton) {
+          // FIX: Add null check
+          backToTopButton.addEventListener("click", function () {
+            // Scroll to the top of the page
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth", // You can use 'auto' or 'smooth' for smooth scrolling
+            });
           });
-        });
-
+        }
         const goToBottomButton = document.getElementById("goToBottom");
         // Add a click event listener to the element
-        goToBottomButton.addEventListener("click", function () {
-          // Scroll to the bottom of the page
-          window.scrollTo({
-            top: document.documentElement.scrollHeight,
-            behavior: "smooth", // You can use 'auto' or 'smooth' for smooth scrolling
+        if (goToBottomButton) {
+          goToBottomButton.addEventListener("click", function () {
+            // Scroll to the bottom of the page
+            window.scrollTo({
+              top: document.documentElement.scrollHeight,
+              behavior: "smooth", // You can use 'auto' or 'smooth' for smooth scrolling
+            });
           });
-        });
+        }
 
         // Reload Page Functionality
         const reloadPageButton = document.getElementById("reloadPage");
@@ -1348,15 +1359,23 @@
         }
         function setSymbolsCharactersModal() {
           const showButton = document.getElementById("showSymbols");
+
+          if (showButton) {
+            showButton.addEventListener("click", () => {
+              symbolsModal.classList.add("show");
+              symbolsModal.classList.remove("hide");
+            });
+          }
+
           const symbolsModal = document.getElementById("symbolsModal");
           const closeButton = document.getElementById("close");
-          showButton.addEventListener("click", () => {
-            symbolsModal.classList.add("show");
-            symbolsModal.classList.remove("hide");
-          });
-          closeButton.addEventListener("click", () => {
-            symbolsModal.classList.add("hide");
-          });
+          if (closeButton) {
+            // FIX: Add null check for closeButton
+            closeButton.addEventListener("click", () => {
+              symbolsModal.classList.add("hide");
+              symbolsModal.classList.remove("show");
+            });
+          }
         }
         // Reload page after 3 seconds
         setTimeout(setSymbolsCharactersModal, 1000);
@@ -1428,45 +1447,45 @@
     });
   })();
 
-  (function () {
-    "use strict";
-    function rafAsync() {
-      return new Promise((resolve) => requestAnimationFrame(resolve));
-    }
-    async function checkElement(selector) {
-      let querySelector = null;
-      while (querySelector === null) {
-        await rafAsync();
-        querySelector = document.querySelector(selector);
-      }
-      return querySelector;
-    }
-    // Check if
-    checkElement(".apphub_HomeHeader").then((element) => {
-      console.log("apphub_HomeHeader exists");
-      function setBlankTitleButton() {
-        // ----------------------------
-        // Fill Blank Title Button
-        // ----------------------------
-        const blankTitleCharacter = "⠀";
-        const alertBlankTitleSet = document.createElement("div");
-        alertBlankTitleSet.className = "alertBlankTitleSet";
-        alertBlankTitleSet.innerHTML = `<span><i>✔</i> Blank Title Set</span>`;
-        const titleFieldInput = document.querySelector(".titleField");
-        const blankTitleButton = document.querySelector("#blankTitleButton");
-        const titleFieldParent = titleFieldInput.parentNode;
-        blankTitleButton.addEventListener("click", () => {
-          console.log("#blankTitleButton clicked");
-          blankTitleButton.classList.add("blank-title-added");
-          titleFieldInput.value = blankTitleCharacter;
-          titleFieldInput.classList.add("fieldInputSuccess");
-          alertBlankTitleSet.classList.add("fadeIn");
-          titleFieldParent.insertBefore(alertBlankTitleSet, titleFieldInput.nextSibling);
-        });
-      }
-      setTimeout(setBlankTitleButton, 0);
-    });
-  })();
+  // (function () {
+  //   "use strict";
+  //   function rafAsync() {
+  //     return new Promise((resolve) => requestAnimationFrame(resolve));
+  //   }
+  //   async function checkElement(selector) {
+  //     let querySelector = null;
+  //     while (querySelector === null) {
+  //       await rafAsync();
+  //       querySelector = document.querySelector(selector);
+  //     }
+  //     return querySelector;
+  //   }
+  //   // Check if
+  //   checkElement(".apphub_HomeHeader").then((element) => {
+  //     console.log("apphub_HomeHeader exists");
+  //     function setBlankTitleButton() {
+  //       // ----------------------------
+  //       // Fill Blank Title Button
+  //       // ----------------------------
+  //       const blankTitleCharacter = "⠀";
+  //       const alertBlankTitleSet = document.createElement("div");
+  //       alertBlankTitleSet.className = "alertBlankTitleSet";
+  //       alertBlankTitleSet.innerHTML = `<span><i>✔</i> Blank Title Set</span>`;
+  //       const titleFieldInput = document.querySelector(".titleField");
+  //       const blankTitleButton = document.querySelector("#blankTitleButton");
+  //       const titleFieldParent = titleFieldInput.parentNode;
+  //       blankTitleButton.addEventListener("click", () => {
+  //         console.log("#blankTitleButton clicked");
+  //         blankTitleButton.classList.add("blank-title-added");
+  //         titleFieldInput.value = blankTitleCharacter;
+  //         titleFieldInput.classList.add("fieldInputSuccess");
+  //         alertBlankTitleSet.classList.add("fadeIn");
+  //         titleFieldParent.insertBefore(alertBlankTitleSet, titleFieldInput.nextSibling);
+  //       });
+  //     }
+  //     setTimeout(setBlankTitleButton, 0);
+  //   });
+  // })();
 
   // Custom artwork enabled notification
   const alertCustomArtworkEnabled = document.createElement("div");
@@ -1786,100 +1805,100 @@
 
   //
 
-  (function () {
-    "use strict";
+  // (function () {
+  //   "use strict";
 
-    // Reload page button if Steam encountered an error or auto reload is enabled.
-    // console.log("Reload Steam market function");
-    const targetNode = document.body;
+  //   // Reload page button if Steam encountered an error or auto reload is enabled.
+  //   // console.log("Reload Steam market function");
+  //   const targetNode = document.body;
 
-    const config = { childList: true, subtree: true };
-    let reloadInProgress = false;
+  //   const config = { childList: true, subtree: true };
+  //   let reloadInProgress = false;
 
-    const createReloadText = function () {
-      const reloadText = document.createElement("div");
-      reloadText.textContent = "Auto Reload Errors is enabled. Reloading page in 5 seconds";
-      reloadText.style.position = "fixed";
-      reloadText.style.bottom = "10px";
-      reloadText.style.right = "50%";
-      reloadText.style.transform = "translateX(-50%)";
-      reloadText.style.zIndex = "9999";
-      reloadText.style.color = "#ffffff";
-      reloadText.style.backgroundColor = "#171d25";
-      reloadText.style.padding = "10px 15px";
-      reloadText.style.borderRadius = "5px";
-      reloadText.classList.add("auto-reload-text");
+  //   const createReloadText = function () {
+  //     const reloadText = document.createElement("div");
+  //     reloadText.textContent = "Auto Reload Errors is enabled. Reloading page in 5 seconds";
+  //     reloadText.style.position = "fixed";
+  //     reloadText.style.bottom = "10px";
+  //     reloadText.style.right = "50%";
+  //     reloadText.style.transform = "translateX(-50%)";
+  //     reloadText.style.zIndex = "9999";
+  //     reloadText.style.color = "#ffffff";
+  //     reloadText.style.backgroundColor = "#171d25";
+  //     reloadText.style.padding = "10px 15px";
+  //     reloadText.style.borderRadius = "5px";
+  //     reloadText.classList.add("auto-reload-text");
 
-      document.body.appendChild(reloadText);
+  //     document.body.appendChild(reloadText);
 
-      return reloadText;
-    };
+  //     return reloadText;
+  //   };
 
-    const createRefreshButton = function () {
-      const refreshButton = document.createElement("button");
-      refreshButton.textContent = "Reload Page";
-      refreshButton.style.position = "fixed";
-      refreshButton.style.top = "10px";
-      refreshButton.style.right = "10px";
-      refreshButton.style.zIndex = "9999";
-      refreshButton.style.minWidth = "auto";
-      refreshButton.style.padding = "10px";
-      refreshButton.style.margin = "10px 0 0 0";
-      refreshButton.classList.add("btn_blue_white_innerfade", "btn_medium");
-      refreshButton.addEventListener("click", function () {
-        location.reload();
-      });
+  //   const createRefreshButton = function () {
+  //     const refreshButton = document.createElement("button");
+  //     refreshButton.textContent = "Reload Page";
+  //     refreshButton.style.position = "fixed";
+  //     refreshButton.style.top = "10px";
+  //     refreshButton.style.right = "10px";
+  //     refreshButton.style.zIndex = "9999";
+  //     refreshButton.style.minWidth = "auto";
+  //     refreshButton.style.padding = "10px";
+  //     refreshButton.style.margin = "10px 0 0 0";
+  //     refreshButton.classList.add("btn_blue_white_innerfade", "btn_medium");
+  //     refreshButton.addEventListener("click", function () {
+  //       location.reload();
+  //     });
 
-      // document.body.appendChild(refreshButton);
+  //     // document.body.appendChild(refreshButton);
 
-      return refreshButton;
-    };
+  //     return refreshButton;
+  //   };
 
-    const autoReload = function () {
-      const autoReloadErrors = localStorage.getItem("autoReloadErrors");
-      if (autoReloadErrors === "true") {
-        console.log("Auto Reload Errors enabled. Reloading page in 5 seconds...");
-        const reloadText = createReloadText();
-        reloadInProgress = true;
-        // Reload the page every 5 seconds if autoReloadErrors is enabled
-        setTimeout(() => {
-          if (reloadInProgress) {
-            console.log("Reloading page due to error...");
-            location.reload();
-          }
-        }, 5000);
-      } else {
-        console.log("Auto Reload Errors not enabled. Creating reload button.");
-        // Create reload button if auto reload is not enabled
-        createRefreshButton();
-        // Disconnect the observer to stop further checks
-        observer.disconnect();
-      }
-    };
+  //   const autoReload = function () {
+  //     const autoReloadErrors = localStorage.getItem("autoReloadErrors");
+  //     if (autoReloadErrors === "true") {
+  //       console.log("Auto Reload Errors enabled. Reloading page in 5 seconds...");
+  //       const reloadText = createReloadText();
+  //       reloadInProgress = true;
+  //       // Reload the page every 5 seconds if autoReloadErrors is enabled
+  //       setTimeout(() => {
+  //         if (reloadInProgress) {
+  //           console.log("Reloading page due to error...");
+  //           location.reload();
+  //         }
+  //       }, 5000);
+  //     } else {
+  //       console.log("Auto Reload Errors not enabled. Creating reload button.");
+  //       // Create reload button if auto reload is not enabled
+  //       createRefreshButton();
+  //       // Disconnect the observer to stop further checks
+  //       observer.disconnect();
+  //     }
+  //   };
 
-    const callback = function (mutationsList, observer) {
-      if (reloadInProgress) return; // If reload in progress, do nothing
-      for (const mutation of mutationsList) {
-        if (mutation.type === "childList") {
-          // Check if the added node is the desired div element
-          const errorDiv = document.querySelector(".market_listing_table_message");
-          if (
-            errorDiv &&
-            (errorDiv.textContent.trim() === "There was an error performing your search. Please try again later." ||
-              errorDiv.textContent.trim() === "There was an error getting listings for this item. Please try again later.")
-          ) {
-            autoReload();
-            break;
-          }
-        }
-      }
-    };
+  //   const callback = function (mutationsList, observer) {
+  //     if (reloadInProgress) return; // If reload in progress, do nothing
+  //     for (const mutation of mutationsList) {
+  //       if (mutation.type === "childList") {
+  //         // Check if the added node is the desired div element
+  //         const errorDiv = document.querySelector(".market_listing_table_message");
+  //         if (
+  //           errorDiv &&
+  //           (errorDiv.textContent.trim() === "There was an error performing your search. Please try again later." ||
+  //             errorDiv.textContent.trim() === "There was an error getting listings for this item. Please try again later.")
+  //         ) {
+  //           autoReload();
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   };
 
-    const observer = new MutationObserver(callback);
+  //   const observer = new MutationObserver(callback);
 
-    // Start observing the target node for configured mutations
-    observer.observe(targetNode, config);
-  })();
+  //   // Start observing the target node for configured mutations
+  //   observer.observe(targetNode, config);
+  // })();
 
   //* ==========================================================================
   //* 8. Auto Claim stickers
@@ -1935,7 +1954,9 @@
     }
   })();
 
-  // 8. Steam Comments Deleter
+  //* ==========================================================================
+  //* 9. Steam Comments Deleter
+  //* ==========================================================================
 
   (function () {
     // Define the interval in milliseconds
@@ -1996,5 +2017,57 @@
         });
       });
     }
+  })();
+
+  //* ==========================================================================
+  //* 10. Steam Screenshots Middle Click
+  //* ==========================================================================
+
+  (function () {
+    "use strict";
+
+    function wrapScreenshotCards() {
+      // Find all screenshot cards that haven't been wrapped yet
+      const cards = document.querySelectorAll(".apphub_Card.modalContentLink[data-modal-content-url]:not([data-enhanced-wrapped])");
+
+      cards.forEach((card) => {
+        // Mark as wrapped to avoid duplicates
+        card.setAttribute("data-enhanced-wrapped", "true");
+
+        // Get the URL
+        const url = card.getAttribute("data-modal-content-url");
+
+        // Create wrapper anchor
+        const wrapper = document.createElement("a");
+        wrapper.href = url;
+        wrapper.target = "_blank";
+        wrapper.rel = "noopener noreferrer";
+        wrapper.style.cssText = "position: relative; display: block; text-decoration: none; z-index: 1;";
+
+        // Move card into wrapper
+        card.parentNode.insertBefore(wrapper, card);
+        wrapper.appendChild(card);
+
+        // Ensure card has pointer-events for left-click modal
+        card.style.pointerEvents = "auto";
+      });
+    }
+
+    // Initial wrap
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", wrapScreenshotCards);
+    } else {
+      setTimeout(wrapScreenshotCards, 100);
+    }
+
+    // Re-wrap for dynamic content (pagination/infinite scroll)
+    const observer = new MutationObserver(() => {
+      setTimeout(wrapScreenshotCards, 50);
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
   })();
 })();

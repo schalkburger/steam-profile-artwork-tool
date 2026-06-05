@@ -1698,7 +1698,7 @@ class ThemeManager {
   hexEditWebsite.className = "modifyArtworkInstructions";
   hexEditWebsite.innerHTML = `<blockquote class="bb_blockquote">This method allows you to upload long workshop images without faking the heights.
   <br />This method works with all supported file types independently of size and frame count. <br />You are expected
-  to apply the instructions below for all workshop images seperately. <div class="description">
+  to apply the instructions below for all workshop images separately. <div class="description">
       <ol>
           <li>Visit this site: <a href="https://hexed.it" target="_blank">https://hexed.it</a></li>
           <li>Click <b>"Open File"</b> and select your image</li>

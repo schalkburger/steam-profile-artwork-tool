@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.37.12
+// @version     1.1.37.16
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -19,6 +19,108 @@
 // 8. Auto Claim stickers
 // 9. Steam Comments Deleter
 // 10. Steam Screenshots Middle Click
+
+//* ========================================================================== //
+//* GLOBAL UTILITIES
+//* ========================================================================== //
+
+function rafAsync() {
+  return new Promise((resolve) => requestAnimationFrame(resolve));
+}
+
+async function checkElement(selector) {
+  let querySelector = null;
+  while (querySelector === null) {
+    await rafAsync();
+    querySelector = document.querySelector(selector);
+  }
+  return querySelector;
+}
+
+//* ========================================================================== //
+//* CONFIG & MANAGERS
+//* ========================================================================== //
+
+const STEAM_ENHANCED_CONFIG = {
+  THEMES: {
+    list: ["DefaultTheme", "SummerTheme", "MidnightTheme", "SteelTheme", "CosmicTheme", "DarkModeTheme", "Steam3000Theme", "GameProfileTheme", "SteamDeckTheme"],
+    display: {
+      DefaultTheme: "Default Theme",
+      SummerTheme: "Summer",
+      MidnightTheme: "Midnight",
+      SteelTheme: "Steel",
+      CosmicTheme: "Cosmic",
+      DarkModeTheme: "DarkMode",
+      Steam3000Theme: "Steam3000Theme",
+      GameProfileTheme: "GameProfileTheme",
+      SteamDeckTheme: "SteamDeckTheme",
+    },
+  },
+  SELECTORS: {
+    body: "body.profile_page",
+    themeButton: ".change-theme",
+    themeDetails: ".change-profile-theme details",
+  },
+};
+
+/**
+ * Manages theme switching for Steam profile
+ */
+class ThemeManager {
+  constructor(config) {
+    this.config = config;
+    this.body = null;
+    this.themeDetails = null;
+  }
+
+  async init() {
+    try {
+      await checkElement(this.config.SELECTORS.themeButton);
+      this.body = document.querySelector(this.config.SELECTORS.body);
+      this.themeDetails = document.querySelector(this.config.SELECTORS.themeDetails);
+
+      if (!this.body) {
+        console.error("❌ ThemeManager: Body element not found");
+        return;
+      }
+
+      this.attachListeners();
+      console.log(`✅ ThemeManager initialized (${this.getButtonCount()} themes)`);
+    } catch (err) {
+      console.error("❌ ThemeManager init error:", err);
+    }
+  }
+
+  getButtonCount() {
+    return document.querySelectorAll(this.config.SELECTORS.themeButton).length;
+  }
+
+  attachListeners() {
+    const buttons = document.querySelectorAll(this.config.SELECTORS.themeButton);
+    if (buttons.length === 0) {
+      console.error("❌ ThemeManager: No theme buttons found");
+      return;
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", (e) => this.switchTheme(e, button));
+    });
+  }
+
+  switchTheme(e, button) {
+    e.stopPropagation();
+    const themeId = button.id;
+    this.body.classList.remove(...this.config.THEMES.list);
+    this.body.classList.add(themeId);
+
+    // Close dropdown after selection
+    if (this.themeDetails) {
+      this.themeDetails.removeAttribute("open");
+    }
+
+    console.log(`✨ Theme changed to: ${themeId}`);
+  }
+}
 
 (function () {
   "use strict";
@@ -569,30 +671,19 @@
     style.appendChild(document.createTextNode(css));
   }
 
-  //* ==========================================================================
   //* 1. Upload Artwork & Enable Custom Uploads Buttons
   //* ==========================================================================
   //* Upload custom artwork button to profile
 
   (function () {
     "use strict";
-    function rafAsync() {
-      return new Promise((resolve) => requestAnimationFrame(resolve));
-    }
-    async function checkElement(selector) {
-      let querySelector = null;
-      while (querySelector === null) {
-        await rafAsync();
-        querySelector = document.querySelector(selector);
-      }
-      return querySelector;
-    }
     // Check if on profile page
     checkElement("#global_header").then((element) => {
       // console.log("global_header");
       function setUploadArtworkButton() {
         const uploadArtworkURL = `https://steamcommunity.com/sharedfiles/edititem/767/3/`;
-        const uploadCustomArtworkButtonContainer = document.createElement("div");
+        const uploadCustomArtworkButtonContainer =
+          document.createElement("div");
         uploadCustomArtworkButtonContainer.id = "steamEnhanced";
         uploadCustomArtworkButtonContainer.className = "steam-enhanced";
         // Get body classes
@@ -606,7 +697,10 @@
         // console.log("Body class array bodyClassesOutput:", bodyClassesOutput);
         const currentTheme = bodyClassesOutput[0].toString();
         // console.log("Body class theme:", bodyClassesOutput[0].toString());
-        uploadCustomArtworkButtonContainer.setAttribute("data-panel", "{'maintainX':true,'bFocusRingRoot':true,'flow-children':'row'}");
+        uploadCustomArtworkButtonContainer.setAttribute(
+          "data-panel",
+          "{'maintainX':true,'bFocusRingRoot':true,'flow-children':'row'}",
+        );
         // Create Buttons
         uploadCustomArtworkButtonContainer.innerHTML = `
 
@@ -770,7 +864,9 @@
 
         // #mainContents
         // const steamEnhancedContainer = document.getElementById("responsive_page_template_content");
-        const steamEnhancedWrapper = document.getElementById("responsive_page_template_content") || document.getElementById("mainContents");
+        const steamEnhancedWrapper =
+          document.getElementById("responsive_page_template_content") ||
+          document.getElementById("mainContents");
         if (steamEnhancedWrapper) {
           steamEnhancedWrapper.appendChild(uploadCustomArtworkButtonContainer);
         }
@@ -806,16 +902,23 @@
         });
 
         // Reload Page Functionality
-        const switchClaimStickers = document.getElementById("switch-rounded-claim-stickers");
+        const switchClaimStickers = document.getElementById(
+          "switch-rounded-claim-stickers",
+        );
         switchClaimStickers.addEventListener("click", function () {
           location.reload();
         });
 
         // Steam Enhanced Toggle
-        const steamEnhancedToggle = document.getElementById("steamEnhancedToggle");
-        const steamEnhancedContainer = document.getElementById("steamEnhancedContainer");
+        const steamEnhancedToggle = document.getElementById(
+          "steamEnhancedToggle",
+        );
+        const steamEnhancedContainer = document.getElementById(
+          "steamEnhancedContainer",
+        );
         const steamEnhanced = document.getElementById("steamEnhanced");
-        const isExpanded = localStorage.getItem("steamEnhancedExpanded") === "true";
+        const isExpanded =
+          localStorage.getItem("steamEnhancedExpanded") === "true";
         if (isExpanded) {
           steamEnhanced.classList.add("expanded");
           steamEnhancedToggle.classList.toggle("toggle");
@@ -829,7 +932,8 @@
           steamEnhancedContainer.classList.toggle("hide");
 
           // Save 'pinned' class state to local storage
-          const isCurrentlyExpanded = steamEnhanced.classList.contains("expanded");
+          const isCurrentlyExpanded =
+            steamEnhanced.classList.contains("expanded");
           localStorage.setItem("steamEnhancedExpanded", isCurrentlyExpanded);
 
           // Toggle 'toggle' class on steamEnhancedPin
@@ -961,7 +1065,9 @@
         }
 
         // Get the Auto Reload checkbox element
-        const checkboxClaimStickers = document.getElementById("switch-rounded-claim-stickers");
+        const checkboxClaimStickers = document.getElementById(
+          "switch-rounded-claim-stickers",
+        );
 
         // Function to toggle class and update localStorage
         function toggleSwitchClaimStickers() {
@@ -975,11 +1081,17 @@
           }
 
           // Update localStorage with checkboxClaimStickers state
-          localStorage.setItem("autoClaimStickers", checkboxClaimStickers.checked);
+          localStorage.setItem(
+            "autoClaimStickers",
+            checkboxClaimStickers.checked,
+          );
         }
 
         // Add event listener to checkboxClaimStickers for change event
-        checkboxClaimStickers.addEventListener("change", toggleSwitchClaimStickers);
+        checkboxClaimStickers.addEventListener(
+          "change",
+          toggleSwitchClaimStickers,
+        );
 
         // Check localStorage for initial switch state
         const autoClaimStickers = localStorage.getItem("autoClaimStickers");
@@ -987,28 +1099,6 @@
           // If switch state is true, check the checkboxClaimStickers and toggle the class
           checkboxClaimStickers.checked = true;
           toggleSwitchClaimStickers();
-        }
-
-        // ========================================================================== //
-        // Change profile theme button
-        // ========================================================================== //
-        // Change profile theme
-        const bodyClass = document.querySelector("body.profile_page");
-        const activeThemeSpan = document.querySelector(".active-theme span");
-        const changeProfileThemeButtonsDetails = document.querySelector(".change-profile-theme details");
-        const changeProfileThemeButtons = document.querySelectorAll(".change-theme");
-        for (let i = 0; i < changeProfileThemeButtons.length; i++) {
-          const changeProfileThemeButton = changeProfileThemeButtons[i];
-          const changeProfileThemeButtonID = changeProfileThemeButton.id;
-          const themeColorArray = ["DefaultTheme", "SummerTheme", "MidnightTheme", "SteelTheme", "CosmicTheme", "DarkModeTheme", "Steam3000Theme", "GameProfileTheme", "SteamDeckTheme"];
-          changeProfileThemeButton.addEventListener("click", () => {
-            console.log("Change theme to:", changeProfileThemeButtonID);
-            bodyClass.classList.remove(...themeColorArray);
-            bodyClass.classList.add(changeProfileThemeButtonID);
-            activeThemeSpan.innerHTML = `<span>${changeProfileThemeButtonID}</span>`;
-            // bodyClass.classList.replace("DarkModeTheme", changeProfileThemeButtonID)
-            changeProfileThemeButtonsDetails.removeAttribute("open");
-          });
         }
       }
       setTimeout(setUploadArtworkButton, 0);
@@ -1022,7 +1112,8 @@
       function setCommentSymbolsPicker() {
         // console.log("setCommentSymbolsPicker");
         const symbolsDialogDetails = document.createElement("div");
-        symbolsDialogDetails.className = "symbols-container symbols-modal-container";
+        symbolsDialogDetails.className =
+          "symbols-container symbols-modal-container";
         symbolsDialogDetails.innerHTML = `
         <div id="symbolsModal" class="symbols-modal">
         <a id="close">×</a>
@@ -1353,7 +1444,9 @@
       </div>
         `;
 
-        const symbolsDialogContainer = document.getElementById("responsive_page_template_content") || document.getElementById("mainContents");
+        const symbolsDialogContainer =
+          document.getElementById("responsive_page_template_content") ||
+          document.getElementById("mainContents");
         if (symbolsDialogContainer) {
           symbolsDialogContainer.appendChild(symbolsDialogDetails);
         }
@@ -1390,17 +1483,6 @@
 
   (function () {
     "use strict";
-    function rafAsync() {
-      return new Promise((resolve) => requestAnimationFrame(resolve));
-    }
-    async function checkElement(selector) {
-      let querySelector = null;
-      while (querySelector === null) {
-        await rafAsync();
-        querySelector = document.querySelector(selector);
-      }
-      return querySelector;
-    }
     // Check if
     checkElement(".createCollectionArrow").then((element) => {
       console.log(".createCollectionArrow exists");
@@ -1441,51 +1523,43 @@
         // Grab mainContentsDiv element reference
         const mainContentsDiv = document.querySelector("#mainContents");
         // Insert the Buttons
-        mainContentsDiv.parentNode.insertBefore(steamProfileArtworkContainer, mainContentsDiv);
+        mainContentsDiv.parentNode.insertBefore(
+          steamProfileArtworkContainer,
+          mainContentsDiv,
+        );
       }
       setTimeout(setMainContents, 0);
     });
   })();
 
-  // (function () {
-  //   "use strict";
-  //   function rafAsync() {
-  //     return new Promise((resolve) => requestAnimationFrame(resolve));
-  //   }
-  //   async function checkElement(selector) {
-  //     let querySelector = null;
-  //     while (querySelector === null) {
-  //       await rafAsync();
-  //       querySelector = document.querySelector(selector);
-  //     }
-  //     return querySelector;
-  //   }
-  //   // Check if
-  //   checkElement(".apphub_HomeHeader").then((element) => {
-  //     console.log("apphub_HomeHeader exists");
-  //     function setBlankTitleButton() {
-  //       // ----------------------------
-  //       // Fill Blank Title Button
-  //       // ----------------------------
-  //       const blankTitleCharacter = "⠀";
-  //       const alertBlankTitleSet = document.createElement("div");
-  //       alertBlankTitleSet.className = "alertBlankTitleSet";
-  //       alertBlankTitleSet.innerHTML = `<span><i>✔</i> Blank Title Set</span>`;
-  //       const titleFieldInput = document.querySelector(".titleField");
-  //       const blankTitleButton = document.querySelector("#blankTitleButton");
-  //       const titleFieldParent = titleFieldInput.parentNode;
-  //       blankTitleButton.addEventListener("click", () => {
-  //         console.log("#blankTitleButton clicked");
-  //         blankTitleButton.classList.add("blank-title-added");
-  //         titleFieldInput.value = blankTitleCharacter;
-  //         titleFieldInput.classList.add("fieldInputSuccess");
-  //         alertBlankTitleSet.classList.add("fadeIn");
-  //         titleFieldParent.insertBefore(alertBlankTitleSet, titleFieldInput.nextSibling);
-  //       });
-  //     }
-  //     setTimeout(setBlankTitleButton, 0);
-  //   });
-  // })();
+  (function () {
+    "use strict";
+    // Check if
+    checkElement(".apphub_HomeHeader").then((element) => {
+      console.log("apphub_HomeHeader exists");
+      function setBlankTitleButton() {
+        // ----------------------------
+        // Fill Blank Title Button
+        // ----------------------------
+        const blankTitleCharacter = "⠀";
+        const alertBlankTitleSet = document.createElement("div");
+        alertBlankTitleSet.className = "alertBlankTitleSet";
+        alertBlankTitleSet.innerHTML = `<span><i>✔</i> Blank Title Set</span>`;
+        const titleFieldInput = document.querySelector(".titleField");
+        const blankTitleButton = document.querySelector("#blankTitleButton");
+        const titleFieldParent = titleFieldInput.parentNode;
+        blankTitleButton.addEventListener("click", () => {
+          console.log("#blankTitleButton clicked");
+          blankTitleButton.classList.add("blank-title-added");
+          titleFieldInput.value = blankTitleCharacter;
+          titleFieldInput.classList.add("fieldInputSuccess");
+          alertBlankTitleSet.classList.add("fadeIn");
+          titleFieldParent.insertBefore(alertBlankTitleSet, titleFieldInput.nextSibling);
+        });
+      }
+      setTimeout(setBlankTitleButton, 0);
+    });
+  })();
 
   // Custom artwork enabled notification
   const alertCustomArtworkEnabled = document.createElement("div");
@@ -1493,12 +1567,14 @@
   alertCustomArtworkEnabled.innerHTML = `<span><i>✔</i> Upload Custom Artwork Enabled</span>`;
   // Long workshop enabled notification
   const alertLongWorkshopEnabled = document.createElement("div");
-  alertLongWorkshopEnabled.className = "alertCustomArtworkEnabled longWorkshopEnabled";
+  alertLongWorkshopEnabled.className =
+    "alertCustomArtworkEnabled longWorkshopEnabled";
   alertCustomArtworkEnabled.classList.add("longWorkshopEnabled");
   alertLongWorkshopEnabled.innerHTML = `<span><i>✔</i> Upload Long Workshop Enabled</span>`;
   // Long guide enabled notification
   const alertLongGuideEnabled = document.createElement("div");
-  alertLongGuideEnabled.className = "alertCustomArtworkEnabled longGuideEnabled";
+  alertLongGuideEnabled.className =
+    "alertCustomArtworkEnabled longGuideEnabled";
   alertCustomArtworkEnabled.classList.add("longGuideEnabled");
   alertLongGuideEnabled.innerHTML = `<span><i>✔</i> Upload Long Guide Enabled</span>`;
   // Long guide enabled notification
@@ -1528,39 +1604,39 @@
 
   (function () {
     "use strict";
-    function rafAsync() {
-      return new Promise((resolve) => requestAnimationFrame(resolve));
-    }
-    async function checkElement(selector) {
-      let querySelector = null;
-      while (querySelector === null) {
-        await rafAsync();
-        querySelector = document.querySelector(selector);
-      }
-      return querySelector;
-    }
     // Check if
     checkElement("#file").then((element) => {
       console.log("#file exists");
       function setFileUpload() {
         // Buttons selectors
         const fileUploadButton = document.querySelector("#file");
-        const customArtworkButton = document.querySelector("#customArtworkButton");
-        const longScreenshotButton = document.querySelector("#longScreenshotButton");
-        const longWorkshopButton = document.querySelector("#longWorkshopButton");
+        const customArtworkButton = document.querySelector(
+          "#customArtworkButton",
+        );
+        const longScreenshotButton = document.querySelector(
+          "#longScreenshotButton",
+        );
+        const longWorkshopButton = document.querySelector(
+          "#longWorkshopButton",
+        );
         const longGuideButton = document.querySelector("#longGuideButton");
         const resetButton = document.querySelector("#resetButton");
-        const selectArtworkTitle = document.querySelector(".detailBox:nth-of-type(2) .title");
+        const selectArtworkTitle = document.querySelector(
+          ".detailBox:nth-of-type(2) .title",
+        );
         const fileUploadParent = fileUploadButton.parentNode;
         let details = [...document.querySelectorAll("details")];
 
         // Scroll functions
         function scrollToChooseFileButton() {
-          document.querySelectorAll(".detailBox")[1].scrollIntoView({ behavior: "smooth", block: "start" });
+          document
+            .querySelectorAll(".detailBox")[1]
+            .scrollIntoView({ behavior: "smooth", block: "start" });
         }
         function customArtworkUploadEnable() {
           console.log("Custom Artwork Upload Enabled");
-          $J("#image_width").val(1000).attr("id", ""), $J("#image_height").val(1).attr("id", "");
+          ($J("#image_width").val(1000).attr("id", ""),
+            $J("#image_height").val(1).attr("id", ""));
           setTimeout(scrollToChooseFileButton, 0);
         }
         function customWorkshopUploadEnable() {
@@ -1593,20 +1669,29 @@
         customArtworkButton.addEventListener("click", () => {
           customArtworkUploadEnable();
           agreeTermsInput.checked = true;
-          fileUploadParent.insertBefore(alertCustomArtworkEnabled, fileUploadButton.nextSibling);
+          fileUploadParent.insertBefore(
+            alertCustomArtworkEnabled,
+            fileUploadButton.nextSibling,
+          );
           details[0].removeAttribute("open");
         });
         longScreenshotButton.addEventListener("click", () => {
           longScreenshotUploadEnable();
           agreeTermsInput.checked = true;
-          fileUploadParent.insertBefore(alertCustomArtworkEnabled, fileUploadButton.nextSibling);
+          fileUploadParent.insertBefore(
+            alertCustomArtworkEnabled,
+            fileUploadButton.nextSibling,
+          );
           details[0].removeAttribute("open");
         });
         longWorkshopButton.addEventListener("click", () => {
           customWorkshopUploadEnable();
           agreeTermsInput.checked = true;
           selectArtworkTitle.textContent = "Modify your artwork";
-          fileUploadParent.insertBefore(alertLongWorkshopEnabled, fileUploadButton);
+          fileUploadParent.insertBefore(
+            alertLongWorkshopEnabled,
+            fileUploadButton,
+          );
           fileUploadParent.insertBefore(hexEditWebsite, fileUploadButton);
           details[0].removeAttribute("open");
         });
@@ -1614,7 +1699,10 @@
           longGuideUploadEnable();
           agreeTermsInput.checked = true;
           selectArtworkTitle.textContent = "Modify your artwork";
-          fileUploadParent.insertBefore(alertLongGuideEnabled, fileUploadButton);
+          fileUploadParent.insertBefore(
+            alertLongGuideEnabled,
+            fileUploadButton,
+          );
           fileUploadParent.insertBefore(hexEditWebsite, fileUploadButton);
           details[0].removeAttribute("open");
         });
@@ -1626,7 +1714,9 @@
           if (!details.some((f) => f.contains(e.target))) {
             details.forEach((f) => f.removeAttribute("open"));
           } else {
-            details.forEach((f) => (!f.contains(e.target) ? f.removeAttribute("open") : ""));
+            details.forEach((f) =>
+              !f.contains(e.target) ? f.removeAttribute("open") : "",
+            );
           }
         });
       }
@@ -1640,24 +1730,16 @@
 
   (function () {
     "use strict";
-    function rafAsync() {
-      return new Promise((resolve) => requestAnimationFrame(resolve));
-    }
-    async function checkElement(selector) {
-      let querySelector = null;
-      while (querySelector === null) {
-        await rafAsync();
-        querySelector = document.querySelector(selector);
-      }
-      return querySelector;
-    }
     // Check if
     checkElement("#manage_friends").then((element) => {
       console.log("#manage_friends exists");
 
       const postingDelay = 7; // Seconds in between posting profile comments
-      const manageFriendsSelector = document.querySelector("#manage_friends > .row");
-      const manageFriendsSelectorParent = document.querySelector("#manage_friends");
+      const manageFriendsSelector = document.querySelector(
+        "#manage_friends > .row",
+      );
+      const manageFriendsSelectorParent =
+        document.querySelector("#manage_friends");
 
       const manageFriendsComments = document.createElement("div");
       manageFriendsComments.className = "friends-comments-textarea";
@@ -1685,9 +1767,15 @@
 
       // ToggleManageFriends();
 
-      manageFriendsSelectorParent.parentNode.appendChild(manageFriendsComments, manageFriendsSelectorParent);
+      manageFriendsSelectorParent.parentNode.appendChild(
+        manageFriendsComments,
+        manageFriendsSelectorParent,
+      );
 
-      manageFriendsSelectorParent.insertBefore(manageFriendsComments, manageFriendsSelector);
+      manageFriendsSelectorParent.insertBefore(
+        manageFriendsComments,
+        manageFriendsSelector,
+      );
 
       const commentSubmitButton = document.querySelector("#comment_submit");
       const commentTextarea = document.querySelector("#comment_textarea");
@@ -1700,7 +1788,9 @@
         const totalSelected = selectedCheckbox?.length;
         const commentMessage = commentTextarea.value;
         if (totalSelected === 0 || commentMessage.length === 0) {
-          alert("Please make sure you entered a message and selected 1 or more friends.");
+          alert(
+            "Please make sure you entered a message and selected 1 or more friends.",
+          );
           return;
         }
 
@@ -1709,23 +1799,43 @@
 
         document.querySelectorAll(".selected").forEach((elem, i) => {
           let profileID = elem.dataset.steamid;
-          setTimeout(() => {
-            let xhr = new XMLHttpRequest();
-            xhr.open("POST", `//steamcommunity.com/comment/Profile/post/${profileID}/-1/`, true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-            xhr.onloadend = (response) => {
-              // let logBody = document.querySelector('#log_body')[0];
-              commentLogBody.innerHTML += `<br>${
-                response.success === false
-                  ? response.error
-                  : 'Successfully posted comment on <a href="https://steamcommunity.com/profiles/${profileID}/#commentthread_Profile_${profileID}_0_area">' + profileID + "</a>"
-              }`;
-              document.querySelector(`.friend_block_v2[data-steamid="${profileID}"]`).classList.remove("selected");
-              document.querySelector(`.friend_block_v2[data-steamid="${profileID}"] .select_friend_checkbox`).checked = false;
-              UpdateSelection();
-            };
-            xhr.send(`comment=${commentMessage}&count=6&sessionid=${g_sessionID}`);
-          }, postingDelay * i * 1000);
+          setTimeout(
+            () => {
+              let xhr = new XMLHttpRequest();
+              xhr.open(
+                "POST",
+                `//steamcommunity.com/comment/Profile/post/${profileID}/-1/`,
+                true,
+              );
+              xhr.setRequestHeader(
+                "Content-Type",
+                "application/x-www-form-urlencoded; charset=UTF-8",
+              );
+              xhr.onloadend = (response) => {
+                // let logBody = document.querySelector('#log_body')[0];
+                commentLogBody.innerHTML += `<br>${
+                  response.success === false
+                    ? response.error
+                    : 'Successfully posted comment on <a href="https://steamcommunity.com/profiles/${profileID}/#commentthread_Profile_${profileID}_0_area">' +
+                      profileID +
+                      "</a>"
+                }`;
+                document
+                  .querySelector(
+                    `.friend_block_v2[data-steamid="${profileID}"]`,
+                  )
+                  .classList.remove("selected");
+                document.querySelector(
+                  `.friend_block_v2[data-steamid="${profileID}"] .select_friend_checkbox`,
+                ).checked = false;
+                UpdateSelection();
+              };
+              xhr.send(
+                `comment=${commentMessage}&count=6&sessionid=${g_sessionID}`,
+              );
+            },
+            postingDelay * i * 1000,
+          );
         });
       });
     });
@@ -1789,7 +1899,9 @@
           console.log("Operation canceled by user.");
         }
       } else {
-        console.error("No img element found inside the profile_avatar_frame div.");
+        console.error(
+          "No img element found inside the profile_avatar_frame div.",
+        );
       }
     } else {
       console.error('No element found with the class "profile_avatar_frame".');
@@ -1918,12 +2030,16 @@
 
       let webapi_token = null;
       if (window.application_config?.dataset?.loyalty_webapi_token) {
-        webapi_token = JSON.parse(window.application_config.dataset.loyalty_webapi_token);
+        webapi_token = JSON.parse(
+          window.application_config.dataset.loyalty_webapi_token,
+        );
       } else {
         const res = await fetch("/category/action");
         const html = await res.text();
         const doc = new DOMParser().parseFromString(html, "text/html");
-        const token = doc.getElementById("application_config")?.dataset?.loyalty_webapi_token;
+        const token =
+          doc.getElementById("application_config")?.dataset
+            ?.loyalty_webapi_token;
         if (!token) {
           console.log("No valid API token found, are you logged in?");
           return;
@@ -1932,7 +2048,9 @@
       }
 
       // can claim check
-      const res = await fetch(`https://api.steampowered.com/ISaleItemRewardsService/CanClaimItem/v1/?access_token=${webapi_token}`);
+      const res = await fetch(
+        `https://api.steampowered.com/ISaleItemRewardsService/CanClaimItem/v1/?access_token=${webapi_token}`,
+      );
       const json = await res.json();
 
       const can_claim = !!json.response?.can_claim;
@@ -1940,11 +2058,17 @@
 
       // request to /ClaimItem
       if (can_claim) {
-        await fetch(`https://api.steampowered.com/ISaleItemRewardsService/ClaimItem/v1/?access_token=${webapi_token}`, { method: "POST" });
+        await fetch(
+          `https://api.steampowered.com/ISaleItemRewardsService/ClaimItem/v1/?access_token=${webapi_token}`,
+          { method: "POST" },
+        );
         console.log("Sticker claimed!");
       } else {
         if (next_claim_time) {
-          console.log("Sticker already claimed today, the next item will be available at: " + new Date(next_claim_time * 1000).toLocaleString("en-GB"));
+          console.log(
+            "Sticker already claimed today, the next item will be available at: " +
+              new Date(next_claim_time * 1000).toLocaleString("en-GB"),
+          );
         } else {
           console.log("No content to collect, skipping.");
         }
@@ -1965,12 +2089,14 @@
     // Check if elements with href containing 'CCommentThread.DeleteComment' exist
     if (document.querySelector("[href*='CCommentThread.DeleteComment']")) {
       // Get all elements with href containing 'CCommentThread.DeleteComment'
-      var deleteLinks = document.querySelectorAll("[href*='CCommentThread.DeleteComment']");
+      var deleteLinks = document.querySelectorAll(
+        "[href*='CCommentThread.DeleteComment']",
+      );
       deleteLinks.forEach(function (link) {
         // Insert the custom action links after each found element
         link.insertAdjacentHTML(
           "afterend",
-          '<a class="actionlink"> | </a><a class="actionlink delAllComments">Delete Everything</a><a class="actionlink"> | </a><a class="actionlink delAuthorComments">Delete Everything From This Author</a>'
+          '<a class="actionlink"> | </a><a class="actionlink delAllComments">Delete Everything</a><a class="actionlink"> | </a><a class="actionlink delAuthorComments">Delete Everything From This Author</a>',
         );
       });
 
@@ -1979,7 +2105,9 @@
         btn.addEventListener("click", function () {
           if (confirm("Are you sure you want to delete all comments?")) {
             var delComments = setInterval(function () {
-              var deleteLink = document.querySelector("[href*='CCommentThread.DeleteComment']");
+              var deleteLink = document.querySelector(
+                "[href*='CCommentThread.DeleteComment']",
+              );
               if (deleteLink) {
                 // Using eval is not recommended. Replace this with safer code if possible.
                 eval(deleteLink.getAttribute("href"));
@@ -1994,21 +2122,37 @@
       // Add event listener to "Delete Everything From This Author" link
       document.querySelectorAll(".delAuthorComments").forEach(function (btn) {
         btn.addEventListener("click", function () {
-          if (confirm("Are you sure you want to delete all comments from this author?")) {
-            var author = btn.parentElement.querySelector(".commentthread_author_link").getAttribute("data-miniprofile");
+          if (
+            confirm(
+              "Are you sure you want to delete all comments from this author?",
+            )
+          ) {
+            var author = btn.parentElement
+              .querySelector(".commentthread_author_link")
+              .getAttribute("data-miniprofile");
             var delComments = setInterval(function () {
-              var authorComments = document.querySelectorAll(".commentthread_comment_author [data-miniprofile='" + author + "']");
+              var authorComments = document.querySelectorAll(
+                ".commentthread_comment_author [data-miniprofile='" +
+                  author +
+                  "']",
+              );
               if (authorComments.length > 0) {
                 authorComments.forEach(function (comment) {
-                  var deleteLink = comment.closest(".comment").querySelector("[href*='CCommentThread.DeleteComment']");
+                  var deleteLink = comment
+                    .closest(".comment")
+                    .querySelector("[href*='CCommentThread.DeleteComment']");
                   if (deleteLink) {
                     // Using eval is not recommended. Replace this with safer code if possible.
                     eval(deleteLink.getAttribute("href"));
                   }
                 });
-              } else if (document.querySelector(".commentthread_pagelinks .active + *")) {
+              } else if (
+                document.querySelector(".commentthread_pagelinks .active + *")
+              ) {
                 // Click the next page link if it exists
-                document.querySelector(".commentthread_pagelinks .active + *").click();
+                document
+                  .querySelector(".commentthread_pagelinks .active + *")
+                  .click();
               } else {
                 clearInterval(delComments);
               }
@@ -2028,7 +2172,9 @@
 
     function wrapScreenshotCards() {
       // Find all screenshot cards that haven't been wrapped yet
-      const cards = document.querySelectorAll(".apphub_Card.modalContentLink[data-modal-content-url]:not([data-enhanced-wrapped])");
+      const cards = document.querySelectorAll(
+        ".apphub_Card.modalContentLink[data-modal-content-url]:not([data-enhanced-wrapped])",
+      );
 
       cards.forEach((card) => {
         // Mark as wrapped to avoid duplicates
@@ -2042,7 +2188,8 @@
         wrapper.href = url;
         wrapper.target = "_blank";
         wrapper.rel = "noopener noreferrer";
-        wrapper.style.cssText = "position: relative; display: block; text-decoration: none; z-index: 1;";
+        wrapper.style.cssText =
+          "position: relative; display: block; text-decoration: none; z-index: 1;";
 
         // Move card into wrapper
         card.parentNode.insertBefore(wrapper, card);
@@ -2070,4 +2217,9 @@
       subtree: true,
     });
   })();
+
+  //* ========================================================================== //
+  //* Initialize Theme Manager
+  //* ========================================================================== //
+  new ThemeManager(STEAM_ENHANCED_CONFIG).init();
 })();

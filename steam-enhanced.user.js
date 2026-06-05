@@ -3,7 +3,7 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.37.16
+// @version     1.1.37.17
 // @author      Schalk Burger <schalkb@gmail.com>
 // @description  A collection of tools to enhance Steam.
 // @license MIT
@@ -61,7 +61,152 @@ const STEAM_ENHANCED_CONFIG = {
     themeButton: ".change-theme",
     themeDetails: ".change-profile-theme details",
   },
+  SYMBOLS: {
+    SELECTORS: {
+      header: "#global_header",
+      modal: "#symbolsModal",
+      trigger: "#showSymbols",
+      closeBtn: "#close",
+      container: "#responsive_page_template_content",
+      fallback: "#mainContents",
+    },
+    CATEGORIES: {
+      "Text Formatting": "These markup tags allow you to add formatting to the text of your comments and posts, similar to HTML.",
+      "Invisible Spacers": "Copy the space between these brackets:&nbsp; (⠀⠀⠀⠀⠀)",
+      "Symbols & Fonts Websites": '<a href="https://fsymbols.com/generators/" target="_blank">Font generator</a><a href="https://text-art.top/" target="_blank">Text art</a><a href="https://steam.tools/mosaticon/" target="_blank">Mosaticon</a>',
+      "Animals & Insects": "🐸 🐢 🐍 🐲🐉 🙈 🙊 🙉🐒🦍🐶🐕🐩🐺🦊🐱🐈🦁🐯🐅🐆🐴🐎🦄🦓🐮🐂🐃🐄🐷🐖🐗🐽🐏🐑 🐐 🐪 🐫 🦒 🐘 🦏 🐭 🐁 🐀 🐹 🐰 🐇 🐿 🦔 🦇 🐻 🐨 🐼 🐾 🦃 🐔 🐓🐣 🐤 🐥 🐦 🐧 🦅 🦆 🦉🦕🦖 🐳🐋 🐬 🐟 🐠 🐡 🐡🐙 🐌 🦈 🐚 🦀 🦐 🦑 🐌 🦋 🐛🐜 🐝 🐞 🦗 🕷 🕸 🦂",
+      "Arrows": "➟ ➡ ➢ ➣ ➤ ➥ ➦ ➧ ➨ ➚ ➘ ➙ ➛ ➜ ➝ ➞ ➸ ➲ ➳ ➳ ➴ ➵ ➶ ➷ ➸ ➹ ➺ ➻ ➼ ➽ ← ↑ → ↓ ↔ ↕ ↖ ↗ ↘ ↙ ↚ ↛ ↜ ↝ ↞ ↟ ↠ ↡ ↢ ↣ ↤ ↥ ↦ ↧ ↨ ➫ ➬ ➩ ➪ ➭ ➮ ➯ ➱ ↩ ↪ ↫ ↬ ↭ ↮ ↯ ↰ ↱ ↲ ↳ ↴ ↵ ↶ ↷ ↸ ↹ ↺ ↻ ↼ ↽ ↾ ↿ ⇀ ⇁ ⇂ ⇃ ⇄ ⇅ ⇆ ⇇ ⇈ ⇉ ⇊ ⇋ ⇌ ⇍ ⇎ ⇏ ⇐ ⇑ ⇒ ⇓ ⇔ ⇕ ⇖ ⇗ ⇘ ⇙ ⇚ ⇛ ⇜ ⇝ ⇞ ⇟ ⇠ ⇡ ⇢ ⇣ ⇫ ⇬ ⇭ ⇮ ⇯ ⇰ ⇱ ⇲ ⇳ ⇴ ⇵ ⇶ ⇷ ⇸ ⇹ ⇺ ⇻ ⇼ ⇽ ⇾ ⇿ ☇ ☈",
+      "Chess Pieces": "♔ ♕ ♖ ♗ ♘ ♙ ♚ ♛ ♜ ♝ ♞ ♟",
+      "Crosses": "† ✞ ✛ ✙ ☩ † ☨ ✞ ✝ ☥ ☦✞ ✜✝✙ ✠",
+      "Hearts & Love": "ღ ♥ ♡ ❤ ➳♥ ❥ ❦ ❧ ❣ 💕 💔💘 💓 💔 💖 💗 💌🖤 💜 💙 💚 💛🧡 💞 💟 💝",
+      "Geometric": "☐ Ↄ ■ □ ▢ ▣ ▤ ▥ ▦ ▧ ▨ ▩ ▪ ▫ ▬ ▭ ▮ ▯ ▰ ▱ ◆ ◇ ◈ ◉ ◊ ○ ◌ ◍ ◎ ● ◐ ◑ ◒ ◓ ◔ ◕ ◖ ◗ ◘ ◙ ◚ ◛ ◜ ◝ ◞ ◟ ◠ ◡ ▲▼△▽⊿ ◤ ◥ ◣ ◢ ◦ ◧ ◨ ◩ ◪ ◫ ◬ ◭ ◮ ◯",
+      "Music": "♩ ♫ ♭ ♪ ♯ ♬ ♮ 🔇🔈 🔉 🔊 📢📣 📯 🔔 🔕 🎵 🎶 🎧🎼🎷 🎸 🎹 🎺 🎻 🥁",
+      "Numbers": "⓵ ⓶ ⓷ ⓸ ⓹ ⓺ ⓻ ⓼ ⓽ ⓾ ⓫ ⓬ ⓭ ⓮ ⓯ ⓰ ⓱ ⓲ ⓳ ⓴<br>① ② ③ ④ ⑤ ⑥ ⑦ ⑧ ⑨ ⑩ ⑪ ⑫ ⑬ ⑭ ⑮ ⑯ ⑰ ⑱ ⑲ ⑳",
+      "Stars & Circular Shapes": "✸✤ ✥✦✧ ◈ ★ ☆ ✩ ✫ ✬ ✭ ✮ ✯ ✰ 【★】 ✱ ✲ ✳ ❃ ❂ ❁ ❀ ✿ ✾ ✽ ✼ ✻ ✺ ✹ ✸ ✷ ✶ ✵ ✴ ❄ ❅ ❆ ❇ ❈ ❉ ❊ ❋ ✪ ⋆ 💫 🌠 ✨🌟",
+      "Transportation": "🏎️🏍️🚂 🚃 🚄 🚅 🚆🚇 🚈 🚊 🚝 🚞 🚋 🚌 🚍🚎 🚐 🚑 🚒 🚓 🚔 🚕 🚖 🚗 🚘 🚚 🚛🚜🚲 🛴 🛵 🛥️⛵ 🚤 🚢 ✈️🛩️🛫 🛬 🚁 🚟 🚠 🚡 🚀 🛸 ⚓🚧🚦🚥🚨🚏 ⛽ 🛤️",
+      "Weather & Space": "🌪️🌠🌈 🌂 ⚡ ❄🔥💧 🌊 🚀🌍 🌎 🌏🌐☔☂️🌡️🌬️⛄🌁🌂🏂🌨️☁️🌩️⛅🌫️⛆",
+    },
+  },
 };
+
+/**
+ * Manages symbols & characters modal
+ */
+class SymbolsManager {
+  constructor(config) {
+    this.config = config;
+    this.modal = null;
+    this.container = null;
+  }
+
+  async init() {
+    try {
+      await checkElement(this.config.SELECTORS.header);
+      this.createModal();
+      this.attachListeners();
+    } catch (err) {
+      console.error("❌ SymbolsManager init error:", err);
+    }
+  }
+
+  createModal() {
+    const wrapper = document.createElement("div");
+    wrapper.className = "symbols-container symbols-modal-container";
+
+    const html = this.generateHTML();
+    wrapper.innerHTML = `<div id="symbolsModal" class="symbols-modal"><a id="close">×</a>${html}</div>`;
+
+    this.container = document.querySelector(this.config.SELECTORS.container) || document.querySelector(this.config.SELECTORS.fallback);
+    if (this.container) {
+      this.container.appendChild(wrapper);
+      this.modal = document.getElementById("symbolsModal");
+    }
+  }
+
+  generateHTML() {
+    const categories = this.config.CATEGORIES;
+    let html = "";
+
+    // Text Formatting section (special case - has table)
+    html += `
+      <div class="subSection detailBox">
+        <div class="subSectionTitle">Text Formatting</div>
+        <p>${categories["Text Formatting"]}</p>
+        <div class="tagrow tagrow_header">
+          <div class="tagsyntax">Syntax</div>
+          <div class="tagexample">Example</div>
+          <div style="clear: both;"></div>
+        </div>
+        ${this.getFormattingTagsHTML()}
+      </div>
+      <div class="divider"></div>`;
+
+    // Other categories
+    Object.entries(categories).forEach(([title, content], idx) => {
+      if (title === "Text Formatting") return; // Skip, already rendered
+
+      const isHTML = typeof content === "string" && content.includes("<");
+      const contentHTML = isHTML ? content : `<div class="subSectionDesc">${content}</div>`;
+
+      html += `
+        <div class="subSection detailBox">
+          <div class="subSectionTitle">${title}</div>
+          ${contentHTML}
+        </div>
+        ${idx < Object.keys(categories).length - 1 ? '<div class="divider"></div>' : ""}`;
+    });
+
+    return html;
+  }
+
+  getFormattingTagsHTML() {
+    const tags = [
+      { tag: "[h1]", text: "Header text", class: "bb_h1" },
+      { tag: "[h2]", text: "Header text", class: "bb_h2" },
+      { tag: "[h3]", text: "Header text", class: "bb_h3" },
+      { tag: "[b]", text: "Bold text", class: null, element: "b" },
+      { tag: "[u]", text: "Underlined text", class: null, element: "u" },
+      { tag: "[i]", text: "Italic text", class: null, element: "i" },
+      { tag: "[strike]", text: "Strikethrough text", class: "bb_strike" },
+      { tag: "[spoiler]", text: "Spoiler text", class: "bb_spoiler" },
+      { tag: "[noparse]", text: "Doesn't parse [b]tags[/b]", class: null },
+      { tag: "[hr][/hr]", text: "Render a horizontal rule", class: null },
+      { tag: "[url=store.steampowered.com]", text: "Website link", class: null },
+    ];
+
+    return tags.map(t => `
+      <div class="tagrow">
+        <div class="tagsyntax">
+          <span class="tag">${t.tag}</span> ${t.text} <span class="tag">${t.tag.replace("[", "[/")}</span>
+        </div>
+        <div class="tagexample">
+          ${t.element ? `<${t.element}>${t.text}</${t.element}>` : 
+            t.class ? `<div class="${t.class}">${t.text}</div>` :
+            t.tag.includes("url") ? `<a class="bb_link" href="http://store.steampowered.com" target="_blank">${t.text}</a>` :
+            t.text}
+        </div>
+        <div style="clear: both;"></div>
+      </div>`).join("");
+  }
+
+  attachListeners() {
+    const trigger = document.getElementById(this.config.SELECTORS.trigger.slice(1));
+    if (trigger && this.modal) {
+      trigger.addEventListener("click", () => {
+        this.modal.classList.add("show");
+        this.modal.classList.remove("hide");
+      });
+    }
+
+    const closeBtn = document.getElementById(this.config.SELECTORS.closeBtn.slice(1));
+    if (closeBtn && this.modal) {
+      closeBtn.addEventListener("click", () => {
+        this.modal.classList.add("hide");
+        this.modal.classList.remove("show");
+      });
+    }
+  }
+}
 
 /**
  * Manages theme switching for Steam profile
@@ -798,34 +943,7 @@ class ThemeManager {
               </details>
             </div>
           </div>
-          ${
-            /*
-          <div class="profile_count_link">
-            <div class="change-profile-theme preview-background">
-              <details>
-                <summary>Preview Background</summary>
-                <div class="color-themes">
-                  <span class="change-theme" id="DefaultTheme">Background</span>
-                </div>
-              </details>
-            </div>
-          </div>
-           */ ""
-          }
-          ${
-            /*
-          <div class="profile_count_link">
-            <div class="change-profile-theme preview-avatar-frame">
-              <details>
-                <summary>Preview Avatar Frame</summary>
-                <div class="color-themes">
-                  <span class="change-theme" id="DefaultTheme">Avatar Frame</span>
-                </div>
-              </details>
-            </div>
-          </div>
-           */ ""
-          }
+          
           <div class="profile_count_link">
           <div class="change-profile-theme useful-links">
             <details>
@@ -1108,8 +1226,9 @@ class ThemeManager {
     //* 2. Symbols & Characters
     //* =======================================================================
 
-    checkElement("#global_header").then((element) => {
-      function setCommentSymbolsPicker() {
+    new SymbolsManager(STEAM_ENHANCED_CONFIG.SYMBOLS).init();
+
+  })();
         // console.log("setCommentSymbolsPicker");
         const symbolsDialogDetails = document.createElement("div");
         symbolsDialogDetails.className =
@@ -1471,10 +1590,7 @@ class ThemeManager {
           }
         }
         // Reload page after 3 seconds
-        setTimeout(setSymbolsCharactersModal, 1000);
-      }
-      setTimeout(setCommentSymbolsPicker, 1500);
-    });
+        setTimeout(setSymbolsCharactersModal, 1000);  
   })();
 
   //* ========================================================================== //
@@ -2222,4 +2338,3 @@ class ThemeManager {
   //* Initialize Theme Manager
   //* ========================================================================== //
   new ThemeManager(STEAM_ENHANCED_CONFIG).init();
-})();

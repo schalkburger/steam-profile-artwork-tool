@@ -3,10 +3,10 @@
 // @namespace   https://greasyfork.org/en/users/961305-darkharden
 // @match       https://steamcommunity.com/*
 // @include     /^https?:\/\/steamcommunity.com\/(id\/+[A-Za-z0-9$-_.+!*'(),]+|profiles\/7656119[0-9]{10})\/friends\/?$/
-// @version     1.1.37.17
+// @version     1.1.37.18
 // @author      Schalk Burger <schalkb@gmail.com>
-// @description  A collection of tools to enhance Steam.
-// @license MIT
+// @description A collection of tools to enhance Steam.
+// @license     MIT
 // ==/UserScript==
 
 // 1. Upload Artwork & Enable Custom Uploads Buttons
@@ -43,7 +43,17 @@ async function checkElement(selector) {
 
 const STEAM_ENHANCED_CONFIG = {
   THEMES: {
-    list: ["DefaultTheme", "SummerTheme", "MidnightTheme", "SteelTheme", "CosmicTheme", "DarkModeTheme", "Steam3000Theme", "GameProfileTheme", "SteamDeckTheme"],
+    list: [
+      "DefaultTheme",
+      "SummerTheme",
+      "MidnightTheme",
+      "SteelTheme",
+      "CosmicTheme",
+      "DarkModeTheme",
+      "Steam3000Theme",
+      "GameProfileTheme",
+      "SteamDeckTheme",
+    ],
     display: {
       DefaultTheme: "Default Theme",
       SummerTheme: "Summer",
@@ -61,152 +71,9 @@ const STEAM_ENHANCED_CONFIG = {
     themeButton: ".change-theme",
     themeDetails: ".change-profile-theme details",
   },
-  SYMBOLS: {
-    SELECTORS: {
-      header: "#global_header",
-      modal: "#symbolsModal",
-      trigger: "#showSymbols",
-      closeBtn: "#close",
-      container: "#responsive_page_template_content",
-      fallback: "#mainContents",
-    },
-    CATEGORIES: {
-      "Text Formatting": "These markup tags allow you to add formatting to the text of your comments and posts, similar to HTML.",
-      "Invisible Spacers": "Copy the space between these brackets:&nbsp; (⠀⠀⠀⠀⠀)",
-      "Symbols & Fonts Websites": '<a href="https://fsymbols.com/generators/" target="_blank">Font generator</a><a href="https://text-art.top/" target="_blank">Text art</a><a href="https://steam.tools/mosaticon/" target="_blank">Mosaticon</a>',
-      "Animals & Insects": "🐸 🐢 🐍 🐲🐉 🙈 🙊 🙉🐒🦍🐶🐕🐩🐺🦊🐱🐈🦁🐯🐅🐆🐴🐎🦄🦓🐮🐂🐃🐄🐷🐖🐗🐽🐏🐑 🐐 🐪 🐫 🦒 🐘 🦏 🐭 🐁 🐀 🐹 🐰 🐇 🐿 🦔 🦇 🐻 🐨 🐼 🐾 🦃 🐔 🐓🐣 🐤 🐥 🐦 🐧 🦅 🦆 🦉🦕🦖 🐳🐋 🐬 🐟 🐠 🐡 🐡🐙 🐌 🦈 🐚 🦀 🦐 🦑 🐌 🦋 🐛🐜 🐝 🐞 🦗 🕷 🕸 🦂",
-      "Arrows": "➟ ➡ ➢ ➣ ➤ ➥ ➦ ➧ ➨ ➚ ➘ ➙ ➛ ➜ ➝ ➞ ➸ ➲ ➳ ➳ ➴ ➵ ➶ ➷ ➸ ➹ ➺ ➻ ➼ ➽ ← ↑ → ↓ ↔ ↕ ↖ ↗ ↘ ↙ ↚ ↛ ↜ ↝ ↞ ↟ ↠ ↡ ↢ ↣ ↤ ↥ ↦ ↧ ↨ ➫ ➬ ➩ ➪ ➭ ➮ ➯ ➱ ↩ ↪ ↫ ↬ ↭ ↮ ↯ ↰ ↱ ↲ ↳ ↴ ↵ ↶ ↷ ↸ ↹ ↺ ↻ ↼ ↽ ↾ ↿ ⇀ ⇁ ⇂ ⇃ ⇄ ⇅ ⇆ ⇇ ⇈ ⇉ ⇊ ⇋ ⇌ ⇍ ⇎ ⇏ ⇐ ⇑ ⇒ ⇓ ⇔ ⇕ ⇖ ⇗ ⇘ ⇙ ⇚ ⇛ ⇜ ⇝ ⇞ ⇟ ⇠ ⇡ ⇢ ⇣ ⇫ ⇬ ⇭ ⇮ ⇯ ⇰ ⇱ ⇲ ⇳ ⇴ ⇵ ⇶ ⇷ ⇸ ⇹ ⇺ ⇻ ⇼ ⇽ ⇾ ⇿ ☇ ☈",
-      "Chess Pieces": "♔ ♕ ♖ ♗ ♘ ♙ ♚ ♛ ♜ ♝ ♞ ♟",
-      "Crosses": "† ✞ ✛ ✙ ☩ † ☨ ✞ ✝ ☥ ☦✞ ✜✝✙ ✠",
-      "Hearts & Love": "ღ ♥ ♡ ❤ ➳♥ ❥ ❦ ❧ ❣ 💕 💔💘 💓 💔 💖 💗 💌🖤 💜 💙 💚 💛🧡 💞 💟 💝",
-      "Geometric": "☐ Ↄ ■ □ ▢ ▣ ▤ ▥ ▦ ▧ ▨ ▩ ▪ ▫ ▬ ▭ ▮ ▯ ▰ ▱ ◆ ◇ ◈ ◉ ◊ ○ ◌ ◍ ◎ ● ◐ ◑ ◒ ◓ ◔ ◕ ◖ ◗ ◘ ◙ ◚ ◛ ◜ ◝ ◞ ◟ ◠ ◡ ▲▼△▽⊿ ◤ ◥ ◣ ◢ ◦ ◧ ◨ ◩ ◪ ◫ ◬ ◭ ◮ ◯",
-      "Music": "♩ ♫ ♭ ♪ ♯ ♬ ♮ 🔇🔈 🔉 🔊 📢📣 📯 🔔 🔕 🎵 🎶 🎧🎼🎷 🎸 🎹 🎺 🎻 🥁",
-      "Numbers": "⓵ ⓶ ⓷ ⓸ ⓹ ⓺ ⓻ ⓼ ⓽ ⓾ ⓫ ⓬ ⓭ ⓮ ⓯ ⓰ ⓱ ⓲ ⓳ ⓴<br>① ② ③ ④ ⑤ ⑥ ⑦ ⑧ ⑨ ⑩ ⑪ ⑫ ⑬ ⑭ ⑮ ⑯ ⑰ ⑱ ⑲ ⑳",
-      "Stars & Circular Shapes": "✸✤ ✥✦✧ ◈ ★ ☆ ✩ ✫ ✬ ✭ ✮ ✯ ✰ 【★】 ✱ ✲ ✳ ❃ ❂ ❁ ❀ ✿ ✾ ✽ ✼ ✻ ✺ ✹ ✸ ✷ ✶ ✵ ✴ ❄ ❅ ❆ ❇ ❈ ❉ ❊ ❋ ✪ ⋆ 💫 🌠 ✨🌟",
-      "Transportation": "🏎️🏍️🚂 🚃 🚄 🚅 🚆🚇 🚈 🚊 🚝 🚞 🚋 🚌 🚍🚎 🚐 🚑 🚒 🚓 🚔 🚕 🚖 🚗 🚘 🚚 🚛🚜🚲 🛴 🛵 🛥️⛵ 🚤 🚢 ✈️🛩️🛫 🛬 🚁 🚟 🚠 🚡 🚀 🛸 ⚓🚧🚦🚥🚨🚏 ⛽ 🛤️",
-      "Weather & Space": "🌪️🌠🌈 🌂 ⚡ ❄🔥💧 🌊 🚀🌍 🌎 🌏🌐☔☂️🌡️🌬️⛄🌁🌂🏂🌨️☁️🌩️⛅🌫️⛆",
-    },
-  },
 };
 
-/**
- * Manages symbols & characters modal
- */
-class SymbolsManager {
-  constructor(config) {
-    this.config = config;
-    this.modal = null;
-    this.container = null;
-  }
 
-  async init() {
-    try {
-      await checkElement(this.config.SELECTORS.header);
-      this.createModal();
-      this.attachListeners();
-    } catch (err) {
-      console.error("❌ SymbolsManager init error:", err);
-    }
-  }
-
-  createModal() {
-    const wrapper = document.createElement("div");
-    wrapper.className = "symbols-container symbols-modal-container";
-
-    const html = this.generateHTML();
-    wrapper.innerHTML = `<div id="symbolsModal" class="symbols-modal"><a id="close">×</a>${html}</div>`;
-
-    this.container = document.querySelector(this.config.SELECTORS.container) || document.querySelector(this.config.SELECTORS.fallback);
-    if (this.container) {
-      this.container.appendChild(wrapper);
-      this.modal = document.getElementById("symbolsModal");
-    }
-  }
-
-  generateHTML() {
-    const categories = this.config.CATEGORIES;
-    let html = "";
-
-    // Text Formatting section (special case - has table)
-    html += `
-      <div class="subSection detailBox">
-        <div class="subSectionTitle">Text Formatting</div>
-        <p>${categories["Text Formatting"]}</p>
-        <div class="tagrow tagrow_header">
-          <div class="tagsyntax">Syntax</div>
-          <div class="tagexample">Example</div>
-          <div style="clear: both;"></div>
-        </div>
-        ${this.getFormattingTagsHTML()}
-      </div>
-      <div class="divider"></div>`;
-
-    // Other categories
-    Object.entries(categories).forEach(([title, content], idx) => {
-      if (title === "Text Formatting") return; // Skip, already rendered
-
-      const isHTML = typeof content === "string" && content.includes("<");
-      const contentHTML = isHTML ? content : `<div class="subSectionDesc">${content}</div>`;
-
-      html += `
-        <div class="subSection detailBox">
-          <div class="subSectionTitle">${title}</div>
-          ${contentHTML}
-        </div>
-        ${idx < Object.keys(categories).length - 1 ? '<div class="divider"></div>' : ""}`;
-    });
-
-    return html;
-  }
-
-  getFormattingTagsHTML() {
-    const tags = [
-      { tag: "[h1]", text: "Header text", class: "bb_h1" },
-      { tag: "[h2]", text: "Header text", class: "bb_h2" },
-      { tag: "[h3]", text: "Header text", class: "bb_h3" },
-      { tag: "[b]", text: "Bold text", class: null, element: "b" },
-      { tag: "[u]", text: "Underlined text", class: null, element: "u" },
-      { tag: "[i]", text: "Italic text", class: null, element: "i" },
-      { tag: "[strike]", text: "Strikethrough text", class: "bb_strike" },
-      { tag: "[spoiler]", text: "Spoiler text", class: "bb_spoiler" },
-      { tag: "[noparse]", text: "Doesn't parse [b]tags[/b]", class: null },
-      { tag: "[hr][/hr]", text: "Render a horizontal rule", class: null },
-      { tag: "[url=store.steampowered.com]", text: "Website link", class: null },
-    ];
-
-    return tags.map(t => `
-      <div class="tagrow">
-        <div class="tagsyntax">
-          <span class="tag">${t.tag}</span> ${t.text} <span class="tag">${t.tag.replace("[", "[/")}</span>
-        </div>
-        <div class="tagexample">
-          ${t.element ? `<${t.element}>${t.text}</${t.element}>` : 
-            t.class ? `<div class="${t.class}">${t.text}</div>` :
-            t.tag.includes("url") ? `<a class="bb_link" href="http://store.steampowered.com" target="_blank">${t.text}</a>` :
-            t.text}
-        </div>
-        <div style="clear: both;"></div>
-      </div>`).join("");
-  }
-
-  attachListeners() {
-    const trigger = document.getElementById(this.config.SELECTORS.trigger.slice(1));
-    if (trigger && this.modal) {
-      trigger.addEventListener("click", () => {
-        this.modal.classList.add("show");
-        this.modal.classList.remove("hide");
-      });
-    }
-
-    const closeBtn = document.getElementById(this.config.SELECTORS.closeBtn.slice(1));
-    if (closeBtn && this.modal) {
-      closeBtn.addEventListener("click", () => {
-        this.modal.classList.add("hide");
-        this.modal.classList.remove("show");
-      });
-    }
-  }
-}
 
 /**
  * Manages theme switching for Steam profile
@@ -222,7 +89,9 @@ class ThemeManager {
     try {
       await checkElement(this.config.SELECTORS.themeButton);
       this.body = document.querySelector(this.config.SELECTORS.body);
-      this.themeDetails = document.querySelector(this.config.SELECTORS.themeDetails);
+      this.themeDetails = document.querySelector(
+        this.config.SELECTORS.themeDetails,
+      );
 
       if (!this.body) {
         console.error("❌ ThemeManager: Body element not found");
@@ -230,7 +99,9 @@ class ThemeManager {
       }
 
       this.attachListeners();
-      console.log(`✅ ThemeManager initialized (${this.getButtonCount()} themes)`);
+      console.log(
+        `✅ ThemeManager initialized (${this.getButtonCount()} themes)`,
+      );
     } catch (err) {
       console.error("❌ ThemeManager init error:", err);
     }
@@ -241,7 +112,9 @@ class ThemeManager {
   }
 
   attachListeners() {
-    const buttons = document.querySelectorAll(this.config.SELECTORS.themeButton);
+    const buttons = document.querySelectorAll(
+      this.config.SELECTORS.themeButton,
+    );
     if (buttons.length === 0) {
       console.error("❌ ThemeManager: No theme buttons found");
       return;
@@ -468,48 +341,6 @@ class ThemeManager {
   }
   #showSymbols {
     margin-left: 0;
-  }
-  #symbolsModal {
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    display: none;
-    position: fixed;
-    z-index: 700;
-    top: 10px;
-    right: 10px;
-    overflow: hidden;
-    overflow-y: scroll;
-    width: 380px;
-    height: calc(95vh);
-    padding: 15px;
-    padding-top: 0;
-    background: #171d25;
-    cursor: auto;
-    border: none;
-    color: #fff;
-  }
-  #symbolsModal.show {
-    display: block;
-  }
-  #symbolsModal.hide {
-    display: none;
-  }
-  #symbolsModal #close {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    font-size: 18px;
-    color: transparent;
-    text-shadow: 0 0 0 white;
-    width: 20px;
-    height: 20px;
-    z-index: 800;
-  }
-  #symbolsModal a {
-    display: block;
-    color: #1a9fff;
-  }
-  .symbol-picker {
-    position: relative;
   }
   .commentthread_entry_quotebox .commentthread_textarea {
     resize: vertical;
@@ -860,11 +691,7 @@ class ThemeManager {
                 </svg>
               </span>
             </div>
-            <div class="quick-icon-container profile_count_link">
-              <span id="showSymbols" title="Symbols & Characters" class="quick-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="rgba(255,255,255,1)"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM8 13C8 15.2091 9.79086 17 12 17C14.2091 17 16 15.2091 16 13H8ZM8 11C8.82843 11 9.5 10.3284 9.5 9.5C9.5 8.67157 8.82843 8 8 8C7.17157 8 6.5 8.67157 6.5 9.5C6.5 10.3284 7.17157 11 8 11ZM16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"></path></svg>
-              </span>
-            </div>
+
             <div class="quick-icon-container profile_count_link">
               <span id="backToTop" title="Back To Top" class="quick-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="rgba(255,255,255,1)"><path d="M13.0001 7.82843V20H11.0001V7.82843L5.63614 13.1924L4.22192 11.7782L12.0001 4L19.7783 11.7782L18.3641 13.1924L13.0001 7.82843Z"></path></svg>
@@ -876,20 +703,7 @@ class ThemeManager {
               </span>
             </div>
           </div>
-          <div class="profile_count_link profile-autoreload-market">
-            <a id="#">Auto Reload Errors</a>
-            <span class="toggle-switch">
-              <input id="switch-rounded" type="checkbox" />
-              <label for="switch-rounded"></label>
-            </span>
-          </div>
-          <div class="profile_count_link profile-autoreload-market">
-            <a id="#">Auto Claim Stickers</a>
-            <span class="toggle-switch">
-              <input id="switch-rounded-claim-stickers" type="checkbox" />
-              <label for="switch-rounded-claim-stickers"></label>
-            </span>
-          </div>
+
           <div class="profile_count_link">
             <div class="change-profile-theme quick-navigation">
               <details>
@@ -973,6 +787,18 @@ class ThemeManager {
                 <div class="profile_count_link">
                   <a href="https://steambackgrounds.com/" target="_blank">Steam Backgrounds</a>
                 </div>
+                <div class="profile_count_link">
+                  <a href="https://csrep.gg/" target="_blank">CS Rep</a>
+                </div>
+                <div class="profile_count_link">
+                  <a href="https://cstracker.gg/" target="_blank">CS Tracker</a>
+                </div>
+                <div class="profile_count_link">
+                  <a href="https://leetify.com/" target="_blank">Leetify</a>
+                </div>
+                <div class="profile_count_link">
+                  <a href="https://steamhistory.net/" target="_blank">Steam History</a>
+                </div>
               </div>
             </details>
           </div>
@@ -1016,14 +842,6 @@ class ThemeManager {
         // Reload Page Functionality
         const reloadPageButton = document.getElementById("reloadPage");
         reloadPageButton.addEventListener("click", function () {
-          location.reload();
-        });
-
-        // Reload Page Functionality
-        const switchClaimStickers = document.getElementById(
-          "switch-rounded-claim-stickers",
-        );
-        switchClaimStickers.addEventListener("click", function () {
           location.reload();
         });
 
@@ -1153,71 +971,7 @@ class ThemeManager {
           });
         });
 
-        // Get the Auto Reload checkbox element
-        const checkboxAutoReload = document.getElementById("switch-rounded");
 
-        // Function to toggle class and update localStorage
-        function toggleSwitchAutoReload() {
-          // Toggle class based on checkboxAutoReload state
-          if (checkboxAutoReload.checked) {
-            // Add class if checkboxAutoReload is checked
-            document.body.classList.add("switch-on");
-          } else {
-            // Remove class if checkboxAutoReload is unchecked
-            document.body.classList.remove("switch-on");
-          }
-
-          // Update localStorage with checkboxAutoReload state
-          localStorage.setItem("autoReloadErrors", checkboxAutoReload.checked);
-        }
-
-        // Add event listener to checkboxAutoReload for change event
-        checkboxAutoReload.addEventListener("change", toggleSwitchAutoReload);
-
-        // Check localStorage for initial switch state
-        const autoReloadErrors = localStorage.getItem("autoReloadErrors");
-        if (autoReloadErrors === "true") {
-          // If switch state is true, check the checkboxAutoReload and toggle the class
-          checkboxAutoReload.checked = true;
-          toggleSwitchAutoReload();
-        }
-
-        // Get the Auto Reload checkbox element
-        const checkboxClaimStickers = document.getElementById(
-          "switch-rounded-claim-stickers",
-        );
-
-        // Function to toggle class and update localStorage
-        function toggleSwitchClaimStickers() {
-          // Toggle class based on checkboxClaimStickers state
-          if (checkboxClaimStickers.checked) {
-            // Add class if checkboxClaimStickers is checked
-            document.body.classList.add("switch-on");
-          } else {
-            // Remove class if checkboxClaimStickers is unchecked
-            document.body.classList.remove("switch-on");
-          }
-
-          // Update localStorage with checkboxClaimStickers state
-          localStorage.setItem(
-            "autoClaimStickers",
-            checkboxClaimStickers.checked,
-          );
-        }
-
-        // Add event listener to checkboxClaimStickers for change event
-        checkboxClaimStickers.addEventListener(
-          "change",
-          toggleSwitchClaimStickers,
-        );
-
-        // Check localStorage for initial switch state
-        const autoClaimStickers = localStorage.getItem("autoClaimStickers");
-        if (autoClaimStickers === "true") {
-          // If switch state is true, check the checkboxClaimStickers and toggle the class
-          checkboxClaimStickers.checked = true;
-          toggleSwitchClaimStickers();
-        }
       }
       setTimeout(setUploadArtworkButton, 0);
     });
@@ -1226,388 +980,23 @@ class ThemeManager {
     //* 2. Symbols & Characters
     //* =======================================================================
 
-    new SymbolsManager(STEAM_ENHANCED_CONFIG.SYMBOLS).init();
 
-  })();
-        // console.log("setCommentSymbolsPicker");
-        const symbolsDialogDetails = document.createElement("div");
-        symbolsDialogDetails.className =
-          "symbols-container symbols-modal-container";
-        symbolsDialogDetails.innerHTML = `
-        <div id="symbolsModal" class="symbols-modal">
-        <a id="close">×</a>
-        <div class="subSection detailBox">
-         <div class="subSectionTitle">Text Formatting</div>
-        <p>These markup tags allow you to add formatting to the text of your comments and posts, similar to HTML.</p>
-        <div class="tagrow tagrow_header">
-          <div class="tagsyntax">Syntax</div>
-          <div class="tagexample">Example</div>
-          <div style="clear: both;"></div>
-        </div>
-            <div class="tagrow">
-          <div class="tagsyntax">
-            <span class="tag">[h1]</span>
-            Header text			<span class="tag">[/h1]</span>
-          </div>
-          <div class="tagexample"><div class="bb_h1">Header text</div></div>
-          <div style="clear: both;"></div>
-        </div>
-            <div class="tagrow">
-          <div class="tagsyntax">
-            <span class="tag">[h2]</span>
-            Header text			<span class="tag">[/h2]</span>
-          </div>
-          <div class="tagexample"><div class="bb_h2">Header text</div></div>
-          <div style="clear: both;"></div>
-        </div>
-            <div class="tagrow">
-          <div class="tagsyntax">
-            <span class="tag">[h3]</span>
-            Header text			<span class="tag">[/h3]</span>
-          </div>
-          <div class="tagexample"><div class="bb_h3">Header text</div></div>
-          <div style="clear: both;"></div>
-        </div>
-            <div class="tagrow">
-          <div class="tagsyntax">
-            <span class="tag">[b]</span>
-            Bold text			<span class="tag">[/b]</span>
-          </div>
-          <div class="tagexample"><b>Bold text</b></div>
-          <div style="clear: both;"></div>
-        </div>
-            <div class="tagrow">
-          <div class="tagsyntax">
-            <span class="tag">[u]</span>
-            Underlined text			<span class="tag">[/u]</span>
-          </div>
-          <div class="tagexample"><u>Underlined text</u></div>
-          <div style="clear: both;"></div>
-        </div>
-            <div class="tagrow">
-          <div class="tagsyntax">
-            <span class="tag">[i]</span>
-            Italic text			<span class="tag">[/i]</span>
-          </div>
-          <div class="tagexample"><i>Italic text</i></div>
-          <div style="clear: both;"></div>
-        </div>
-            <div class="tagrow">
-          <div class="tagsyntax">
-            <span class="tag">[strike]</span>
-            Strikethrough text			<span class="tag">[/strike]</span>
-          </div>
-          <div class="tagexample"><span class="bb_strike">Strikethrough text</span></div>
-          <div style="clear: both;"></div>
-        </div>
-            <div class="tagrow">
-          <div class="tagsyntax">
-            <span class="tag">[spoiler]</span>
-            Spoiler text			<span class="tag">[/spoiler]</span>
-          </div>
-          <div class="tagexample"><span class="bb_spoiler"><span>Spoiler text</span></span></div>
-          <div style="clear: both;"></div>
-        </div>
-            <div class="tagrow">
-          <div class="tagsyntax">
-            <span class="tag">[noparse]</span>
-            Doesn't parse [b]tags[/b] 			<span class="tag">[/noparse]</span>
-          </div>
-          <div class="tagexample">Doesn't parse [b]tags[/b] </div>
-          <div style="clear: both;"></div>
-        </div>
-          <div class="tagrow">
-              <div class="tagsyntax">
-                  <span class="tag">[hr][/hr]</span>
-              </div>
-              <div class="tagexample">
-            Render a horizontal rule            <br><br>
-              </div>
-              <div style="clear: both;"></div>
-          </div>
-            <div class="tagrow">
-          <div class="tagsyntax">
-            <span class="tag">[url=store.steampowered.com]</span>
-            Website link			<span class="tag">[/url]</span>
-          </div>
-          <div class="tagexample"><a class="bb_link" href="http://store.steampowered.com" target="_blank" rel="">Website link</a></div>
-          <div style="clear: both;"></div>
-        </div>
-      </div>
-        <div class="subSection detailBox" id="2050699">
-          <div class="subSectionTitle">Invisible Spacers</div>
-          <div class="subSectionDesc">
-            Copy the space between these brackets:&nbsp; (⠀⠀⠀⠀⠀)
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="1356403">
-          <div class="subSectionTitle">Symbols & Fonts Websites</div>
-          <div class="subSectionDesc">
-              <a href="https://fsymbols.com/generators/" target="_blank">Font generator</a>
-              <a href="https://text-art.top/" target="_blank">Text art</a>
-              <a href="https://steam.tools/mosaticon/" target="_blank">Mosaticon</a>
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="1356403">
-          <div class="subSectionTitle">Animals &amp; Insects</div>
-          <div class="subSectionDesc">
-            🐸 🐢 🐍 🐲🐉 🙈 🙊 🙉🐒🦍🐶🐕🐩🐺🦊🐱🐈🦁🐯🐅🐆🐴🐎🦄🦓🐮🐂🐃🐄🐷🐖🐗🐽🐏🐑 🐐 🐪 🐫 🦒 🐘 🦏 🐭 🐁 🐀 🐹 🐰 🐇 🐿 🦔 🦇 🐻 🐨 🐼 🐾 🦃 🐔 🐓🐣 🐤 🐥 🐦 🐧 🦅 🦆 🦉🦕🦖 🐳🐋 🐬 🐟 🐠 🐡 🐡🐙 🐌
-            🦈 🐚 🦀 🦐 🦑 🐌 🦋 🐛🐜 🐝 🐞 🦗 🕷 🕸 🦂
 
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="1355840">
-          <div class="subSectionTitle">Arrows</div>
-          <div class="subSectionDesc">
-            ➟ ➡ ➢ ➣ ➤ ➥ ➦ ➧ ➨ ➚ ➘ ➙ ➛ ➜ ➝ ➞ ➸ ➲ ➳ ➳ ➴ ➵ ➶ ➷ ➸ ➹ ➺ ➻ ➼ ➽ ← ↑ → ↓ ↔ ↕ ↖ ↗ ↘ ↙ ↚ ↛ ↜ ↝ ↞ ↟ ↠ ↡ ↢ ↣ ↤ ↥ ↦ ↧ ↨ ➫ ➬ ➩ ➪ ➭ ➮ ➯ ➱ ↩ ↪ ↫ ↬ ↭ ↮ ↯ ↰ ↱ ↲ ↳ ↴ ↵ ↶ ↷ ↸ ↹ ↺ ↻ ↼ ↽ ↾ ↿ ⇀ ⇁ ⇂ ⇃ ⇄ ⇅ ⇆ ⇇ ⇈ ⇉ ⇊
-            ⇋ ⇌ ⇍ ⇎ ⇏ ⇐ ⇑ ⇒ ⇓ ⇔ ⇕ ⇖ ⇗ ⇘ ⇙ ⇚ ⇛ ⇜ ⇝ ⇞ ⇟ ⇠ ⇡ ⇢ ⇣ ⇫ ⇬ ⇭ ⇮ ⇯ ⇰ ⇱ ⇲ ⇳ ⇴ ⇵ ⇶ ⇷ ⇸ ⇹ ⇺ ⇻ ⇼ ⇽ ⇾ ⇿ ☇ ☈
+//* ========================================================================== //
+//* 3. Steam Profile Artwork Tool Buttons
+//* =======================================================================
 
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="2050601">
-          <div class="subSectionTitle">Chess Pieces</div>
-          <div class="subSectionDesc">
-            ♔ ♕ ♖ ♗ ♘ ♙ ♚ ♛ ♜ ♝ ♞ ♟
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="2050598">
-          <div class="subSectionTitle">Crosses</div>
-          <div class="subSectionDesc">
-            † ✞ ✛ ✙ ☩ † ☨ ✞ ✝ ☥ ☦✞ ✜✝✙ ✠
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="2050526">
-          <div class="subSectionTitle">Emergency &amp; Medicine</div>
-          <div class="subSectionDesc">
-            🚓 🚑 🚒 🏥 💉 💊
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="1356343">
-          <div class="subSectionTitle">Food</div>
-          <div class="subSectionDesc">
-            🍄🍏🍎🍐🍊🍋🍌🍉🍇🍓🍈🍒🍑🍍🥝🥑🍅🍆🥒🥕🌽🌶🥔🍠🌰🥜🍯🥐🍞🥖🧀🥚🍳🥓🥞🍤🍗🍖🍕🌭🍔🍟🥙🌮🌯🥗🥘🍝🍜🍲🍥🍣🍱🍛🍙🍚🍘🍢🍡🍧 🎂 🍰🍨🍦🍮🍭🍬🍫🍿🍩🍪🥛🍼☕🍵🍶🍺🍻🥂🍷🥃🍸🍹🍾🥄🍴🍽🔪
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="1356328">
-          <div class="subSectionTitle">Hands, Faces &amp; People</div>
-          <div class="subSectionDesc">
-            😀 😁 😂 🤣 😃 😄 😅 😆 😉 😊 😋 😎 😍 😘 😗 😙 😚 🙂 🤗 🤩 🤔🤨 😐 😑 😶 🙄 😏 😣 😥😮 🤐 😯 😪 😫 😴😌 😛😜 😝 🤤 😒 😓 😔😕 🙃 🤑 😲 🙁 😖 😞 😟 😤 😢<br />😭😦 😧😨 😩 🤯😬 😰 😱😳🤪 😵 😡
-            😠 🤬 😷 🤒 🤕 🤢 🤮 🤧 😇 🤠🤡 🤥 🤫 🤭 🧐 🤓 😈 👿 👹 👺 💀 👻 👽 🤖 💩 😺 😸 😹 😻 😼 😽 🙀 😿 😾 👶 👦 👧 👨 👩 👴 <br />👵 👨‍⚕️ 👩‍⚕️ 👨‍🎓 👩‍🎓 👨‍⚖️ 👩‍⚖️👨‍🌾 👩‍🌾 👨‍🍳 👩‍🍳 👨‍🔧👩‍🔧👨‍🏭 👩‍🏭 👨‍💼 👩‍💼👨‍🔬 👩‍🔬 👨‍💻 👩‍💻 👨‍🎤👩‍🎤 👨‍🎨 👩‍🎨
-            👨‍✈️ 👩‍✈️ 👨‍🚀 👩‍🚀 <br />👨‍🚒 👩‍🚒 👮 👮‍♂️ 👮‍♀️ 🕵 🕵️‍♂️ 🕵️‍♀️ 💂 💂‍♂️ 💂‍♀️ 👷 👷‍♂️ 👷‍♀️ 🤴 👸 👳👳‍♂️ 👳‍♀️ 👲 🧕 🧔 👱 <br />👱‍♂️👱‍♀️ 🤵 👰 🤰🤱 👼 🎅 🤶 🧙‍♀️ 🧙‍♂️ 🧚‍♀️ 🧚‍♂️ 🧛‍♀️ 🧛‍♂️ 🧜‍♀️ 🧜‍♂️ 🧝‍♀️ 🧝‍♂️ 🧞‍♀️ 🧞‍♂️🧟‍♀️ <br />🧟‍♂️🙍 🙍‍♂️ 🙍‍♀️ 🙎 🙎‍♂️ 🙎‍♀️ 🙅 🙅‍♂️ 🙅‍♀️ 🙆
-            🙆‍♂️ 🙆‍♀️💁 💁‍♂️💁‍♀️ 🙋 🙋‍♂️ 🙋‍♀️ 🙇 🙇‍♂️<br />🙇‍♀️ 🤦 🤦‍♂️ 🤦‍♀️ 🤷 🤷‍♂️🤷‍♀️ 💆 💆‍♂️ 💆‍♀️💇 💇‍♂️ 💇‍♀️ 🤷🚶 🚶‍♂️ 🚶‍♀️ 🏃🏃‍♂️ 🏃‍♀️ 💃 🕺 👯👯‍♂️ <br />👯‍♀️ 🧖‍♀️ 🧖‍♂️ 🕴 🗣👤 👥 👫👬 👭💏 👨‍❤️‍💋‍👨 👩‍❤️‍💋‍👩 💑 👨‍❤️‍👨 👩‍❤️‍👩 👪 👨‍👩‍👦 👨‍👩‍👧 👨‍👩‍👧‍👦 👨‍👩‍👦‍👦 👨‍👩‍👧‍👧 👨‍👨‍👦 👨‍👨‍👧 👨‍👨‍👧‍👦 👨‍👨‍👦‍👦 <br />👨‍👨‍👧‍👧 👩‍👩‍👦 👩‍👩‍👧
-            👩‍👩‍👧‍👦 👩‍👩‍👦‍👦 👩‍👩‍👧‍👧 👨‍👦 👨‍👦‍👦 👨‍👧 👨‍👧‍👦 👨‍👧‍👧 👩‍👦 👩‍👦‍👦 👩‍👧 👩‍👧‍👦 👩‍👧‍👧 🤳 💪 👈 👉 ☝ 👆 🖕 👇 ✌ 🤞 🖖 🤘 🖐 <br />✋ 👌 👍 👎 ✊ 👊🤛 🤜 🤚 👋 🤟 ✍ 👏 👐 🙌 🤲 🙏 🤝 💅 👂 👃 👣 👀 🧠 👅 👄 💋 👨‍🎤 <br />👩‍🎤 💃 🕺 👯‍♂️ 👯‍♀️
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="2050605">
-          <div class="subSectionTitle">Gender Signs</div>
-          <div class="subSectionDesc">
-            ♀ ♂ ⚢ ⚣ ⚤ ⚥ ☿ ♁ ⚧
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="2050535">
-          <div class="subSectionTitle">Geometric</div>
-          <div class="subSectionDesc">
-            ☐ Ↄ ■ □ ▢ ▣ ▤ ▥ ▦ ▧ ▨ ▩ ▪ ▫ ▬ ▭ ▮ ▯ ▰ ▱ ◆ ◇ ◈ ◉ ◊ ○ ◌ ◍ ◎ ● ◐ ◑ ◒ ◓ ◔ ◕ ◖ ◗ ◘ ◙ ◚ ◛ ◜ ◝ ◞ ◟ ◠ ◡ ▲▼△▽⊿ ◤ ◥ ◣ ◢ ◦ ◧ ◨ ◩ ◪ ◫ ◬ ◭ ◮ ◯ ⍁ ⍂ ⍃ ⍄ ⌷ ⌸ ⌹ ⌺ ⌻ ⌼ ⌿ ⍀ ⍅ ⍆ ⍇ ⍈ ⍉ ⍊ ⍋ ⍌ ⍍ ⍎ ⍏ ⍐ ⍑ ⍒ ⍓ ⍔
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="2534949">
-          <div class="subSectionTitle">Halloween</div>
-          <div class="subSectionDesc">
-            😨 😰 😱 🤡 😈 👿 👹 👺 💀 ☠️👻 👽 👾 🤖 🕵 👸 🧙 ⚱️⚰️⛓️🧙‍♀️🧙‍♂️ 🧚 🧚‍♀️ 🧚‍♂️ <br />
-            🧛 🧛‍♀️ 🧛‍♂️ 🧜 🧜‍♀️ 🧜‍♂️ 🧝 🧝‍♀️ 🧝‍♂️ 🧞 🧞‍♀️ 🧞‍♂️ 🧟 🧟‍♀️ 🧟‍♂️ 🕴 💚🖤 🦄 🦇🦉 🕷️🕸️🥀 <br />
-            🍫 🍬 🍭 🌃 🛸🌕 🌚 ⚡🎃 🔮🎭 🕯️🗡️<br /><br />
-            <br />
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="1356331">
-          <div class="subSectionTitle">Hearts &amp; Love</div>
-          <div class="subSectionDesc">
-            ღ ♥ ♡ ❤ ➳♥ ❥ ❦ ❧ ❣ 💕 💔💘 💓 💔 💖 💗 💌🖤 💜 💙 💚 💛🧡 💞 💟 💝<br /><br />👰 💍 💒 🏩 💑 💏<br /><br /><br /><br />
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="1355831">
-          <div class="subSectionTitle">Letters</div>
-          <div class="subSectionDesc">
-            Ⓐ Ⓑ Ⓒ Ⓓ Ⓔ Ⓕ Ⓖ Ⓗ Ⓘ Ⓙ Ⓚ Ⓛ Ⓜ Ⓝ Ⓞ Ⓟ Ⓠ Ⓡ Ⓢ Ⓣ Ⓤ Ⓥ Ⓦ Ⓧ Ⓨ Ⓩ<br />ⓐ ⓑ ⓒ ⓓ ⓔ ⓕ ⓖ ⓗ ⓘ ⓙ ⓚ ⓛ ⓜ ⓝ ⓞ ⓟ ⓠ ⓡ ⓢ ⓣ ⓤ ⓥ ⓦ ⓧ ⓨ ⓩ<br /><br />₠ ₡ ₢ ₣ ₤ ₥ ₦ ₧ ₨ ₪ ₫ € ₭ ₮ ₯ ℀ ℁ ℂ ℄ ℅ ℆ ℇ ℈ ℉ ℊ ℋ ℌ ℍ ℎ ℏ ℐ ℑ ℒ ℓ ℔ ℕ №
-            ℗ ℘ ℙ ℚ ℛ ℜ ℝ ℞ ℟ ℡ ™ ℣ ℤ ℥ Ω ℧ ℨ ℩ K Å ℬ ℭ ℮ ℯ ℰ ℱ Ⅎ ℳ ℴ ℵ ℶ ℷ ℸ<br /><br />𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫<br />𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ<br /><br />𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟<br />𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅<br /><br />𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏<br />𝒜𝐵𝒞𝒟𝐸𝐹𝒢𝐻𝐼𝒥𝒦𝐿𝑀𝒩𝒪𝒫𝒬𝑅𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵<br /><br />ᵃᵇᶜᵈᵉᶠᵍʰᶤʲᵏˡᵐᶰᵒᵖᵠʳˢᵗᵘᵛʷˣʸᶻ<br /><br />℃
-            ℉ °∃ ∧ ∠ ∨ ∩ ⊂ ⊃ ∪ ⊥ ∀ Ξ Γ ɐ ə ɘ ε β ɟ ɥ ɯ ɔ и ๏ ɹ ʁ я ʌ ʍ λ ч ∞ Σ Π<br /><br />๖ۣۜA ๖ۣۜB ๖ۣۜC ๖ۣۜD ๖ۣۜE ๖ۣۜF ๖ۣۜG ๖ۣۜH ๖ۣۜI ๖ۣۜJ ๖ۣۜK ๖ۣۜL ๖ۣۜM ๖ۣۜN ๖ۣۜO ๖ۣۜP ๖ۣۜQ ๖ۣۜR ๖ۣۜS ๖ۣۜT ๖ۣۜU ๖ۣۜW ๖ۣۜV
-            ๖ۣۜX ๖ۣۜY ๖ۣۜZ <br /><br />æ Æ ø Ø å Å ö Ö ä Ä ë Ê ï Î é É ß <br /><br />α в ¢ ∂ є f g н ι נ к ℓ м и σ ρ q я ѕ т υ ω ν χ у <br /><br />💤 | ᶠᵘᶜᵏᵧₒᵤ | Yᵒᵘ Oᶰˡʸ Lᶤᵛᵉ Oᶰᶜᵉ | ℓ٥ﻻ ﻉ√٥υ | ᶫᵒᵛᵉᵧₒᵤ<br /><br />🆕
-            🆒 🆙 🆖 🆓 🔤 🔠 🔡 <br /><br />
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="1355839">
-          <div class="subSectionTitle">Lines, Bars &amp; Dashes</div>
-          <div class="subSectionDesc">
-            ▂▃▅▆█▆▅▃▂ <br /><br />ılı.lıllılı.ıllı..ılı.lıllılı.ıllı <br /><br />║▌│█║▌│ █║▌│█│║▌║ <br /><br />▂ ▃ ▄ ▅ ▆ ▇ █ █ ▇ ▆ ▅ ▄ ▃ ▂<br /><br />· ¨ … ¦ ┅ ┆ ┈ ┊ ╱ ╲ ╳ ¯ – —<br /><br />≡ ჻ ░ ▒ ▓ ▤ ▥ ▦ ▧
-            ▨ ▩ █ ▌ ▐ ▀ ▄<br /><br />◠ ◡ ╭ ╮ ╯ ╰<br /><br />│ ┤ ╡ ╢ ╖ ╕ ╣ ║ ╝ ╜ ╛ ┐ └ ┴ ┬ ├ ─ ┼ ╞ ╟ ╚ ╔ ╩ ╦ ╠ ═ ╬ ╧ ╨ ╤ ╥ ╙ ╘ ╒ ╓ ╫ ╪ ┘ ┌<br /><br />
-            ⊢ ⊣ ⊤ ⊥ ⊦ ⊧ ⊨ ⊩ ⊪ ⊫ ⊬ ⊭ ⊮ ⊯<br /><br />☰ ☱ ☲ ☳ ☴ ☵ ☶ ☷
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="2050595">
-          <div class="subSectionTitle">Marks, Signs &amp; Symbols</div>
-          <div class="subSectionDesc">
-            ☢️☣️ 🆗 🏧 🚮 🚰 ♿ 🚹 🚺 🚻 🚼 🚾 ▶️ ⏩ ◀️⏪ 🔼 ⏫ 🔽 ⏬ ⏹️ ⏏️ 🎦 🔅 🔆 📶 📳 📴 ♻️ #️⃣ 0️⃣ 1️⃣2️⃣ 3️⃣ 4️⃣ 5️⃣6️⃣ 7️⃣ 8️⃣ 9️⃣ 🔟 💯 🔠 🔡 🔢 🔣 🔤 🅰 🆎 🅱 🆑🆒 🆓🆕 🆖 🅾 🆗 🅿 🆘 🆙 🆚 🈁 🈂️ 🈷️ 🈶 🈯 🉐 🈹
-            🈚 🈲 🉑 🈸 🈴 🈳 ㊗️ ㊙️ 🈺🈵 ◽ ◾ ⬛ ⬜ 🔶 🔷 🔸 🔹 🔺 🔻 💠 🔲 🔳 ⚪ ⚫ 🔴 🔵 <br /><br />🛐⚛️🕉️✡️☸️☯️✝️☦️☪️☮️🕎 🔯 ♈ ♉ ♊ ♋ ♌ ♍ ♎ ♏ ♐ ♑ ♒ ♓ ⛎ <br /><br />⚠️🚸 ⛔ 🚫 🚳 🚭 🚯 🚱
-            🚷🔞 <br /><br />⬆️➡️↗️➡️↘️⬇️↙️⬅️↖️↩️↪️⤴️⤵️🔃🔄🔙🔚🔛 🔜 🔝 <br /><br />🔱📛 🔰⭕ ✅ ☑️✔️✖️❌❎➕➖➗➰➿〽️✳️✴️❇️❓❔❕ ❗ Ⓜ️<br />
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="1355841">
-          <div class="subSectionTitle">Miscellaneous Characters &amp; Symbols</div>
-          <div class="subSectionDesc">
-            유 웃 ۵ ∴ △ ∞ ｡ ™ ℠ © ℗ ® ™ ® ™ ✿ ❖ ∞ ზ ⧞ ⧝ ◎ ♣ ♥ ♦ ➸ ☫ ☬ ☭ ☮ ☯ ◎ ♣ ♥ ☼ ☾ ☽ ♦ ✚ ✪ ✣ ✤ ✥ ☠ 유 ℧ ℥ ۵ ≛ ∫ ∬ ∭ ∮ ∯ ∰ ∱∳ 〄 ∩ ∪ ⊗ ⊘ ≅ ≠ Ω ♨ ❢ ❣ ✐ ✎ ✏ ✆ ރ ▧ ▨ ▦ ▩ ۩ ஜ ஜ ๑۩۞۩๑ ஜ ஒ ண இஆ ௰ ௫&amp;➸ ๏̯͡๏
-            【ツ】 ะ㋚ะ ๑㋡๑ ʚ㋞ɞ <br /><br />∎ − ∓ ∔ ∕ ∖ ∗ ∘ ∙ ∝ ∞ ∟ ∠ ∡ ∢ ∣ ∤ ∥ ∦ ∧ ∨ ∩ ∪ ∴ ∵ ∶ ∷ ∸ ∹ ∺ ∻ ∼ ∽ ∾ ∿ ≀ ≁ ≪ ≫ ≬ ≭ ≮ ≯ ≰ ≱ ≲ ≳ ≴ ≵ ≶ ≷ ≸ ≹ ≺ ≻ ≼ ≽ ≾ ≿ ⊀ ⊁ ⊂ ⊃ ⊄ ⊅ ⊆ ⊇ ⊈ ⊉ ⊊ ⊋ ⊌ ⊍ ⊎ ⊏ ⊐ ⊑ ⊒ ⊓ ⊔
-            ⊕ ⊖ ⊗ ⊘ ⊙ ⊚ ⊛ ⊜ ⊝ ⊞ ⊟ ⊠ ⊡ ⊰ ⊱ ⊲ ⊳ ⊴ ⊵ ⊶ ⊷ ⊸ ⊹ ⊺ ⊻ ⊼ ⊽ ⊾ ⊿ ⋀ ⋁ ⋂ ⋃ ⋄ ⋅ ⋇ ⋈ ⋉ ⋊ ⋋ ⋌ ⋍ ⋎ ⋏ ⋐ ⋑ ⋒ ⋓ ⋔ ⋕ ⊾ ⋖ ⋗ ∀ ∃ ∄ ∅ ∈ ∉ ∏ ∑ ∓ ∝ ∟ ∠ ∡ ∢ ≃ ⋖ ⋗ ⋘ ⋙ ⋚ ⋛ ≦ ≧ ⋜ ⋝ ⋞ ⋟ ⋠ ⋡ ⋢ ⋣ ⋤ ⋥ ⋦ ⋧ ⋨ ⋩ ⋪ ⋫ ⋬ ⋭ ⋮ ⋯ ⋰
-            ⋱ ⋲ ⋳ ⋴ ⋵ ⋶ ⋷ ⋸ ⋹ ⋺ ⋻ ⋼ ⋽ ⋾ ⋿ ⌀ ⌁ ⌂ ⌃ ⌄ ⌅ ⌆ ⌇ ⌈ ⌉ ⌊ ⌋ ⌌ ⌍ ⌎ ⌏ ⌐ ⌑ ⌒ ⌓ ⌔ ⌕ ⌖ ⌗ ⌘ ⌙ ⌜⌝ ⌞ ⌟ ⌠ ⌡ ⌢ ⌣ ⌤ ⌥ ⌨ ⟨ ⟩ ⌫ ⌬ ⌭ ⌮ ⌯ ⌰ ⌱ ⌲ ⌳ ⌴ ⌵ ⌶ ⌽ ⌾ ⍕ ⍖ ⍗ ⍘ ⍙ ⍚ ␋ ␢ ␣<br /><br />
-            ☤ ⚛ ☊ ☋ ☌ ☍ ☓ ☖ ☗ ☘ ☙ ☟ ☠ ☡ ☢ ☣ ☤ ☥ ☦ ☧ ☨ ☩ ☪ ☫ ☬ ☭ ☸ ☼ ♃ ♄ ♅ ♇ ♨ ♰ ♱ ☫ ª ↀ ↁ ↂ ϡ ☤ ☥ ☦ ☧ ☨ ☩ ☪ ☫ ☬ ☭ ⁉ ⁈ ؟ ﹖ ¿ Ƹ̵̡Ӝ̵̨̄Ʒ [̲̅$̲̅(̲̅ιοο̲̅)̲̅$̲̅] 🏳 ๖ۣۜ ‡ ☮ ☪ ⚔ ✡ ☭ ✯ <br /><br />
-            🎀 🎄 🎅 🎆 🎈 🎊 ⚔ 🎃 👻 🎁 🎉🔥💣👑🔥 🎆 🎭🔫 🏁 🚩🎌 🏴 🏳️‍🌈 🏴‍☠️ 💺🌠 ⛱️🏖️🎆 🎇 🎑 💴 💵💶 💷 🗿 🗾 🏔️🌋 🗻 🏕️🏜️🏝️🏞️🏟️🏛️🏗️🏘️🏚️🏠 🏡 🏢 🏣 🏤 🏥 🏦 🏨 🏩 🏪 🏫 🏬 🏭 🏯 🏰 💒 🗼 🗽 ⛪ 🕌 🕍 ⛩ 🕋
-            ⛲ ⛺ 🌁 🌃 🏙️🌄 🌅 🌆 🌇 🌉 🌌🎠 🎡 🎢🎥 🎬 💣 👑 🔥 🎭 🔫 ⌚ ⌛☕ 🗯️💭💢♨️💤🌀<br /><br /><br /><br />
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="2050555">
-          <div class="subSectionTitle">Music</div>
-          <div class="subSectionDesc">
-            ♩ ♫ ♭ ♪ ♯ ♬ ♮ 🔇🔈 🔉 🔊 📢📣 📯 🔔 🔕 🎵 🎶 🎧🎼🎷 🎸 🎹 🎺 🎻 🥁
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="1355832">
-          <div class="subSectionTitle">Numbers</div>
-          <div class="subSectionDesc">
-            ⓵ ⓶ ⓷ ⓸ ⓹ ⓺ ⓻ ⓼ ⓽ ⓾ ⓫ ⓬ ⓭ ⓮ ⓯ ⓰ ⓱ ⓲ ⓳ ⓴<br /><br />① ② ③ ④ ⑤ ⑥ ⑦ ⑧ ⑨ ⑩ ⑪ ⑫ ⑬ ⑭ ⑮ ⑯ ⑰ ⑱ ⑲ ⑳<br /><br />
-            ⒉ ⒊ ⒋ ⒌ ⒍ ⒎ ⒏ ⒐ ⒑ ⒒ ⒓ ⒔ ⒕ ⒖ ⒗ ⒘ ⒙ ⒚ ⒛ <br /><br />𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫 <br /><br />𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡𝟘<br /><br />√ ∛ ∜ <br /><br />⅟ ½ ⅓ ⅕<br />⅙ ⅛ ⅔ ⅖<br />⅚ ⅜ ¾ ⅗<br />⅝ ⅞ ⅘<br />
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="2436771">
-          <div class="subSectionTitle">Plants</div>
-          <div class="subSectionDesc">
-            💐 🌸 💮 🌹 🥀 🌺 🌻 🌼 🌷 🌱🌲 🌳 🌴 🌵🌾 🌿 ☘🍀 🍁 🍂🍃 🍄 🌰
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="1356327">
-          <div class="subSectionTitle">Stars &amp; Circular Shapes</div>
-          <div class="subSectionDesc">
-            ✸✤ ✥✦✧ ◈ ★ ☆ ✩ ✫ ✬ ✭ ✮ ✯ ✰ 【★】 ✱ ✲ ✳ ❃ ❂ ❁ ❀ ✿ ✾ ✽ ✼ ✻ ✺ ✹ ✸ ✷ ❃ ❂ ❁ ❀ ✿ ✾ ✽ ✼ ✻ ✺ ✹ ✸ ✷ ✶ ✵ ✴ ❄ ❅ ❆ ❇ ❈ ❉ ❊ ❋ ✪ ⋆ 💫 🌠 ✨🌟
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="1356354">
-          <div class="subSectionTitle">Sports</div>
-          <div class="subSectionDesc">
-            🏆 🏁 ♕ ♛ ♔ ♚ 🏂 🏄 🏊 🎯 ⚽ ⚾ 🎾 🏀⚽ 🏈🏉 🎳 ⛳ 🎱 🎲 🎮 👾 ♖ ♗ ♘ ♙ ♜ ♝ ♞ ♟ 🃏 ♤ ♧ ♡ ♢ ♠ ♣ ♥ ♦🏅 🥇 🥈 🥉 🏒⛸ 🎿 🛷 🥌 🏹🧗‍♀️ 🧗‍♂️ 🧘‍♀️ 🧘‍♂️ 🕴 🏇 ⛷ 🏂 🏌 🏌️‍♂️ 🏌️‍♀️ 🏄 🏄‍♂️ 🏄‍♀️ 🚣 🚣‍♂️ 🚣‍♀️ 🏊 🏊‍♂️ 🏊‍♀️ ⛹ ⛹️‍♂️ ⛹️‍♀️ 🏋
-            🏋️‍♂️ 🏋️‍♀️ 🚴 🚴‍♂️🚴‍♀️ 🚵 🚵‍♂️ 🚵‍♀️ 🤸 🤸‍♂️ 🤸‍♀️ 🤼 🤼‍♂️ 🤼‍♀️ 🤽 🤽‍♂️ 🤽‍♀️ 🤾 🤾‍♂️ 🤾‍♀️ 🤹 🤹‍♂️ 🤹‍♀️ 🎪🎫 🎾<br />🎳 🏏 🏑 🏒 🏓 🏸 🥊 🥋 ⛳🎣 🎽 🛷 🥌 🎯 🎱 🎮 🎰 🎲
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="2436791">
-          <div class="subSectionTitle">Transportation</div>
-          <div class="subSectionDesc">
-            🏎️🏍️🚂 🚃 🚄 🚅 🚆🚇 🚈 🚊 🚝 🚞 🚋 🚌 🚍🚎 🚐 🚑 🚒 🚓 🚔 🚕 🚖 🚗 🚘 🚚 🚛 <br />🚜🚲 🛴 🛵 🛥️⛵ 🚤 🚢 ✈️🛩️🛫 🛬 🚁 🚟 🚠 🚡 🚀 🛸 ⚓🚧🚦🚥🚨🚏 ⛽ 🛤️
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="2050539">
-          <div class="subSectionTitle">Weather &amp; Space</div>
-          <div class="subSectionDesc">
-            🌪️🌠🌈 🌂 ⚡ ❄🔥💧 🌊 🚀🌍 🌎 🌏🌐☔☂️🌡️🌬️⛄🌁🌂🏂🌨️☁️🌩️⛅🌫️⛆
-
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="subSection detailBox" id="1356348">
-          <div class="subSectionTitle">Work &amp; Office</div>
-          <div class="subSectionDesc">
-            📅 📆 🔧 🔨 🔩 🚪 🔑 🔐 🔏 🔒 🔓 🎬 🎥 📹 📼 📷 📡 📺 🔌 🔋 💡 🔦 ☎ ☏ 📞📟 ✂ ✃ ✄ 📌 📎 🔗 ✏ ✒ 🔎 🔍 📏 📐 🎨 💻 📠 📇 💾 💽 📀 💿 📊 📈 📉 📇 📠 💻 ✉ 📧 📨 📩 📮 📪 📫 📥 📤 📲 📱 📁 📂 📰 📄 📃
-            📑 📜 📋 📝 📦 🎫 🔖 📖 📔 📒 📓 📕 📙 📗 📘 📚 💄 👓 👑 🎩 👒 🎓 👛 👜 👝 🎒 💼 🎽 👗 👔 👕 👚 👘 👙 👖 👠 👢 👞 👡 👟 🕛🕧🕐 🕜 🕑🕝 🕒 🕞 🕓🕟 🕔 🕠🕕 🕡 🕖🕢 🕗🕣 🕘 🕤 🕙 🕥 🕚 🕦 📫 📪📬
-            📭
-
-          </div>
-        </div>
-      </div>
-        `;
-
-        const symbolsDialogContainer =
-          document.getElementById("responsive_page_template_content") ||
-          document.getElementById("mainContents");
-        if (symbolsDialogContainer) {
-          symbolsDialogContainer.appendChild(symbolsDialogDetails);
-        }
-        function setSymbolsCharactersModal() {
-          const showButton = document.getElementById("showSymbols");
-
-          if (showButton) {
-            showButton.addEventListener("click", () => {
-              symbolsModal.classList.add("show");
-              symbolsModal.classList.remove("hide");
-            });
-          }
-
-          const symbolsModal = document.getElementById("symbolsModal");
-          const closeButton = document.getElementById("close");
-          if (closeButton) {
-            // FIX: Add null check for closeButton
-            closeButton.addEventListener("click", () => {
-              symbolsModal.classList.add("hide");
-              symbolsModal.classList.remove("show");
-            });
-          }
-        }
-        // Reload page after 3 seconds
-        setTimeout(setSymbolsCharactersModal, 1000);  
-  })();
-
-  //* ========================================================================== //
-  //* 3. Steam Profile Artwork Tool Buttons
-  //* =======================================================================
-
-  (function () {
-    "use strict";
-    // Check if
-    checkElement(".createCollectionArrow").then((element) => {
-      console.log(".createCollectionArrow exists");
-      function setMainContents() {
-        // Create Steam Profile Artwork Tool Buttons Container
-        const steamProfileArtworkContainer = document.createElement("div");
-        steamProfileArtworkContainer.className = "steamProfileArtworkContainer";
-        // Create Buttons
-        steamProfileArtworkContainer.innerHTML = `
+(function () {
+  "use strict";
+  // Check if
+  checkElement(".createCollectionArrow").then((element) => {
+    console.log(".createCollectionArrow exists");
+    function setMainContents() {
+      // Create Steam Profile Artwork Tool Buttons Container
+      const steamProfileArtworkContainer = document.createElement("div");
+      steamProfileArtworkContainer.className = "steamProfileArtworkContainer";
+      // Create Buttons
+      steamProfileArtworkContainer.innerHTML = `
   <div class="pageTitle">Steam Profile Artwork Tool</div>
   <div class="buttonsContainer">
     <a id="blankTitleButton" class="btn_darkblue_white_innerfade btn_medium" style="margin: 2px">
@@ -1636,67 +1025,69 @@ class ThemeManager {
     <span style="padding-left: 16px; padding-right: 14px;background:#171a21">Reset</span>
     </a>
   </div>`;
-        // Grab mainContentsDiv element reference
-        const mainContentsDiv = document.querySelector("#mainContents");
-        // Insert the Buttons
-        mainContentsDiv.parentNode.insertBefore(
-          steamProfileArtworkContainer,
-          mainContentsDiv,
+      // Grab mainContentsDiv element reference
+      const mainContentsDiv = document.querySelector("#mainContents");
+      // Insert the Buttons
+      mainContentsDiv.parentNode.insertBefore(
+        steamProfileArtworkContainer,
+        mainContentsDiv,
+      );
+    }
+    setTimeout(setMainContents, 0);
+  });
+})();
+
+(function () {
+  "use strict";
+  // Check if
+  checkElement(".apphub_HomeHeader").then((element) => {
+    console.log("apphub_HomeHeader exists");
+    function setBlankTitleButton() {
+      // ----------------------------
+      // Fill Blank Title Button
+      // ----------------------------
+      const blankTitleCharacter = "⠀";
+      const alertBlankTitleSet = document.createElement("div");
+      alertBlankTitleSet.className = "alertBlankTitleSet";
+      alertBlankTitleSet.innerHTML = `<span><i>✔</i> Blank Title Set</span>`;
+      const titleFieldInput = document.querySelector(".titleField");
+      const blankTitleButton = document.querySelector("#blankTitleButton");
+      const titleFieldParent = titleFieldInput.parentNode;
+      blankTitleButton.addEventListener("click", () => {
+        console.log("#blankTitleButton clicked");
+        blankTitleButton.classList.add("blank-title-added");
+        titleFieldInput.value = blankTitleCharacter;
+        titleFieldInput.classList.add("fieldInputSuccess");
+        alertBlankTitleSet.classList.add("fadeIn");
+        titleFieldParent.insertBefore(
+          alertBlankTitleSet,
+          titleFieldInput.nextSibling,
         );
-      }
-      setTimeout(setMainContents, 0);
-    });
-  })();
+      });
+    }
+    setTimeout(setBlankTitleButton, 0);
+  });
+})();
 
-  (function () {
-    "use strict";
-    // Check if
-    checkElement(".apphub_HomeHeader").then((element) => {
-      console.log("apphub_HomeHeader exists");
-      function setBlankTitleButton() {
-        // ----------------------------
-        // Fill Blank Title Button
-        // ----------------------------
-        const blankTitleCharacter = "⠀";
-        const alertBlankTitleSet = document.createElement("div");
-        alertBlankTitleSet.className = "alertBlankTitleSet";
-        alertBlankTitleSet.innerHTML = `<span><i>✔</i> Blank Title Set</span>`;
-        const titleFieldInput = document.querySelector(".titleField");
-        const blankTitleButton = document.querySelector("#blankTitleButton");
-        const titleFieldParent = titleFieldInput.parentNode;
-        blankTitleButton.addEventListener("click", () => {
-          console.log("#blankTitleButton clicked");
-          blankTitleButton.classList.add("blank-title-added");
-          titleFieldInput.value = blankTitleCharacter;
-          titleFieldInput.classList.add("fieldInputSuccess");
-          alertBlankTitleSet.classList.add("fadeIn");
-          titleFieldParent.insertBefore(alertBlankTitleSet, titleFieldInput.nextSibling);
-        });
-      }
-      setTimeout(setBlankTitleButton, 0);
-    });
-  })();
-
-  // Custom artwork enabled notification
-  const alertCustomArtworkEnabled = document.createElement("div");
-  alertCustomArtworkEnabled.className = "alertCustomArtworkEnabled";
-  alertCustomArtworkEnabled.innerHTML = `<span><i>✔</i> Upload Custom Artwork Enabled</span>`;
-  // Long workshop enabled notification
-  const alertLongWorkshopEnabled = document.createElement("div");
-  alertLongWorkshopEnabled.className =
-    "alertCustomArtworkEnabled longWorkshopEnabled";
-  alertCustomArtworkEnabled.classList.add("longWorkshopEnabled");
-  alertLongWorkshopEnabled.innerHTML = `<span><i>✔</i> Upload Long Workshop Enabled</span>`;
-  // Long guide enabled notification
-  const alertLongGuideEnabled = document.createElement("div");
-  alertLongGuideEnabled.className =
-    "alertCustomArtworkEnabled longGuideEnabled";
-  alertCustomArtworkEnabled.classList.add("longGuideEnabled");
-  alertLongGuideEnabled.innerHTML = `<span><i>✔</i> Upload Long Guide Enabled</span>`;
-  // Long guide enabled notification
-  const hexEditWebsite = document.createElement("div");
-  hexEditWebsite.className = "modifyArtworkInstructions";
-  hexEditWebsite.innerHTML = `<blockquote class="bb_blockquote">This method allows you to upload long workshop images without faking the heights.
+// Custom artwork enabled notification
+const alertCustomArtworkEnabled = document.createElement("div");
+alertCustomArtworkEnabled.className = "alertCustomArtworkEnabled";
+alertCustomArtworkEnabled.innerHTML = `<span><i>✔</i> Upload Custom Artwork Enabled</span>`;
+// Long workshop enabled notification
+const alertLongWorkshopEnabled = document.createElement("div");
+alertLongWorkshopEnabled.className =
+  "alertCustomArtworkEnabled longWorkshopEnabled";
+alertCustomArtworkEnabled.classList.add("longWorkshopEnabled");
+alertLongWorkshopEnabled.innerHTML = `<span><i>✔</i> Upload Long Workshop Enabled</span>`;
+// Long guide enabled notification
+const alertLongGuideEnabled = document.createElement("div");
+alertLongGuideEnabled.className = "alertCustomArtworkEnabled longGuideEnabled";
+alertCustomArtworkEnabled.classList.add("longGuideEnabled");
+alertLongGuideEnabled.innerHTML = `<span><i>✔</i> Upload Long Guide Enabled</span>`;
+// Long guide enabled notification
+const hexEditWebsite = document.createElement("div");
+hexEditWebsite.className = "modifyArtworkInstructions";
+hexEditWebsite.innerHTML = `<blockquote class="bb_blockquote">This method allows you to upload long workshop images without faking the heights.
   <br />This method works with all supported file types independently of size and frame count. <br />You are expected
   to apply the instructions below for all workshop images separately. <div class="description">
       <ol>
@@ -1718,148 +1109,143 @@ class ThemeManager {
 </blockquote>
 </div>`;
 
-  (function () {
-    "use strict";
-    // Check if
-    checkElement("#file").then((element) => {
-      console.log("#file exists");
-      function setFileUpload() {
-        // Buttons selectors
-        const fileUploadButton = document.querySelector("#file");
-        const customArtworkButton = document.querySelector(
-          "#customArtworkButton",
-        );
-        const longScreenshotButton = document.querySelector(
-          "#longScreenshotButton",
-        );
-        const longWorkshopButton = document.querySelector(
-          "#longWorkshopButton",
-        );
-        const longGuideButton = document.querySelector("#longGuideButton");
-        const resetButton = document.querySelector("#resetButton");
-        const selectArtworkTitle = document.querySelector(
-          ".detailBox:nth-of-type(2) .title",
-        );
-        const fileUploadParent = fileUploadButton.parentNode;
-        let details = [...document.querySelectorAll("details")];
-
-        // Scroll functions
-        function scrollToChooseFileButton() {
-          document
-            .querySelectorAll(".detailBox")[1]
-            .scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-        function customArtworkUploadEnable() {
-          console.log("Custom Artwork Upload Enabled");
-          ($J("#image_width").val(1000).attr("id", ""),
-            $J("#image_height").val(1).attr("id", ""));
-          setTimeout(scrollToChooseFileButton, 0);
-        }
-        function customWorkshopUploadEnable() {
-          console.log("Workshop Upload Enabled");
-          $J("[name=consumer_app_id]").val(480);
-          $J("[name=file_type]").val(0);
-          $J("[name=visibility]").val(0);
-          setTimeout(scrollToChooseFileButton, 0);
-        }
-        function longGuideUploadEnable() {
-          console.log("Long guide Upload Enabled");
-          $J("[name=consumer_app_id]").val(767);
-          $J("[name=file_type]").val(9);
-          $J("[name=visibility]").val(0);
-          setTimeout(scrollToChooseFileButton, 0);
-        }
-        function longScreenshotUploadEnable() {
-          console.log("Long screenshot Upload Enabled");
-          $J("#image_width").val("1000");
-          $J("#image_height").val("1");
-          $J('[name="file_type"]').val("5");
-          setTimeout(scrollToChooseFileButton, 0);
-        }
-        function resetUploads() {
-          console.log("Resetting uploads");
-          location.reload();
-        }
-        const agreeTermsInput = document.querySelector("#agree_terms");
-        // Buttons event listeners
-        customArtworkButton.addEventListener("click", () => {
-          customArtworkUploadEnable();
-          agreeTermsInput.checked = true;
-          fileUploadParent.insertBefore(
-            alertCustomArtworkEnabled,
-            fileUploadButton.nextSibling,
-          );
-          details[0].removeAttribute("open");
-        });
-        longScreenshotButton.addEventListener("click", () => {
-          longScreenshotUploadEnable();
-          agreeTermsInput.checked = true;
-          fileUploadParent.insertBefore(
-            alertCustomArtworkEnabled,
-            fileUploadButton.nextSibling,
-          );
-          details[0].removeAttribute("open");
-        });
-        longWorkshopButton.addEventListener("click", () => {
-          customWorkshopUploadEnable();
-          agreeTermsInput.checked = true;
-          selectArtworkTitle.textContent = "Modify your artwork";
-          fileUploadParent.insertBefore(
-            alertLongWorkshopEnabled,
-            fileUploadButton,
-          );
-          fileUploadParent.insertBefore(hexEditWebsite, fileUploadButton);
-          details[0].removeAttribute("open");
-        });
-        longGuideButton.addEventListener("click", () => {
-          longGuideUploadEnable();
-          agreeTermsInput.checked = true;
-          selectArtworkTitle.textContent = "Modify your artwork";
-          fileUploadParent.insertBefore(
-            alertLongGuideEnabled,
-            fileUploadButton,
-          );
-          fileUploadParent.insertBefore(hexEditWebsite, fileUploadButton);
-          details[0].removeAttribute("open");
-        });
-        resetButton.addEventListener("click", () => {
-          resetUploads();
-        });
-        // Details open close functionality
-        document.addEventListener("click", function (e) {
-          if (!details.some((f) => f.contains(e.target))) {
-            details.forEach((f) => f.removeAttribute("open"));
-          } else {
-            details.forEach((f) =>
-              !f.contains(e.target) ? f.removeAttribute("open") : "",
-            );
-          }
-        });
-      }
-      setTimeout(setFileUpload, 0);
-    });
-  })();
-
-  //* ==========================================================================
-  //* 4. Steam Mass Comments Poster Vanilla
-  //* ==========================================================================
-
-  (function () {
-    "use strict";
-    // Check if
-    checkElement("#manage_friends").then((element) => {
-      console.log("#manage_friends exists");
-
-      const postingDelay = 7; // Seconds in between posting profile comments
-      const manageFriendsSelector = document.querySelector(
-        "#manage_friends > .row",
+(function () {
+  "use strict";
+  // Check if
+  checkElement("#file").then((element) => {
+    console.log("#file exists");
+    function setFileUpload() {
+      // Buttons selectors
+      const fileUploadButton = document.querySelector("#file");
+      const customArtworkButton = document.querySelector(
+        "#customArtworkButton",
       );
-      const manageFriendsSelectorParent =
-        document.querySelector("#manage_friends");
+      const longScreenshotButton = document.querySelector(
+        "#longScreenshotButton",
+      );
+      const longWorkshopButton = document.querySelector("#longWorkshopButton");
+      const longGuideButton = document.querySelector("#longGuideButton");
+      const resetButton = document.querySelector("#resetButton");
+      const selectArtworkTitle = document.querySelector(
+        ".detailBox:nth-of-type(2) .title",
+      );
+      const fileUploadParent = fileUploadButton.parentNode;
+      let details = [...document.querySelectorAll("details")];
 
-      const manageFriendsComments = document.createElement("div");
-      manageFriendsComments.className = "friends-comments-textarea";
-      manageFriendsComments.innerHTML = `<div class="row commentthread_entry" style="background-color: initial; padding-right: 24px;">
+      // Scroll functions
+      function scrollToChooseFileButton() {
+        document
+          .querySelectorAll(".detailBox")[1]
+          .scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      function customArtworkUploadEnable() {
+        console.log("Custom Artwork Upload Enabled");
+        ($J("#image_width").val(1000).attr("id", ""),
+          $J("#image_height").val(1).attr("id", ""));
+        setTimeout(scrollToChooseFileButton, 0);
+      }
+      function customWorkshopUploadEnable() {
+        console.log("Workshop Upload Enabled");
+        $J("[name=consumer_app_id]").val(480);
+        $J("[name=file_type]").val(0);
+        $J("[name=visibility]").val(0);
+        setTimeout(scrollToChooseFileButton, 0);
+      }
+      function longGuideUploadEnable() {
+        console.log("Long guide Upload Enabled");
+        $J("[name=consumer_app_id]").val(767);
+        $J("[name=file_type]").val(9);
+        $J("[name=visibility]").val(0);
+        setTimeout(scrollToChooseFileButton, 0);
+      }
+      function longScreenshotUploadEnable() {
+        console.log("Long screenshot Upload Enabled");
+        $J("#image_width").val("1000");
+        $J("#image_height").val("1");
+        $J('[name="file_type"]').val("5");
+        setTimeout(scrollToChooseFileButton, 0);
+      }
+      function resetUploads() {
+        console.log("Resetting uploads");
+        location.reload();
+      }
+      const agreeTermsInput = document.querySelector("#agree_terms");
+      // Buttons event listeners
+      customArtworkButton.addEventListener("click", () => {
+        customArtworkUploadEnable();
+        agreeTermsInput.checked = true;
+        fileUploadParent.insertBefore(
+          alertCustomArtworkEnabled,
+          fileUploadButton.nextSibling,
+        );
+        details[0].removeAttribute("open");
+      });
+      longScreenshotButton.addEventListener("click", () => {
+        longScreenshotUploadEnable();
+        agreeTermsInput.checked = true;
+        fileUploadParent.insertBefore(
+          alertCustomArtworkEnabled,
+          fileUploadButton.nextSibling,
+        );
+        details[0].removeAttribute("open");
+      });
+      longWorkshopButton.addEventListener("click", () => {
+        customWorkshopUploadEnable();
+        agreeTermsInput.checked = true;
+        selectArtworkTitle.textContent = "Modify your artwork";
+        fileUploadParent.insertBefore(
+          alertLongWorkshopEnabled,
+          fileUploadButton,
+        );
+        fileUploadParent.insertBefore(hexEditWebsite, fileUploadButton);
+        details[0].removeAttribute("open");
+      });
+      longGuideButton.addEventListener("click", () => {
+        longGuideUploadEnable();
+        agreeTermsInput.checked = true;
+        selectArtworkTitle.textContent = "Modify your artwork";
+        fileUploadParent.insertBefore(alertLongGuideEnabled, fileUploadButton);
+        fileUploadParent.insertBefore(hexEditWebsite, fileUploadButton);
+        details[0].removeAttribute("open");
+      });
+      resetButton.addEventListener("click", () => {
+        resetUploads();
+      });
+      // Details open close functionality
+      document.addEventListener("click", function (e) {
+        if (!details.some((f) => f.contains(e.target))) {
+          details.forEach((f) => f.removeAttribute("open"));
+        } else {
+          details.forEach((f) =>
+            !f.contains(e.target) ? f.removeAttribute("open") : "",
+          );
+        }
+      });
+    }
+    setTimeout(setFileUpload, 0);
+  });
+})();
+
+//* ==========================================================================
+//* 4. Steam Mass Comments Poster Vanilla
+//* ==========================================================================
+
+(function () {
+  "use strict";
+  // Check if
+  checkElement("#manage_friends").then((element) => {
+    console.log("#manage_friends exists");
+
+    const postingDelay = 7; // Seconds in between posting profile comments
+    const manageFriendsSelector = document.querySelector(
+      "#manage_friends > .row",
+    );
+    const manageFriendsSelectorParent =
+      document.querySelector("#manage_friends");
+
+    const manageFriendsComments = document.createElement("div");
+    manageFriendsComments.className = "friends-comments-textarea";
+    manageFriendsComments.innerHTML = `<div class="row commentthread_entry" style="background-color: initial; padding-right: 24px;">
     <div class="commentthread_entry_quotebox">
         <textarea rows="3" class="commentthread_textarea" id="comment_textarea" placeholder="Add a comment" style="overflow: hidden; height: 20px;"></textarea>
     </div>
@@ -1881,460 +1267,394 @@ class ThemeManager {
     <span id="log_body"></span>
   </div>`;
 
-      // ToggleManageFriends();
+    // ToggleManageFriends();
 
-      manageFriendsSelectorParent.parentNode.appendChild(
-        manageFriendsComments,
-        manageFriendsSelectorParent,
-      );
+    manageFriendsSelectorParent.parentNode.appendChild(
+      manageFriendsComments,
+      manageFriendsSelectorParent,
+    );
 
-      manageFriendsSelectorParent.insertBefore(
-        manageFriendsComments,
-        manageFriendsSelector,
-      );
+    manageFriendsSelectorParent.insertBefore(
+      manageFriendsComments,
+      manageFriendsSelector,
+    );
 
-      const commentSubmitButton = document.querySelector("#comment_submit");
-      const commentTextarea = document.querySelector("#comment_textarea");
-      const commentLogHead = document.querySelector("#log_head");
-      const commentLogBody = document.querySelector("#log_body");
+    const commentSubmitButton = document.querySelector("#comment_submit");
+    const commentTextarea = document.querySelector("#comment_textarea");
+    const commentLogHead = document.querySelector("#log_head");
+    const commentLogBody = document.querySelector("#log_body");
 
-      commentSubmitButton.addEventListener("click", (e) => {
-        // e.preventDefault();
-        const selectedCheckbox = document.querySelector(".selected");
-        const totalSelected = selectedCheckbox?.length;
-        const commentMessage = commentTextarea.value;
-        if (totalSelected === 0 || commentMessage.length === 0) {
-          alert(
-            "Please make sure you entered a message and selected 1 or more friends.",
-          );
-          return;
-        }
+    commentSubmitButton.addEventListener("click", (e) => {
+      // e.preventDefault();
+      const selectedCheckbox = document.querySelector(".selected");
+      const totalSelected = selectedCheckbox?.length;
+      const commentMessage = commentTextarea.value;
+      if (totalSelected === 0 || commentMessage.length === 0) {
+        alert(
+          "Please make sure you entered a message and selected 1 or more friends.",
+        );
+        return;
+      }
 
-        commentLogHead.innerHTML = "";
-        commentLogBody.innerHTML = "";
+      commentLogHead.innerHTML = "";
+      commentLogBody.innerHTML = "";
 
-        document.querySelectorAll(".selected").forEach((elem, i) => {
-          let profileID = elem.dataset.steamid;
-          setTimeout(
-            () => {
-              let xhr = new XMLHttpRequest();
-              xhr.open(
-                "POST",
-                `//steamcommunity.com/comment/Profile/post/${profileID}/-1/`,
-                true,
-              );
-              xhr.setRequestHeader(
-                "Content-Type",
-                "application/x-www-form-urlencoded; charset=UTF-8",
-              );
-              xhr.onloadend = (response) => {
-                // let logBody = document.querySelector('#log_body')[0];
-                commentLogBody.innerHTML += `<br>${
-                  response.success === false
-                    ? response.error
-                    : 'Successfully posted comment on <a href="https://steamcommunity.com/profiles/${profileID}/#commentthread_Profile_${profileID}_0_area">' +
-                      profileID +
-                      "</a>"
-                }`;
-                document
-                  .querySelector(
-                    `.friend_block_v2[data-steamid="${profileID}"]`,
-                  )
-                  .classList.remove("selected");
-                document.querySelector(
-                  `.friend_block_v2[data-steamid="${profileID}"] .select_friend_checkbox`,
-                ).checked = false;
-                UpdateSelection();
-              };
-              xhr.send(
-                `comment=${commentMessage}&count=6&sessionid=${g_sessionID}`,
-              );
-            },
-            postingDelay * i * 1000,
-          );
-        });
+      document.querySelectorAll(".selected").forEach((elem, i) => {
+        let profileID = elem.dataset.steamid;
+        setTimeout(
+          () => {
+            let xhr = new XMLHttpRequest();
+            xhr.open(
+              "POST",
+              `//steamcommunity.com/comment/Profile/post/${profileID}/-1/`,
+              true,
+            );
+            xhr.setRequestHeader(
+              "Content-Type",
+              "application/x-www-form-urlencoded; charset=UTF-8",
+            );
+            xhr.onloadend = (response) => {
+              // let logBody = document.querySelector('#log_body')[0];
+              commentLogBody.innerHTML += `<br>${
+                response.success === false
+                  ? response.error
+                  : 'Successfully posted comment on <a href="https://steamcommunity.com/profiles/${profileID}/#commentthread_Profile_${profileID}_0_area">' +
+                    profileID +
+                    "</a>"
+              }`;
+              document
+                .querySelector(`.friend_block_v2[data-steamid="${profileID}"]`)
+                .classList.remove("selected");
+              document.querySelector(
+                `.friend_block_v2[data-steamid="${profileID}"] .select_friend_checkbox`,
+              ).checked = false;
+              UpdateSelection();
+            };
+            xhr.send(
+              `comment=${commentMessage}&count=6&sessionid=${g_sessionID}`,
+            );
+          },
+          postingDelay * i * 1000,
+        );
       });
     });
-  })();
+  });
+})();
 
-  //* ==========================================================================
-  //* 5. Steam Copy Avatar Frame Source
-  //* ==========================================================================
+//* ==========================================================================
+//* 5. Steam Copy Avatar Frame Source
+//* ==========================================================================
 
-  function copySrcValueToClipboard() {
-    // Get the div element with the class "avatarFrame"
-    var avatarFrame = document.querySelector(".avatarFrame");
+function copySrcValueToClipboard() {
+  // Get the div element with the class "avatarFrame"
+  var avatarFrame = document.querySelector(".avatarFrame");
 
-    // Check if the div element exists
-    if (avatarFrame) {
-      // Get the img element inside the div
-      var imgElement = avatarFrame.querySelector("img");
+  // Check if the div element exists
+  if (avatarFrame) {
+    // Get the img element inside the div
+    var imgElement = avatarFrame.querySelector("img");
 
-      // Check if the img element exists
-      if (imgElement) {
-        // Get the src attribute value
-        var srcValue = imgElement.src;
+    // Check if the img element exists
+    if (imgElement) {
+      // Get the src attribute value
+      var srcValue = imgElement.src;
 
-        // Display the src value in a prompt for manual copying
-        prompt("Copy the src value:", srcValue);
+      // Display the src value in a prompt for manual copying
+      prompt("Copy the src value:", srcValue);
+    } else {
+      console.error("No img element found inside the avatarFrame div.");
+    }
+  } else {
+    console.error('No element found with the class "avatarFrame".');
+  }
+}
+
+// Call the function to copy the src value to the clipboard
+// copySrcValueToClipboard();
+
+//* ==========================================================================
+//* 6. Steam Replace Avatar Frame Source
+//* ==========================================================================
+
+function replaceSrcValue() {
+  // Get the div element with the class "profile_avatar_frame"
+  var avatarFrame = document.querySelector(".profile_avatar_frame");
+
+  // Check if the div element exists
+  if (avatarFrame) {
+    // Get the img element inside the div
+    var imgElement = avatarFrame.querySelector("img");
+
+    // Check if the img element exists
+    if (imgElement) {
+      // Prompt the user to enter the new src value
+      var newSrcValue = prompt("Enter the new src value:");
+
+      // Check if the user entered a value
+      if (newSrcValue !== null) {
+        // Update the src attribute of the img element
+        imgElement.src = newSrcValue;
+        console.log("Src value updated successfully:", newSrcValue);
       } else {
-        console.error("No img element found inside the avatarFrame div.");
+        console.log("Operation canceled by user.");
       }
     } else {
-      console.error('No element found with the class "avatarFrame".');
+      console.error(
+        "No img element found inside the profile_avatar_frame div.",
+      );
     }
+  } else {
+    console.error('No element found with the class "profile_avatar_frame".');
+  }
+}
+
+// Call the function to replace the src value
+// replaceSrcValue();
+
+//* ==========================================================================
+//* 7. Reload Steam market function
+//* ==========================================================================
+
+//
+
+// (function () {
+//   "use strict";
+
+//   // Reload page button if Steam encountered an error or auto reload is enabled.
+//   // console.log("Reload Steam market function");
+//   const targetNode = document.body;
+
+//   const config = { childList: true, subtree: true };
+//   let reloadInProgress = false;
+
+//   const createReloadText = function () {
+//     const reloadText = document.createElement("div");
+//     reloadText.textContent = "Auto Reload Errors is enabled. Reloading page in 5 seconds";
+//     reloadText.style.position = "fixed";
+//     reloadText.style.bottom = "10px";
+//     reloadText.style.right = "50%";
+//     reloadText.style.transform = "translateX(-50%)";
+//     reloadText.style.zIndex = "9999";
+//     reloadText.style.color = "#ffffff";
+//     reloadText.style.backgroundColor = "#171d25";
+//     reloadText.style.padding = "10px 15px";
+//     reloadText.style.borderRadius = "5px";
+//     reloadText.classList.add("auto-reload-text");
+
+//     document.body.appendChild(reloadText);
+
+//     return reloadText;
+//   };
+
+//   const createRefreshButton = function () {
+//     const refreshButton = document.createElement("button");
+//     refreshButton.textContent = "Reload Page";
+//     refreshButton.style.position = "fixed";
+//     refreshButton.style.top = "10px";
+//     refreshButton.style.right = "10px";
+//     refreshButton.style.zIndex = "9999";
+//     refreshButton.style.minWidth = "auto";
+//     refreshButton.style.padding = "10px";
+//     refreshButton.style.margin = "10px 0 0 0";
+//     refreshButton.classList.add("btn_blue_white_innerfade", "btn_medium");
+//     refreshButton.addEventListener("click", function () {
+//       location.reload();
+//     });
+
+//     // document.body.appendChild(refreshButton);
+
+//     return refreshButton;
+//   };
+
+//   const autoReload = function () {
+//     const autoReloadErrors = localStorage.getItem("autoReloadErrors");
+//     if (autoReloadErrors === "true") {
+//       console.log("Auto Reload Errors enabled. Reloading page in 5 seconds...");
+//       const reloadText = createReloadText();
+//       reloadInProgress = true;
+//       // Reload the page every 5 seconds if autoReloadErrors is enabled
+//       setTimeout(() => {
+//         if (reloadInProgress) {
+//           console.log("Reloading page due to error...");
+//           location.reload();
+//         }
+//       }, 5000);
+//     } else {
+//       console.log("Auto Reload Errors not enabled. Creating reload button.");
+//       // Create reload button if auto reload is not enabled
+//       createRefreshButton();
+//       // Disconnect the observer to stop further checks
+//       observer.disconnect();
+//     }
+//   };
+
+//   const callback = function (mutationsList, observer) {
+//     if (reloadInProgress) return; // If reload in progress, do nothing
+//     for (const mutation of mutationsList) {
+//       if (mutation.type === "childList") {
+//         // Check if the added node is the desired div element
+//         const errorDiv = document.querySelector(".market_listing_table_message");
+//         if (
+//           errorDiv &&
+//           (errorDiv.textContent.trim() === "There was an error performing your search. Please try again later." ||
+//             errorDiv.textContent.trim() === "There was an error getting listings for this item. Please try again later.")
+//         ) {
+//           autoReload();
+//           break;
+//         }
+//       }
+//     }
+//   };
+
+//   const observer = new MutationObserver(callback);
+
+//   // Start observing the target node for configured mutations
+//   observer.observe(targetNode, config);
+// })();
+
+
+
+//* ==========================================================================
+//* 9. Steam Comments Deleter
+//* ==========================================================================
+
+(function () {
+  // Define the interval in milliseconds
+  var interval = 1000;
+
+  // Check if elements with href containing 'CCommentThread.DeleteComment' exist
+  if (document.querySelector("[href*='CCommentThread.DeleteComment']")) {
+    // Get all elements with href containing 'CCommentThread.DeleteComment'
+    var deleteLinks = document.querySelectorAll(
+      "[href*='CCommentThread.DeleteComment']",
+    );
+    deleteLinks.forEach(function (link) {
+      // Insert the custom action links after each found element
+      link.insertAdjacentHTML(
+        "afterend",
+        '<a class="actionlink"> | </a><a class="actionlink delAllComments">Delete Everything</a><a class="actionlink"> | </a><a class="actionlink delAuthorComments">Delete Everything From This Author</a>',
+      );
+    });
+
+    // Add event listener to "Delete Everything" link
+    document.querySelectorAll(".delAllComments").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (confirm("Are you sure you want to delete all comments?")) {
+          var delComments = setInterval(function () {
+            var deleteLink = document.querySelector(
+              "[href*='CCommentThread.DeleteComment']",
+            );
+            if (deleteLink) {
+              // Using eval is not recommended. Replace this with safer code if possible.
+              eval(deleteLink.getAttribute("href"));
+            } else {
+              clearInterval(delComments);
+            }
+          }, interval);
+        }
+      });
+    });
+
+    // Add event listener to "Delete Everything From This Author" link
+    document.querySelectorAll(".delAuthorComments").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (
+          confirm(
+            "Are you sure you want to delete all comments from this author?",
+          )
+        ) {
+          var author = btn.parentElement
+            .querySelector(".commentthread_author_link")
+            .getAttribute("data-miniprofile");
+          var delComments = setInterval(function () {
+            var authorComments = document.querySelectorAll(
+              ".commentthread_comment_author [data-miniprofile='" +
+                author +
+                "']",
+            );
+            if (authorComments.length > 0) {
+              authorComments.forEach(function (comment) {
+                var deleteLink = comment
+                  .closest(".comment")
+                  .querySelector("[href*='CCommentThread.DeleteComment']");
+                if (deleteLink) {
+                  // Using eval is not recommended. Replace this with safer code if possible.
+                  eval(deleteLink.getAttribute("href"));
+                }
+              });
+            } else if (
+              document.querySelector(".commentthread_pagelinks .active + *")
+            ) {
+              // Click the next page link if it exists
+              document
+                .querySelector(".commentthread_pagelinks .active + *")
+                .click();
+            } else {
+              clearInterval(delComments);
+            }
+          }, interval);
+        }
+      });
+    });
+  }
+})();
+
+//* ==========================================================================
+//* 10. Steam Screenshots Middle Click
+//* ==========================================================================
+
+(function () {
+  "use strict";
+
+  function wrapScreenshotCards() {
+    // Find all screenshot cards that haven't been wrapped yet
+    const cards = document.querySelectorAll(
+      ".apphub_Card.modalContentLink[data-modal-content-url]:not([data-enhanced-wrapped])",
+    );
+
+    cards.forEach((card) => {
+      // Mark as wrapped to avoid duplicates
+      card.setAttribute("data-enhanced-wrapped", "true");
+
+      // Get the URL
+      const url = card.getAttribute("data-modal-content-url");
+
+      // Create wrapper anchor
+      const wrapper = document.createElement("a");
+      wrapper.href = url;
+      wrapper.target = "_blank";
+      wrapper.rel = "noopener noreferrer";
+      wrapper.style.cssText =
+        "position: relative; display: block; text-decoration: none; z-index: 1;";
+
+      // Move card into wrapper
+      card.parentNode.insertBefore(wrapper, card);
+      wrapper.appendChild(card);
+
+      // Ensure card has pointer-events for left-click modal
+      card.style.pointerEvents = "auto";
+    });
   }
 
-  // Call the function to copy the src value to the clipboard
-  // copySrcValueToClipboard();
-
-  //* ==========================================================================
-  //* 6. Steam Replace Avatar Frame Source
-  //* ==========================================================================
-
-  function replaceSrcValue() {
-    // Get the div element with the class "profile_avatar_frame"
-    var avatarFrame = document.querySelector(".profile_avatar_frame");
-
-    // Check if the div element exists
-    if (avatarFrame) {
-      // Get the img element inside the div
-      var imgElement = avatarFrame.querySelector("img");
-
-      // Check if the img element exists
-      if (imgElement) {
-        // Prompt the user to enter the new src value
-        var newSrcValue = prompt("Enter the new src value:");
-
-        // Check if the user entered a value
-        if (newSrcValue !== null) {
-          // Update the src attribute of the img element
-          imgElement.src = newSrcValue;
-          console.log("Src value updated successfully:", newSrcValue);
-        } else {
-          console.log("Operation canceled by user.");
-        }
-      } else {
-        console.error(
-          "No img element found inside the profile_avatar_frame div.",
-        );
-      }
-    } else {
-      console.error('No element found with the class "profile_avatar_frame".');
-    }
+  // Initial wrap
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", wrapScreenshotCards);
+  } else {
+    setTimeout(wrapScreenshotCards, 100);
   }
 
-  // Call the function to replace the src value
-  // replaceSrcValue();
+  // Re-wrap for dynamic content (pagination/infinite scroll)
+  const observer = new MutationObserver(() => {
+    setTimeout(wrapScreenshotCards, 50);
+  });
 
-  //* ==========================================================================
-  //* 7. Reload Steam market function
-  //* ==========================================================================
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+})();
 
-  //
-
-  // (function () {
-  //   "use strict";
-
-  //   // Reload page button if Steam encountered an error or auto reload is enabled.
-  //   // console.log("Reload Steam market function");
-  //   const targetNode = document.body;
-
-  //   const config = { childList: true, subtree: true };
-  //   let reloadInProgress = false;
-
-  //   const createReloadText = function () {
-  //     const reloadText = document.createElement("div");
-  //     reloadText.textContent = "Auto Reload Errors is enabled. Reloading page in 5 seconds";
-  //     reloadText.style.position = "fixed";
-  //     reloadText.style.bottom = "10px";
-  //     reloadText.style.right = "50%";
-  //     reloadText.style.transform = "translateX(-50%)";
-  //     reloadText.style.zIndex = "9999";
-  //     reloadText.style.color = "#ffffff";
-  //     reloadText.style.backgroundColor = "#171d25";
-  //     reloadText.style.padding = "10px 15px";
-  //     reloadText.style.borderRadius = "5px";
-  //     reloadText.classList.add("auto-reload-text");
-
-  //     document.body.appendChild(reloadText);
-
-  //     return reloadText;
-  //   };
-
-  //   const createRefreshButton = function () {
-  //     const refreshButton = document.createElement("button");
-  //     refreshButton.textContent = "Reload Page";
-  //     refreshButton.style.position = "fixed";
-  //     refreshButton.style.top = "10px";
-  //     refreshButton.style.right = "10px";
-  //     refreshButton.style.zIndex = "9999";
-  //     refreshButton.style.minWidth = "auto";
-  //     refreshButton.style.padding = "10px";
-  //     refreshButton.style.margin = "10px 0 0 0";
-  //     refreshButton.classList.add("btn_blue_white_innerfade", "btn_medium");
-  //     refreshButton.addEventListener("click", function () {
-  //       location.reload();
-  //     });
-
-  //     // document.body.appendChild(refreshButton);
-
-  //     return refreshButton;
-  //   };
-
-  //   const autoReload = function () {
-  //     const autoReloadErrors = localStorage.getItem("autoReloadErrors");
-  //     if (autoReloadErrors === "true") {
-  //       console.log("Auto Reload Errors enabled. Reloading page in 5 seconds...");
-  //       const reloadText = createReloadText();
-  //       reloadInProgress = true;
-  //       // Reload the page every 5 seconds if autoReloadErrors is enabled
-  //       setTimeout(() => {
-  //         if (reloadInProgress) {
-  //           console.log("Reloading page due to error...");
-  //           location.reload();
-  //         }
-  //       }, 5000);
-  //     } else {
-  //       console.log("Auto Reload Errors not enabled. Creating reload button.");
-  //       // Create reload button if auto reload is not enabled
-  //       createRefreshButton();
-  //       // Disconnect the observer to stop further checks
-  //       observer.disconnect();
-  //     }
-  //   };
-
-  //   const callback = function (mutationsList, observer) {
-  //     if (reloadInProgress) return; // If reload in progress, do nothing
-  //     for (const mutation of mutationsList) {
-  //       if (mutation.type === "childList") {
-  //         // Check if the added node is the desired div element
-  //         const errorDiv = document.querySelector(".market_listing_table_message");
-  //         if (
-  //           errorDiv &&
-  //           (errorDiv.textContent.trim() === "There was an error performing your search. Please try again later." ||
-  //             errorDiv.textContent.trim() === "There was an error getting listings for this item. Please try again later.")
-  //         ) {
-  //           autoReload();
-  //           break;
-  //         }
-  //       }
-  //     }
-  //   };
-
-  //   const observer = new MutationObserver(callback);
-
-  //   // Start observing the target node for configured mutations
-  //   observer.observe(targetNode, config);
-  // })();
-
-  //* ==========================================================================
-  //* 8. Auto Claim stickers
-  //* ==========================================================================
-
-  (async function () {
-    "use strict";
-
-    let claimStickersInProgress = false;
-
-    const autoClaimStickers = localStorage.getItem("autoClaimStickers");
-    if (autoClaimStickers === "true") {
-      console.log("autoClaimStickers is enabled");
-      claimStickersInProgress = true;
-      // Reload the page every 5 seconds if autoClaimStickers is enabled
-      console.log("autoClaimStickers is true");
-
-      let webapi_token = null;
-      if (window.application_config?.dataset?.loyalty_webapi_token) {
-        webapi_token = JSON.parse(
-          window.application_config.dataset.loyalty_webapi_token,
-        );
-      } else {
-        const res = await fetch("/category/action");
-        const html = await res.text();
-        const doc = new DOMParser().parseFromString(html, "text/html");
-        const token =
-          doc.getElementById("application_config")?.dataset
-            ?.loyalty_webapi_token;
-        if (!token) {
-          console.log("No valid API token found, are you logged in?");
-          return;
-        }
-        webapi_token = JSON.parse(token);
-      }
-
-      // can claim check
-      const res = await fetch(
-        `https://api.steampowered.com/ISaleItemRewardsService/CanClaimItem/v1/?access_token=${webapi_token}`,
-      );
-      const json = await res.json();
-
-      const can_claim = !!json.response?.can_claim;
-      const next_claim_time = json.response?.next_claim_time;
-
-      // request to /ClaimItem
-      if (can_claim) {
-        await fetch(
-          `https://api.steampowered.com/ISaleItemRewardsService/ClaimItem/v1/?access_token=${webapi_token}`,
-          { method: "POST" },
-        );
-        console.log("Sticker claimed!");
-      } else {
-        if (next_claim_time) {
-          console.log(
-            "Sticker already claimed today, the next item will be available at: " +
-              new Date(next_claim_time * 1000).toLocaleString("en-GB"),
-          );
-        } else {
-          console.log("No content to collect, skipping.");
-        }
-      }
-    } else {
-      console.log("autoClaimStickers is false");
-    }
-  })();
-
-  //* ==========================================================================
-  //* 9. Steam Comments Deleter
-  //* ==========================================================================
-
-  (function () {
-    // Define the interval in milliseconds
-    var interval = 1000;
-
-    // Check if elements with href containing 'CCommentThread.DeleteComment' exist
-    if (document.querySelector("[href*='CCommentThread.DeleteComment']")) {
-      // Get all elements with href containing 'CCommentThread.DeleteComment'
-      var deleteLinks = document.querySelectorAll(
-        "[href*='CCommentThread.DeleteComment']",
-      );
-      deleteLinks.forEach(function (link) {
-        // Insert the custom action links after each found element
-        link.insertAdjacentHTML(
-          "afterend",
-          '<a class="actionlink"> | </a><a class="actionlink delAllComments">Delete Everything</a><a class="actionlink"> | </a><a class="actionlink delAuthorComments">Delete Everything From This Author</a>',
-        );
-      });
-
-      // Add event listener to "Delete Everything" link
-      document.querySelectorAll(".delAllComments").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          if (confirm("Are you sure you want to delete all comments?")) {
-            var delComments = setInterval(function () {
-              var deleteLink = document.querySelector(
-                "[href*='CCommentThread.DeleteComment']",
-              );
-              if (deleteLink) {
-                // Using eval is not recommended. Replace this with safer code if possible.
-                eval(deleteLink.getAttribute("href"));
-              } else {
-                clearInterval(delComments);
-              }
-            }, interval);
-          }
-        });
-      });
-
-      // Add event listener to "Delete Everything From This Author" link
-      document.querySelectorAll(".delAuthorComments").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          if (
-            confirm(
-              "Are you sure you want to delete all comments from this author?",
-            )
-          ) {
-            var author = btn.parentElement
-              .querySelector(".commentthread_author_link")
-              .getAttribute("data-miniprofile");
-            var delComments = setInterval(function () {
-              var authorComments = document.querySelectorAll(
-                ".commentthread_comment_author [data-miniprofile='" +
-                  author +
-                  "']",
-              );
-              if (authorComments.length > 0) {
-                authorComments.forEach(function (comment) {
-                  var deleteLink = comment
-                    .closest(".comment")
-                    .querySelector("[href*='CCommentThread.DeleteComment']");
-                  if (deleteLink) {
-                    // Using eval is not recommended. Replace this with safer code if possible.
-                    eval(deleteLink.getAttribute("href"));
-                  }
-                });
-              } else if (
-                document.querySelector(".commentthread_pagelinks .active + *")
-              ) {
-                // Click the next page link if it exists
-                document
-                  .querySelector(".commentthread_pagelinks .active + *")
-                  .click();
-              } else {
-                clearInterval(delComments);
-              }
-            }, interval);
-          }
-        });
-      });
-    }
-  })();
-
-  //* ==========================================================================
-  //* 10. Steam Screenshots Middle Click
-  //* ==========================================================================
-
-  (function () {
-    "use strict";
-
-    function wrapScreenshotCards() {
-      // Find all screenshot cards that haven't been wrapped yet
-      const cards = document.querySelectorAll(
-        ".apphub_Card.modalContentLink[data-modal-content-url]:not([data-enhanced-wrapped])",
-      );
-
-      cards.forEach((card) => {
-        // Mark as wrapped to avoid duplicates
-        card.setAttribute("data-enhanced-wrapped", "true");
-
-        // Get the URL
-        const url = card.getAttribute("data-modal-content-url");
-
-        // Create wrapper anchor
-        const wrapper = document.createElement("a");
-        wrapper.href = url;
-        wrapper.target = "_blank";
-        wrapper.rel = "noopener noreferrer";
-        wrapper.style.cssText =
-          "position: relative; display: block; text-decoration: none; z-index: 1;";
-
-        // Move card into wrapper
-        card.parentNode.insertBefore(wrapper, card);
-        wrapper.appendChild(card);
-
-        // Ensure card has pointer-events for left-click modal
-        card.style.pointerEvents = "auto";
-      });
-    }
-
-    // Initial wrap
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", wrapScreenshotCards);
-    } else {
-      setTimeout(wrapScreenshotCards, 100);
-    }
-
-    // Re-wrap for dynamic content (pagination/infinite scroll)
-    const observer = new MutationObserver(() => {
-      setTimeout(wrapScreenshotCards, 50);
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-  })();
-
-  //* ========================================================================== //
-  //* Initialize Theme Manager
-  //* ========================================================================== //
-  new ThemeManager(STEAM_ENHANCED_CONFIG).init();
+//* ========================================================================== //
+//* Initialize Theme Manager
+//* ========================================================================== //
+new ThemeManager(STEAM_ENHANCED_CONFIG).init();
